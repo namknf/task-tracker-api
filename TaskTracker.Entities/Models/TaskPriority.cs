@@ -5,6 +5,7 @@ namespace TaskTracker.Entities.Models
 {
     public class TaskPriority
     {
+        [Key]
         [Column("TaskPriorityId")]
         public Guid Id { get; set; }
 

@@ -5,6 +5,7 @@ namespace TaskTracker.Entities.Models
 {
     public class TaskComment
     {
+        [Key]
         [Column("TaskCommentId")]
         public Guid Id { get; set; }
 
