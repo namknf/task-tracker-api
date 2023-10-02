@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskTracker.Entities.Configuration;
 using TaskTracker.Entities.Models;
+using File = TaskTracker.Entities.Models.File;
 using Task = TaskTracker.Entities.Models.Task;
 
 namespace TaskTracker.Api.Data
@@ -27,5 +28,7 @@ namespace TaskTracker.Api.Data
         public DbSet<TaskPriority> TaskPriorities { get; set; }
 
         public DbSet<TaskComment> TaskComments { get; set; }
+
+        public DbSet<File> Files { get; set; }
     }
 }
