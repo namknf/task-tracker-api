@@ -1,15 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskTracker.Entities.Models
 {
-    public class TaskPriority
+    public class TaskPriority : BaseModel
     {
-        [Key]
-        [Column("TaskPriorityId")]
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "PriorityName is a required field.")]
+        [MaxLength(15, ErrorMessage = "Maximum length for the task priority is 15 characters.")]
         public string PriorityName { get; set; }
     }
 }

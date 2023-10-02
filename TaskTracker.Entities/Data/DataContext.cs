@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TaskTracker.Entities.Configuration;
 using TaskTracker.Entities.Models;
 using Task = TaskTracker.Entities.Models.Task;
 
@@ -12,6 +13,7 @@ namespace TaskTracker.Api.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
         }
 
         public DbSet<Project> Projects { get; set; }

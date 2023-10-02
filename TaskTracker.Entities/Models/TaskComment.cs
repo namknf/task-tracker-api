@@ -3,13 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskTracker.Entities.Models
 {
-    public class TaskComment
+    public class TaskComment : BaseModel
     {
-        [Key]
-        [Column("TaskCommentId")]
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "CommentText is a required field.")]
+        [MaxLength(180, ErrorMessage = "Maximum length for the comment text is 180 characters.")]
         public string CommentText { get; set; }
 
         [ForeignKey(nameof(User))]

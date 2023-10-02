@@ -1,20 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Net;
 
 namespace TaskTracker.Entities.Models
 {
-    public class Task
+    public class Task : BaseModel
     {
-        [Key]
-        [Column("TaskId")]
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "TaskName is a required field.")]
+        [MaxLength(50, ErrorMessage = "Maximum length for the description is 50 characters.")]
         public string TaskName { get; set; }
 
         [Required(ErrorMessage = "Description is a required field.")]
-        public string Description { get; set; }
+        [MaxLength(180, ErrorMessage = "Maximum length for the description is 180 characters.")]
+        public string? Description { get; set; }
 
         [ForeignKey(nameof(Status))]
         public Guid TaskStatusId { get; set; }
@@ -37,8 +34,8 @@ namespace TaskTracker.Entities.Models
         [ForeignKey(nameof(Project))]
         public Guid ProjectId { get; set; }
 
-        public IEnumerable<TaskAction> Actions { get; set; }
+        public IEnumerable<TaskAction>? Actions { get; set; }
 
-        public IEnumerable<TaskComment> Comments { get; set; }
+        public IEnumerable<TaskComment>? Comments { get; set; }
     }
 }
