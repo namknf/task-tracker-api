@@ -1,18 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TaskTracker.Entities.DataTransferObjects
+﻿namespace TaskTracker.Entities.DataTransferObjects
 {
-    public class UserForRegistrerDto
+    public class UserForRegistrerDto : UserForManipulationDto
     {
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-
-        [Required(ErrorMessage = "Username is required")]
-        public string UserName { get; set; }
-
-        [Required(ErrorMessage = "Password is required")]
-        public string Password { get; set; }
 
         public string Email { get; set; }
 

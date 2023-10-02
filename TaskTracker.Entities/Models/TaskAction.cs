@@ -3,16 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskTracker.Entities.Models
 {
-    public class TaskAction
+    public class TaskAction : BaseModel
     {
-        [Key]
-        [Column("TaskActionId")]
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "ActionName is a required field.")]
+        [MaxLength(50, ErrorMessage = "Maximum length for the action name is 50 characters.")]
         public string ActionName { get; set; }
 
         [Required(ErrorMessage = "Description is a required field.")]
+        [MaxLength(180, ErrorMessage = "Maximum length for the description is 180 characters.")]
         public string Description { get; set; }
 
         [ForeignKey(nameof(User))]

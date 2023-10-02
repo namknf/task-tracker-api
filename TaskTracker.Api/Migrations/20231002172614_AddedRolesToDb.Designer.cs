@@ -12,8 +12,8 @@ using TaskTracker.Api.Data;
 namespace TaskTracker.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230930172100_DatabaseCreation")]
-    partial class DatabaseCreation
+    [Migration("20231002172614_AddedRolesToDb")]
+    partial class AddedRolesToDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,6 +49,22 @@ namespace TaskTracker.Api.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "f3d44384-8df4-4339-803a-a8d214e17c79",
+                            ConcurrencyStamp = "1f03894b-7f4c-49c6-8f34-06ef2d7c7968",
+                            Name = "Manager",
+                            NormalizedName = "MANAGER"
+                        },
+                        new
+                        {
+                            Id = "7cf06848-c331-4bbe-be80-557e69fa4712",
+                            ConcurrencyStamp = "de218c1f-2f38-457b-a3a7-07e3c150450c",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -172,12 +188,34 @@ namespace TaskTracker.Api.Migrations
                     b.ToTable("ProjectUser");
                 });
 
+            modelBuilder.Entity("TaskTracker.Entities.Models.File", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("File");
+                });
+
             modelBuilder.Entity("TaskTracker.Entities.Models.Project", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ProjectId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -187,11 +225,13 @@ namespace TaskTracker.Api.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -202,12 +242,12 @@ namespace TaskTracker.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("StatusId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("StatusName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -218,8 +258,7 @@ namespace TaskTracker.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TaskId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -229,14 +268,16 @@ namespace TaskTracker.Api.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
 
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TaskName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid>("TaskPriorityId")
                         .HasColumnType("uniqueidentifier");
@@ -259,19 +300,20 @@ namespace TaskTracker.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TaskActionId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("ActionDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ActionName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
 
                     b.Property<Guid>("TaskId")
                         .HasColumnType("uniqueidentifier");
@@ -293,12 +335,12 @@ namespace TaskTracker.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TaskCommentId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CommentText")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(180)
+                        .HasColumnType("nvarchar(180)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("datetime2");
@@ -323,12 +365,12 @@ namespace TaskTracker.Api.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("TaskPriorityId");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PriorityName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -356,11 +398,13 @@ namespace TaskTracker.Api.Migrations
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -385,9 +429,8 @@ namespace TaskTracker.Api.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid?>("PhotoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -408,6 +451,8 @@ namespace TaskTracker.Api.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("PhotoId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -556,6 +601,15 @@ namespace TaskTracker.Api.Migrations
                     b.Navigation("Task");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TaskTracker.Entities.Models.User", b =>
+                {
+                    b.HasOne("TaskTracker.Entities.Models.File", "Photo")
+                        .WithMany()
+                        .HasForeignKey("PhotoId");
+
+                    b.Navigation("Photo");
                 });
 
             modelBuilder.Entity("TaskUser", b =>

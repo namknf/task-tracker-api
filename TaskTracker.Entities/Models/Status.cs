@@ -1,15 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TaskTracker.Entities.Models
 {
-    public class Status
+    public class Status : BaseModel
     {
-        [Key]
-        [Column("StatusId")]
-        public Guid Id { get; set; }
-
         [Required(ErrorMessage = "StatusName is a required field.")]
+        [MaxLength(15, ErrorMessage = "Maximum length for the status name is 15 characters.")]
         public string StatusName { get; set; }
     }
 }
