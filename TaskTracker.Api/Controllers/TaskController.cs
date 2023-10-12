@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TaskTracker.Entities.Models;
+using TaskTracker.Entities.DataTransferObjects;
 using Task = TaskTracker.Entities.Models.Task;
 
 namespace TaskTracker.Api.Controllers
@@ -8,7 +8,8 @@ namespace TaskTracker.Api.Controllers
     [ApiController]
     public class TaskController : ControllerBase
     {
-        public async Task<ActionResult<List<Task>>> GetAllTasks()
+        [HttpGet("tasks")]
+        public async Task<ActionResult<List<TaskDto>>> GetAllTasks()
         {
             return Ok();
         }

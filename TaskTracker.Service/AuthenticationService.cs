@@ -22,13 +22,13 @@ namespace TaskTracker.Service
             _configuration = configuration;
         }
 
-        public async Task<bool> ValidateUser(UserForAuthorizeDto userForAuth)
+        public async Task<bool> IsValidUser(UserForAuthorizeDto userForAuth)
         {
             _user = await _userManager.FindByEmailAsync(userForAuth.Email);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
         }
 
-        public async Task<string> CreateToken()
+        public string CreateToken()
         {
             var signingCredentials = GetSigningCredentials();
             var claims = GetClaims();
