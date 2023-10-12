@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +8,7 @@ using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
+using IAuthenticationService = TaskTracker.Contract.IAuthenticationService;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -40,7 +43,7 @@ namespace TaskTracker.Api.Controllers
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrerDto userForRegistration)
         {
             var user = _mapper.Map<User>(userForRegistration);
-            user.UserName = userForRegistration.Email;
+            user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, userForRegistration.Password);
             var result = await _userManager.CreateAsync(user);
 
             if (!result.Succeeded)
@@ -71,14 +74,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Выход
+        /// Log out
         /// </summary>
         /// <returns>NoContent</returns>
         [HttpPost("logout")]
         [Authorize]
         public async Task<IActionResult> LogOut()
         {
-            await _signInManager.SignOutAsync();
+            await _signInManager.Context.SignOutAsync("Cookie");
             _logger.LogInformation("User signed out successfully");
             return NoContent();
         }

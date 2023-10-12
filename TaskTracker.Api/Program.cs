@@ -29,7 +29,6 @@ builder.Services.AddAuthorization();
 
 builder.Services.ConfigureJWT(builder.Configuration);
 
-builder.Services.AddAuthentication();
 builder.Services.ConfigureIdentity();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
