@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
-using TaskTracker.Api.Data;
+using TaskTracker.Entities.Data;
 using TaskTracker.Entities.Models;
 
 namespace TaskTracker.Api.Extensions

@@ -4,7 +4,7 @@ using TaskTracker.Entities.Models;
 using File = TaskTracker.Entities.Models.File;
 using Task = TaskTracker.Entities.Models.Task;
 
-namespace TaskTracker.Api.Data
+namespace TaskTracker.Entities.Data
 {
     public class DataContext : IdentityDbContext<User>
     {
