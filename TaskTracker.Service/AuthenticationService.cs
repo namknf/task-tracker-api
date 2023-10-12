@@ -22,16 +22,16 @@ namespace TaskTracker.Service
             _configuration = configuration;
         }
 
-        public async Task<bool> ValidateUser(UserForAuthorizeDto userForAuth)
+        public async Task<bool> IsValidUser(UserForAuthorizeDto userForAuth)
         {
-            _user = await _userManager.FindByNameAsync(userForAuth.UserName);
+            _user = await _userManager.FindByEmailAsync(userForAuth.Email);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
         }
 
-        public async Task<string> CreateToken()
+        public string CreateToken()
         {
             var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims();
+            var claims = GetClaims();
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
@@ -44,20 +44,12 @@ namespace TaskTracker.Service
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        private async Task<List<Claim>> GetClaims()
+        private List<Claim> GetClaims()
         {
-            var claims = new List<Claim>
+            return new List<Claim>
             {
                 new Claim(ClaimTypes.Name, _user.UserName)
             };
-
-            var roles = await _userManager.GetRolesAsync(_user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            return claims;
         }
 
         private SecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)

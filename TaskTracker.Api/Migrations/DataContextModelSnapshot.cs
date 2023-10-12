@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TaskTracker.Api.Data;
+using TaskTracker.Entities.Data;
 
 #nullable disable
 
@@ -47,22 +47,6 @@ namespace TaskTracker.Api.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f3d44384-8df4-4339-803a-a8d214e17c79",
-                            ConcurrencyStamp = "1f03894b-7f4c-49c6-8f34-06ef2d7c7968",
-                            Name = "Manager",
-                            NormalizedName = "MANAGER"
-                        },
-                        new
-                        {
-                            Id = "7cf06848-c331-4bbe-be80-557e69fa4712",
-                            ConcurrencyStamp = "de218c1f-2f38-457b-a3a7-07e3c150450c",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -206,7 +190,7 @@ namespace TaskTracker.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("File");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("TaskTracker.Entities.Models.Project", b =>
@@ -429,6 +413,11 @@ namespace TaskTracker.Api.Migrations
 
                     b.Property<Guid?>("PhotoId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

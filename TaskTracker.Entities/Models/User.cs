@@ -14,6 +14,9 @@ namespace TaskTracker.Entities.Models
         [MaxLength(30, ErrorMessage = "Maximum length for the last name is 30 characters.")]
         public string LastName { get; set; }
 
+        [MaxLength(30, ErrorMessage = "Maximum length for the position is 30 characters.")]
+        public string Position { get; set; }
+
         [ForeignKey(nameof(Photo))]
         public Guid? PhotoId { get; set; }
 

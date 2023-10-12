@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TaskTracker.Api.Migrations
 {
-    public partial class DatabaseCreation : Migration
+    public partial class DbCreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,7 +24,7 @@ namespace TaskTracker.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "File",
+                name: "Files",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -34,7 +34,7 @@ namespace TaskTracker.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_File", x => x.Id);
+                    table.PrimaryKey("PK_Files", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,6 +104,7 @@ namespace TaskTracker.Api.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Position = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     PhotoId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -124,9 +125,9 @@ namespace TaskTracker.Api.Migrations
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_File_PhotoId",
+                        name: "FK_AspNetUsers_Files_PhotoId",
                         column: x => x.PhotoId,
-                        principalTable: "File",
+                        principalTable: "Files",
                         principalColumn: "Id");
                 });
 
@@ -483,7 +484,7 @@ namespace TaskTracker.Api.Migrations
                 name: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "File");
+                name: "Files");
 
             migrationBuilder.DropTable(
                 name: "Projects");

@@ -4,8 +4,8 @@ namespace TaskTracker.Contract
 {
     public interface IAuthenticationService
     {
-        Task<bool> ValidateUser(UserForAuthorizeDto userForAuth);
+        Task<bool> IsValidUser(UserForAuthorizeDto userForAuth);
 
-        Task<string> CreateToken();
+        string CreateToken();
     }
 }

@@ -8,7 +8,8 @@ namespace TaskTracker.Api
     {
         public MappingProfile()
         {
-            CreateMap<UserForRegistrerDto, User>();
+            CreateMap<UserForRegistrerDto, User>()
+                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
         }
     }
 }

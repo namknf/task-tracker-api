@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
-using TaskTracker.Api.Data;
+using TaskTracker.Entities.Data;
 using TaskTracker.Entities.Models;
 
 namespace TaskTracker.Api.Extensions
@@ -34,6 +35,12 @@ namespace TaskTracker.Api.Extensions
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
+            services.AddAuthentication("Cookie")
+                .AddCookie("Cookie", config =>
+                {
+                    config.LoginPath = "/api/auth/login";
+                });
+
             var builder = services.AddIdentityCore<User>(o =>
             {
                 o.Password.RequireDigit = true;
@@ -43,8 +50,8 @@ namespace TaskTracker.Api.Extensions
                 o.Password.RequiredLength = 10;
                 o.User.RequireUniqueEmail = true;
             });
-            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
-            builder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+            builder = new IdentityBuilder(builder.UserType, builder.Services);
+            builder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders().AddSignInManager<SignInManager<User>>();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
