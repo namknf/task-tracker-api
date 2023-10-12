@@ -31,7 +31,7 @@ namespace TaskTracker.Service
         public async Task<string> CreateToken()
         {
             var signingCredentials = GetSigningCredentials();
-            var claims = await GetClaims();
+            var claims = GetClaims();
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
@@ -44,20 +44,12 @@ namespace TaskTracker.Service
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        private async Task<List<Claim>> GetClaims()
+        private List<Claim> GetClaims()
         {
-            var claims = new List<Claim>
+            return new List<Claim>
             {
                 new Claim(ClaimTypes.Name, _user.UserName)
             };
-
-            var roles = await _userManager.GetRolesAsync(_user);
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-
-            return claims;
         }
 
         private SecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
@@ -77,10 +69,6 @@ namespace TaskTracker.Service
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return token;
-        }
-
-        private void LogOut()
-        {
         }
     }
 }

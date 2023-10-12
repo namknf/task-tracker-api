@@ -35,18 +35,16 @@ namespace TaskTracker.Api.Controllers
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrerDto userForRegistration)
         {
             var user = _mapper.Map<User>(userForRegistration);
-            var result = await _userManager.CreateAsync(user, userForRegistration.Password);
+            user.UserName = userForRegistration.Email;
+            var result = await _userManager.CreateAsync(user);
 
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
-                {
                     ModelState.TryAddModelError(error.Code, error.Description);
-                }
 
                 return BadRequest(ModelState);
             }
-
             return StatusCode(201);
         }
 
@@ -65,6 +63,17 @@ namespace TaskTracker.Api.Controllers
                 return Unauthorized();
             }
             return Ok(new { Token = await _authService.CreateToken() });
+        }
+
+        /// <summary>
+        /// Выход
+        /// </summary>
+        /// <returns>NoContent</returns>
+        [HttpPost("logout")]
+        public async Task<IActionResult> LogOut()
+        {
+            Response.Headers.Remove("Authorization");
+            return NoContent();
         }
     }
 }
