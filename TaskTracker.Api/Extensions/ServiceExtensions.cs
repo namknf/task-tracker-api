@@ -43,7 +43,7 @@ namespace TaskTracker.Api.Extensions
                 o.Password.RequiredLength = 10;
                 o.User.RequireUniqueEmail = true;
             });
-            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+            builder = new IdentityBuilder(builder.UserType, builder.Services);
             builder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
         }
 

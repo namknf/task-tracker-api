@@ -59,7 +59,7 @@ namespace TaskTracker.Api.Controllers
         {
             if (!await _authService.ValidateUser(user))
             {
-                _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong user name or password.");
+                _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong email or password.");
                 return Unauthorized();
             }
             return Ok(new { Token = await _authService.CreateToken() });
