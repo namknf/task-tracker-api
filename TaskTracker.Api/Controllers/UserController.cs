@@ -47,7 +47,6 @@ namespace TaskTracker.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _userManager.AddToRolesAsync(user, userForRegistration.Roles);
             return StatusCode(201);
         }
 

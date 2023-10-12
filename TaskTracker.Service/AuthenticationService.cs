@@ -24,7 +24,7 @@ namespace TaskTracker.Service
 
         public async Task<bool> ValidateUser(UserForAuthorizeDto userForAuth)
         {
-            _user = await _userManager.FindByNameAsync(userForAuth.UserName);
+            _user = await _userManager.FindByEmailAsync(userForAuth.Email);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
         }
 
@@ -77,6 +77,10 @@ namespace TaskTracker.Service
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return token;
+        }
+
+        private void LogOut()
+        {
         }
     }
 }
