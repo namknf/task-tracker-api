@@ -17,6 +17,13 @@ namespace TaskTracker.Api.Extensions
             services.AddDbContext<DataContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"),
             ma => ma.MigrationsAssembly("TaskTracker.Api")));
 
+        public static void ConfigureLogging(this IServiceCollection services) =>
+            services.AddLogging(config =>
+            {
+                config.AddDebug();
+                config.AddConsole();
+            });
+
         public static void ConfigureCors(this IServiceCollection services) =>
             services.AddCors(options =>
             {
@@ -35,6 +42,7 @@ namespace TaskTracker.Api.Extensions
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
+            services.AddAuthorization();
             services.AddAuthentication("Cookie")
                 .AddCookie("Cookie", config =>
                 {
