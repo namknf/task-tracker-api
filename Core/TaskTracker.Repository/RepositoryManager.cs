@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.Repository
 {
-    internal class RepositoryManager
+    public class RepositoryManager
     {
     }
 }

@@ -9,5 +9,7 @@
         public string Priority { get; set; }
 
         public string TaskName { get; set; }
+
+        public string Status { get; set; }
     }
 }

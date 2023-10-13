@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TaskTracker.Contract;
 
 namespace TaskTracker.Repository
 {
-    internal class TaskRepository
+    public class TaskRepository : ITaskRepository
     {
     }
 }
