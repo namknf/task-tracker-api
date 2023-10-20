@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
-using TaskTracker.Api.ActionFilters;
 using TaskTracker.Api.Extensions;
-using TaskTracker.Contract;
-using TaskTracker.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -20,8 +17,8 @@ builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureIdentity();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.ConfigureSwagger();
-builder.Services.AddScoped<ValidationFilterAttribute>();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddInternalServices();
+builder.Services.ConfigureRepositoryManager();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;

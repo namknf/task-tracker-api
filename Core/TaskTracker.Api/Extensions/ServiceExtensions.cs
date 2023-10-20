@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using TaskTracker.Api.ActionFilters;
+using TaskTracker.Contract;
 using TaskTracker.Entities.Data;
 using TaskTracker.Entities.Models;
+using TaskTracker.Repository;
+using TaskTracker.Service;
 
 namespace TaskTracker.Api.Extensions
 {
@@ -32,6 +35,16 @@ namespace TaskTracker.Api.Extensions
                        .AllowAnyMethod()
                        .AllowAnyHeader());
             });
+
+        public static void AddInternalServices(this IServiceCollection services)
+        {
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IDataContextService, DataContextService>();
+        }
+
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
 
         public static void ConfigureIISIntegration(this IServiceCollection services) =>
             services.Configure<IISOptions>(options =>
