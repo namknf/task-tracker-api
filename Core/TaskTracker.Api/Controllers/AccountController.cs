@@ -1,21 +1,19 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
-using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using IAuthenticationService = TaskTracker.Contract.IAuthenticationService;
 
 namespace TaskTracker.Api.Controllers
 {
-    [Route("api/auth")]
+    [Route("api/account")]
     [Produces("application/json")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class AccountController : BaseController
     {
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
@@ -23,7 +21,7 @@ namespace TaskTracker.Api.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly IAuthenticationService _authService;
 
-        public UserController(ILogger<UserController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, SignInManager<User> signInManager)
+        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, SignInManager<User> signInManager)
         {
             _logger = logger;
             _mapper = mapper;
@@ -57,7 +55,7 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Authorization
+        /// Log in by email and password
         /// </summary>
         /// <param name="user">Authorized user</param>
         /// <returns>Token</returns>
@@ -70,6 +68,34 @@ namespace TaskTracker.Api.Controllers
                 _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong email or password.");
                 return Unauthorized();
             }
+            return Ok(new { Token = _authService.CreateToken() });
+        }
+
+        /// <summary>
+        /// Send message with code on Telegram
+        /// </summary>
+        /// <param name="user">User with number</param>
+        /// <returns>Dispatch result message</returns>
+        [HttpPost("login/sendMessage")]
+        public async Task<IActionResult> SendTelegramCode([FromBody] UserForAuthorizeDto user)
+        {
+            if (!await _authService.IsValidNumber(user.PhoneNumber))
+            {
+                _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong number.");
+                return BadRequest();
+            }
+            await _authService.SendMessageByBot(user.PhoneNumber);
+            return Ok("Message sent");
+        }
+
+        /// <summary>
+        /// Log in by code from Telegram bot
+        /// </summary>
+        /// <param name="code">code value</param>
+        /// <returns>Token</returns>
+        [HttpPost("login/phone")]
+        public async Task<IActionResult> LogInByCode([FromBody] string code)
+        {
             return Ok(new { Token = _authService.CreateToken() });
         }
 
