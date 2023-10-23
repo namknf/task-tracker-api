@@ -12,8 +12,8 @@ using TaskTracker.Entities.Data;
 namespace TaskTracker.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231012092844_DbCreation")]
-    partial class DbCreation
+    [Migration("20231023190624_CreationDb")]
+    partial class CreationDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -408,6 +408,7 @@ namespace TaskTracker.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")

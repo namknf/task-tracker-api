@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using TaskTracker.Api.ActionFilters;
+using TaskTracker.Contract;
 using TaskTracker.Entities.Data;
 using TaskTracker.Entities.Models;
+using TaskTracker.Repository;
+using TaskTracker.Service;
 
 namespace TaskTracker.Api.Extensions
 {
@@ -16,6 +19,13 @@ namespace TaskTracker.Api.Extensions
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
             services.AddDbContext<DataContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("sqlConnection"),
             ma => ma.MigrationsAssembly("TaskTracker.Api")));
+
+        public static void ConfigureLogging(this IServiceCollection services) =>
+            services.AddLogging(config =>
+            {
+                config.AddDebug();
+                config.AddConsole();
+            });
 
         public static void ConfigureCors(this IServiceCollection services) =>
             services.AddCors(options =>
@@ -26,6 +36,16 @@ namespace TaskTracker.Api.Extensions
                        .AllowAnyHeader());
             });
 
+        public static void AddInternalServices(this IServiceCollection services)
+        {
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IDataContextService, DataContextService>();
+        }
+
+        public static void ConfigureRepositoryManager(this IServiceCollection services) =>
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
+
         public static void ConfigureIISIntegration(this IServiceCollection services) =>
             services.Configure<IISOptions>(options =>
             {
@@ -35,6 +55,7 @@ namespace TaskTracker.Api.Extensions
 
         public static void ConfigureIdentity(this IServiceCollection services)
         {
+            services.AddAuthorization();
             services.AddAuthentication("Cookie")
                 .AddCookie("Cookie", config =>
                 {

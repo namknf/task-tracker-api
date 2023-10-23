@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <UserSecretsId>5661b75d-314f-4934-9b13-3310a5551e2d</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,6 +39,10 @@
     <ProjectReference Include="..\TaskTracker.Contract\TaskTracker.Contract.csproj" />
     <ProjectReference Include="..\TaskTracker.Entities\TaskTracker.Entities.csproj" />
     <ProjectReference Include="..\TaskTracker.Service\TaskTracker.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

@@ -22,6 +22,8 @@ namespace TaskTracker.Entities.Models
 
         public File? Photo { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public IEnumerable<Task>? Tasks { get; set; }
 
         public IEnumerable<Project>? Projects { get; set; }

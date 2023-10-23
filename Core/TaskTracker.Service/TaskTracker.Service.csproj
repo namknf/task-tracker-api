@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TaskTracker.Contract\TaskTracker.Contract.csproj" />
     <ProjectReference Include="..\TaskTracker.Entities\TaskTracker.Entities.csproj" />
+    <ProjectReference Include="..\TaskTracker.Repository\TaskTracker.Repository.csproj" />
   </ItemGroup>
 
 </Project>

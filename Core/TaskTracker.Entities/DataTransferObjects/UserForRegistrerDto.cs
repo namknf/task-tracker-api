@@ -12,5 +12,8 @@ namespace TaskTracker.Entities.DataTransferObjects
 
         [Required(ErrorMessage = "Position is required")]
         public string Position { get; set; }
+
+        [Required(ErrorMessage = "Phone number is required")]
+        public string PhoneNumber { get; set; }
     }
 }
