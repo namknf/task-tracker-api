@@ -5,8 +5,10 @@ namespace TaskTracker.Contract
 {
     public interface IDataContextService
     {
-        Task<List<Task>> GetProjectTasksAsync(Guid projectId, bool trackChanges);
+        Task<List<Task>> GetProjectTasksAsync(Guid projectId);
 
-        Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges);
+        Task<Project?> GetProjectAsync(Guid projectId);
+
+        Task<CodeAttempt?> GetCodeAttemptAsync(string phoneNumber, string code);
     }
 }

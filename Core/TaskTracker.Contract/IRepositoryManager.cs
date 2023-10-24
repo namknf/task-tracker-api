@@ -6,6 +6,8 @@
 
         IProjectRepository ProjectRepository { get; }
 
+        ICodeAttemptRepository CodeAttemptRepository { get; }
+
         Task SaveAsync();
     }
 }

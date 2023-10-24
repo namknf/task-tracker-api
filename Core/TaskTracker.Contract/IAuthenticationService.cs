@@ -1,4 +1,5 @@
 ﻿using TaskTracker.Entities.DataTransferObjects;
+using TaskTracker.Entities.Models;
 
 namespace TaskTracker.Contract
 {
@@ -10,6 +11,6 @@ namespace TaskTracker.Contract
 
         string CreateToken();
 
-        Task SendMessageByBot(string? phoneNumber);
+        System.Threading.Tasks.Task SendMessageByBot(string? phoneNumber);
     }
 }

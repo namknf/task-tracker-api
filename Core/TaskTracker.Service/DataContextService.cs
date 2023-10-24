@@ -13,10 +13,13 @@ namespace TaskTracker.Service
             _manager = manager;
         }
 
-        public async Task<List<Task>> GetProjectTasksAsync(Guid projectId, bool trackChanges) =>
-            await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, trackChanges);
+        public async Task<List<Task>> GetProjectTasksAsync(Guid projectId) =>
+            await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false);
 
-        public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
-            await _manager.ProjectRepository.GetProjectAsync(projectId, trackChanges);
+        public async Task<Project?> GetProjectAsync(Guid projectId) =>
+            await _manager.ProjectRepository.GetProjectAsync(projectId, false);
+
+        public async Task<CodeAttempt?> GetCodeAttemptAsync(string phoneNumber, string code) =>
+            await _manager.CodeAttemptRepository.GetCodeAttemptAsync(phoneNumber, code, false);
     }
 }

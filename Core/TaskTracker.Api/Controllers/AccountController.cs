@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
+using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using IAuthenticationService = TaskTracker.Contract.IAuthenticationService;
@@ -20,8 +21,9 @@ namespace TaskTracker.Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IAuthenticationService _authService;
+        private readonly IDataContextService _dataContextService;
 
-        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, SignInManager<User> signInManager)
+        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, SignInManager<User> signInManager, IDataContextService dataContextService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -29,6 +31,7 @@ namespace TaskTracker.Api.Controllers
             _authService = authService;
             _signInManager = signInManager;
             _signInManager.UserManager = _userManager;
+            _dataContextService = dataContextService;
         }
 
         /// <summary>
@@ -74,28 +77,39 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Send message with code on Telegram
         /// </summary>
-        /// <param name="user">User with number</param>
+        /// <param name="phoneNumber">User's phone number</param>
         /// <returns>Dispatch result message</returns>
         [HttpPost("login/sendMessage")]
-        public async Task<IActionResult> SendTelegramCode([FromBody] UserForAuthorizeDto user)
+        public async Task<IActionResult> SendTelegramCode([FromBody] string phoneNumber)
         {
-            if (!await _authService.IsValidNumber(user.PhoneNumber))
+            if (!await _authService.IsValidNumber(phoneNumber))
             {
                 _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong number.");
                 return BadRequest();
             }
-            await _authService.SendMessageByBot(user.PhoneNumber);
+            await _authService.SendMessageByBot(phoneNumber);
             return Ok("Message sent");
         }
 
         /// <summary>
         /// Log in by code from Telegram bot
         /// </summary>
-        /// <param name="code">code value</param>
+        /// <param name="attempt">Info about entering attempt</param>
         /// <returns>Token</returns>
         [HttpPost("login/phone")]
-        public async Task<IActionResult> LogInByCode([FromBody] string code)
+        public async Task<IActionResult> LogInByCode([FromBody] CodeAttemptDto attempt)
         {
+            if (attempt == null)
+            {
+                _logger.LogError("CodeAttemptDto object sent from client is null.");
+                return BadRequest("CodeAttemptDto object is null");
+            }
+            var code = await _dataContextService.GetCodeAttemptAsync(attempt.PhoneNumber, attempt.Code);
+            if (code == null)
+            {
+                _logger.LogWarning($"{nameof(LogInByCode)}: Login code failed. Wrong code.");
+                return Unauthorized();
+            }
             return Ok(new { Token = _authService.CreateToken() });
         }
 
