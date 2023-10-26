@@ -8,6 +8,8 @@ namespace TaskTracker.Contract
 
         Task<Project?> GetProjectAsync(Guid projectId);
 
+        Task<List<Project>> GetProjectsAsync();
+
         System.Threading.Tasks.Task SaveChangesAsync();
     }
 }

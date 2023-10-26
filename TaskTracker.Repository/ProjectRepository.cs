@@ -14,5 +14,8 @@ namespace TaskTracker.Repository
 
         public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(projectId), trackChanges).SingleOrDefaultAsync();
+
+        public async Task<List<Project>?> GetProjectsAsync(bool trackChanges) =>
+            await FindAll(trackChanges).ToListAsync();
     }
 }

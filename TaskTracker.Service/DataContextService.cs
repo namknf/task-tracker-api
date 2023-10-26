@@ -20,5 +20,8 @@ namespace TaskTracker.Service
 
         public async System.Threading.Tasks.Task SaveChangesAsync() =>
             await _manager.SaveAsync();
+
+        public async Task<List<Project>> GetProjectsAsync() =>
+            await _manager.ProjectRepository.GetProjectsAsync(false) ?? new List<Project>();
     }
 }

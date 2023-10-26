@@ -7,5 +7,7 @@ namespace TaskTracker.Contract
         Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges);
 
         void CreateProject(Project project);
+
+        Task<List<Project>?> GetProjectsAsync(bool trackChanges);
     }
 }
