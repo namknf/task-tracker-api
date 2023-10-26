@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using TaskTracker.Entities.Configuration;
 using TaskTracker.Entities.Models;
 using File = TaskTracker.Entities.Models.File;
 using Task = TaskTracker.Entities.Models.Task;
@@ -13,6 +14,8 @@ namespace TaskTracker.Entities.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new PriorityConfiguration());
+            modelBuilder.ApplyConfiguration(new StatusConfiguration());
         }
 
         public DbSet<Project> Projects { get; set; }
