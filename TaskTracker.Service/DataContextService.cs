@@ -69,5 +69,10 @@ namespace TaskTracker.Service
             taskEntity.TaskPriorityId = parms.PriorityId;
             _manager.TaskRepository.CreateTask(taskEntity);
         }
+
+        public void DeleteTask(Entities.Models.Task task) => _manager.TaskRepository.DeleteTask(task);
+
+        public async Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges) =>
+            await _manager.TaskRepository.GetTaskAsync(projectId, taskId, trackChanges);
     }
 }

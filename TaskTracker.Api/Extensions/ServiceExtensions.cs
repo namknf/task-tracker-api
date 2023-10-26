@@ -39,7 +39,8 @@ namespace TaskTracker.Api.Extensions
         public static void AddInternalServices(this IServiceCollection services)
         {
             services.AddScoped<ValidationFilterAttribute>();
-            services.AddTransient<ValidateProjectExistsAttribute>();
+            services.AddScoped<ValidateProjectExistsAttribute>();
+            services.AddScoped<ValidateTaskExistsAttribute>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IDataContextService, DataContextService>();
         }

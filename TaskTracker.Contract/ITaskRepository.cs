@@ -9,5 +9,7 @@ namespace TaskTracker.Contract
         void CreateTask(Task task);
 
         void DeleteTask(Task task);
+
+        Task<Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges);
     }
 }

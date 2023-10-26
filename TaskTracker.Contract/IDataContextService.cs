@@ -21,5 +21,9 @@ namespace TaskTracker.Contract
         void DeleteProject(Project project);
 
         System.Threading.Tasks.Task CreateTaskAsync(Entities.Models.Task taskEntity, List<ParticipantDto> participants, Guid projectId, TaskCreationParameters parms);
+
+        void DeleteTask(Entities.Models.Task task);
+
+        Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges);
     }
 }

@@ -78,7 +78,7 @@ namespace TaskTracker.Api.Controllers
         /// <param name="projectId">Project id</param>
         /// <param name="projectDto">New project information</param>
         /// <returns>No content</returns>
-        [HttpPut("{id}"), Authorize]
+        [HttpPut("{projectId}"), Authorize]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         public async Task<IActionResult> UpdateProject(Guid projectId, [FromBody] ProjectForUpdateDto projectDto)
         {

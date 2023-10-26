@@ -65,5 +65,19 @@ namespace TaskTracker.Api.Controllers
             var taskToReturn = _mapper.Map<TaskDto>(taskEntity);
             return CreatedAtRoute("CreateTaskForProject", new { id = taskToReturn.Id }, taskToReturn);
         }
+
+        /// <summary>
+        /// Delete existing task
+        /// </summary>
+        /// <returns>No Content</returns>
+        [HttpDelete("{taskId}")]
+        [ServiceFilter(typeof(ValidateTaskExistsAttribute))]
+        public async Task<IActionResult> DeleteTask(Guid projectId, Guid taskId)
+        {
+            var task = HttpContext.Items["task"] as Entities.Models.Task;
+            _dataContextService.DeleteTask(task);
+            await _dataContextService.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
