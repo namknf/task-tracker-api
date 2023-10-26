@@ -18,7 +18,7 @@ namespace TaskTracker.Api.ActionFilters
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
             var trackChanges = context.HttpContext.Request.Method.Equals("PUT");
-            var id = (Guid)context.ActionArguments["id"];
+            var id = (Guid)context.ActionArguments["projectId"];
             var project = await _dataService.GetProjectAsync(id, trackChanges);
             if (project == null)
             {
