@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Contract", "Tas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Service", "TaskTracker.Service\TaskTracker.Service.csproj", "{53715212-DFAE-470C-B7D4-00682EF7A119}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTracker.Repository", "TaskTracker.Repository\TaskTracker.Repository.csproj", "{E5F10992-722B-4EDC-9E02-DA4F8424E94B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTracker.Repository", "TaskTracker.Repository\TaskTracker.Repository.csproj", "{E5F10992-722B-4EDC-9E02-DA4F8424E94B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
