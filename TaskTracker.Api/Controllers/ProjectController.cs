@@ -60,11 +60,11 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Delete existing project
         /// </summary>
-        /// <param name="id">Project id</param>
+        /// <param name="projectId">Project id</param>
         /// <returns>No content</returns>
         [HttpDelete("{id}"), Authorize]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
-        public async Task<IActionResult> DeleteProject(Guid id)
+        public async Task<IActionResult> DeleteProject(Guid projectId)
         {
             var project = HttpContext.Items["project"] as Project;
             _dataContextService.DeleteProject(project);
@@ -75,12 +75,12 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Update project information
         /// </summary>
-        /// <param name="id">Project id</param>
+        /// <param name="projectId">Project id</param>
         /// <param name="projectDto">New project information</param>
         /// <returns>No content</returns>
         [HttpPut("{id}"), Authorize]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
-        public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectForUpdateDto projectDto)
+        public async Task<IActionResult> UpdateProject(Guid projectId, [FromBody] ProjectForUpdateDto projectDto)
         {
             var projectEntity = HttpContext.Items["project"] as Project;
             _mapper.Map(projectDto, projectEntity);

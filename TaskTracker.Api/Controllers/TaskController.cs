@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
 {
-    [Route("api/project/{projectId}/")]
+    [Route("api/projects/{projectId}/tasks/")]
     [ApiController]
     public class TaskController : ControllerBase
     {
@@ -22,18 +23,47 @@ namespace TaskTracker.Api.Controllers
             _logger = logger;
         }
 
-        [HttpGet("tasks"), Authorize]  
-        public async Task<ActionResult<List<TaskDto>>> GetAllTasksForProject(Guid projectId, [FromQuery] TaskParameters parms)
+        /// <summary>
+        /// Get all tasks from project
+        /// </summary>
+        /// <param name="projectId">Project id</param>
+        /// <returns>List of tasks</returns>
+        [HttpGet, Authorize]
+        [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
+        public async Task<ActionResult<List<TaskDto>>> GetAllTasksForProject(Guid projectId)
         {
-            var project = await _dataContextService.GetProjectAsync(projectId, false);
-            if (project == null)
-            {
-                _logger.LogInformation("Project with id: {projectId} doesn't exist in the database.", projectId);
-                return NotFound();
-            }
             var tasksFromDb = await _dataContextService.GetProjectTasksAsync(projectId);
             var tasksDto = _mapper.Map<IEnumerable<TaskDto>>(tasksFromDb);
             return Ok(tasksDto);
+        }
+
+        /// <summary>
+        /// Create new task
+        /// </summary>
+        /// <param name="projectId">Project id</param>
+        /// <param name="taskDto">new task model</param>
+        /// <returns>Created task</returns>
+        [HttpPost(Name = "CreateTaskForProject")]
+        [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
+        public async Task<IActionResult> CreateTaskForProject(Guid projectId, [FromBody] TaskForCreationDto taskDto, [FromQuery] TaskCreationParameters parms)
+        {
+            if (taskDto == null)
+            {
+                _logger.LogError("TaskForCreationDto is null");
+                return BadRequest("TaskForCreationDto is null");
+            }
+
+            if (parms == null)
+            {
+                _logger.LogError("TaskCreationParameters is null");
+                return BadRequest("TaskCreationParameters is null");
+            }
+
+            var taskEntity = _mapper.Map<Entities.Models.Task>(taskDto);
+            await _dataContextService.CreateTaskAsync(taskEntity, taskDto.Participants, projectId, parms);
+            await _dataContextService.SaveChangesAsync();
+            var taskToReturn = _mapper.Map<TaskDto>(taskEntity);
+            return CreatedAtRoute("CreateTaskForProject", new { id = taskToReturn.Id }, taskToReturn);
         }
     }
 }

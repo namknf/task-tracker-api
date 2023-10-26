@@ -11,7 +11,7 @@ namespace TaskTracker.Entities.Models
 
         [Required(ErrorMessage = "Description is a required field.")]
         [MaxLength(180, ErrorMessage = "Maximum length for the description is 180 characters.")]
-        public string? Description { get; set; }
+        public string Description { get; set; }
 
         [ForeignKey(nameof(Status))]
         public Guid TaskStatusId { get; set; }
