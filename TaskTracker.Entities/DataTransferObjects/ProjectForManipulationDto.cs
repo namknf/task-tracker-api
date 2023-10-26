@@ -6,7 +6,7 @@
 
         public DateTime Deadline { get; set; }
 
-        public DateTime CreationDate { get => DateTime.Now; }
+        public virtual DateTime CreationDate { get; set; }
 
         public string Description { get; set; }
 

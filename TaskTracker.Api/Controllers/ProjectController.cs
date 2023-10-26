@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
@@ -9,7 +8,7 @@ using TaskTracker.Api.ActionFilters;
 
 namespace TaskTracker.Api.Controllers
 {
-    [Route("api/")]
+    [Route("api/projects/")]
     [ApiController]
     [Produces("application/json")]
     public class ProjectController : BaseController
@@ -29,7 +28,7 @@ namespace TaskTracker.Api.Controllers
         /// Get all projects of current user
         /// </summary>
         /// <returns>List of projects</returns>
-        [HttpGet("projects"), Authorize]
+        [HttpGet, Authorize]
         public async Task<ActionResult<List<ProjectDto>>> GetProjects()
         {
             var projectsFromDb = await _dataContextService.GetProjectsAsync(UserId);
@@ -58,12 +57,33 @@ namespace TaskTracker.Api.Controllers
             return CreatedAtRoute("ProjectById", new { id = projectToReturn.Id }, projectToReturn);
         }
 
-        [HttpDelete("project/{id}"), Authorize]
+        /// <summary>
+        /// Delete existing project
+        /// </summary>
+        /// <param name="id">Project id</param>
+        /// <returns>No content</returns>
+        [HttpDelete("{id}"), Authorize]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         public async Task<IActionResult> DeleteProject(Guid id)
         {
             var project = HttpContext.Items["project"] as Project;
             _dataContextService.DeleteProject(project);
+            await _dataContextService.SaveChangesAsync();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Update project information
+        /// </summary>
+        /// <param name="id">Project id</param>
+        /// <param name="projectDto">New project information</param>
+        /// <returns>No content</returns>
+        [HttpPut("{id}"), Authorize]
+        [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
+        public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectForUpdateDto projectDto)
+        {
+            var projectEntity = HttpContext.Items["project"] as Project;
+            _mapper.Map(projectDto, projectEntity);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
         }
