@@ -63,7 +63,7 @@ namespace TaskTracker.Service
                 Expires = DateTime.Now.AddDays(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
                 Issuer = issuer,
                 Audience = audiense,
-                SigningCredentials = signingCredentials
+                SigningCredentials = signingCredentials,
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
