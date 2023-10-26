@@ -4,6 +4,6 @@ namespace TaskTracker.Contract
 {
     public interface IUserRepository
     {
-        Task<User?> GetUserAsync(Guid projectId, bool trackChanges);
+        Task<User?> GetUserAsync(Guid userId, bool trackChanges);
     }
 }
