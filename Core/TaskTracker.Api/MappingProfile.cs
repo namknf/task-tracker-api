@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
-using Task = TaskTracker.Entities.Models.Task;
 
 namespace TaskTracker.Api
 {
@@ -12,10 +11,15 @@ namespace TaskTracker.Api
             CreateMap<UserForRegistrerDto, User>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
 
-            CreateMap<Task, TaskDto>()
+            CreateMap<Entities.Models.Task, TaskDto>()
                 .ForMember(t => t.Status, opt => opt.MapFrom(td => td.Status.StatusName))
-                .ForMember(t => t.Participants, opt => opt.MapFrom(td => string.Join(", ", td.Participants.Select(p => p.FirstName))))
                 .ForMember(t => t.Priority, opt => opt.MapFrom(td => td.Priority.PriorityName));
+
+            CreateMap<Project, ProjectDto>();
+
+            CreateMap<User, UserDto>();
+
+            CreateMap<User, ParticipantDto>();
         }
     }
 }

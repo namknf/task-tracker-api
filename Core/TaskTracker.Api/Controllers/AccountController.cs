@@ -7,7 +7,6 @@ using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
-using IAuthenticationService = TaskTracker.Contract.IAuthenticationService;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -20,10 +19,10 @@ namespace TaskTracker.Api.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IAuthenticationService _authService;
+        private readonly TaskTracker.Contract.IAuthenticationService _authService;
         private readonly IDataContextService _dataContextService;
 
-        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, SignInManager<User> signInManager, IDataContextService dataContextService)
+        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, TaskTracker.Contract.IAuthenticationService authService, SignInManager<User> signInManager, IDataContextService dataContextService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -57,6 +56,7 @@ namespace TaskTracker.Api.Controllers
             return StatusCode(201);
         }
 
+        #region LogInLogic
         /// <summary>
         /// Log in by email and password
         /// </summary>
@@ -112,6 +112,7 @@ namespace TaskTracker.Api.Controllers
             }
             return Ok(new { Token = _authService.CreateToken() });
         }
+        #endregion
 
         /// <summary>
         /// Log out
@@ -124,6 +125,13 @@ namespace TaskTracker.Api.Controllers
             await _signInManager.Context.SignOutAsync("Cookie");
             _logger.LogInformation("User signed out successfully");
             return NoContent();
+        }
+
+        [HttpGet("info")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetUserInfo()
+        {
+            return Ok();
         }
     }
 }

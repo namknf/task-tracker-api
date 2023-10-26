@@ -2,9 +2,11 @@
 {
     public class TaskDto
     {
-        public string Participants { get; set; }
+        public Guid Id { get; set; }
 
-        public string CreationDate { get; set; }
+        public List<ParticipantDto> Participants { get; set; }
+
+        public DateTime CreationDate { get; set; }
 
         public string Priority { get; set; }
 
