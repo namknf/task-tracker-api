@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
@@ -91,7 +92,7 @@ namespace TaskTracker.Api.Controllers
         [HttpGet("info"), Authorize]
         public async Task<ActionResult<UserDto>> GetUserInfo()
         {
-            var userFromDb = await _dataContextService.GetUserAsync(UserId);
+            var userFromDb = await _userManager.Users.FirstOrDefaultAsync(u => u.Id.Equals(UserId));
             if (userFromDb == null)
             {
                 _logger.LogError("User not found");

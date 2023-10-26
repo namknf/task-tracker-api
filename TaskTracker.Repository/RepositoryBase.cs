@@ -13,6 +13,7 @@ namespace TaskTracker.Repository
         {
             DataContext = dataContext;
         }
+
         public IQueryable<T> FindAll(bool trackChanges) =>
             !trackChanges ? DataContext.Set<T>().AsNoTracking() : DataContext.Set<T>();
 

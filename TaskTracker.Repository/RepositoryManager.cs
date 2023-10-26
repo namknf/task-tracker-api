@@ -8,7 +8,6 @@ namespace TaskTracker.Repository
         private DataContext _dataContext;
         private ITaskRepository _taskRepository;
         private IProjectRepository _projectRepository;
-        private IUserRepository _userRepository;
 
         public RepositoryManager(DataContext dataContext)
         {
@@ -33,15 +32,6 @@ namespace TaskTracker.Repository
             }
         }
 
-        public IUserRepository UserRepository
-        {
-            get
-            {
-                _userRepository ??= new UserRepository(_dataContext);
-                return _userRepository;
-            }
-        }
-
-        public Task SaveAsync() => _dataContext.SaveChangesAsync();
+        public async Task SaveAsync() => await _dataContext.SaveChangesAsync();
     }
 }

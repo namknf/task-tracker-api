@@ -6,8 +6,6 @@
 
         IProjectRepository ProjectRepository { get; }
 
-        IUserRepository UserRepository { get; }
-
         Task SaveAsync();
     }
 }

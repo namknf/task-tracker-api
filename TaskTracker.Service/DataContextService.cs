@@ -1,6 +1,5 @@
 ﻿using TaskTracker.Contract;
 using TaskTracker.Entities.Models;
-using Task = TaskTracker.Entities.Models.Task;
 
 namespace TaskTracker.Service
 {
@@ -13,13 +12,13 @@ namespace TaskTracker.Service
             _manager = manager;
         }
 
-        public async Task<List<Task>> GetProjectTasksAsync(Guid projectId) =>
+        public async Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId) =>
             await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false);
 
         public async Task<Project?> GetProjectAsync(Guid projectId) =>
             await _manager.ProjectRepository.GetProjectAsync(projectId, false);
 
-        public async Task<User?> GetUserAsync(Guid id) =>
-            await _manager.UserRepository.GetUserAsync(id, false);
+        public async System.Threading.Tasks.Task SaveChangesAsync() =>
+            await _manager.SaveAsync();
     }
 }

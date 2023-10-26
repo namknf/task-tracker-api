@@ -9,14 +9,12 @@ namespace TaskTracker.Api.Controllers
     {
         protected const string AuthenticationType = "Token";
 
-        protected Guid UserId
+        protected string UserId
         {
             get
             {
                 var value = User.Claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultNameClaimType)?.Value;
-                if (value is not null)
-                    return Guid.Parse(value);
-
+                if (value is not null) return value;
                 throw new Exception("Undefined user");
             }
         }

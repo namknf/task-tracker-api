@@ -64,6 +64,7 @@ namespace TaskTracker.Service
                 Issuer = issuer,
                 Audience = audiense,
                 SigningCredentials = signingCredentials,
+                Subject = new ClaimsIdentity(claims),
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
