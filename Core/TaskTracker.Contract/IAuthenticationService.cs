@@ -1,5 +1,4 @@
 ﻿using TaskTracker.Entities.DataTransferObjects;
-using TaskTracker.Entities.Models;
 
 namespace TaskTracker.Contract
 {
@@ -7,10 +6,6 @@ namespace TaskTracker.Contract
     {
         Task<bool> IsValidUser(UserForAuthorizeDto userForAuth);
 
-        Task<bool> IsValidNumber(string? number);
-
         string CreateToken();
-
-        System.Threading.Tasks.Task SendMessageByBot(string? phoneNumber);
     }
 }

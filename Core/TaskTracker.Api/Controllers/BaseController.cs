@@ -5,7 +5,7 @@ namespace TaskTracker.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BaseController : ControllerBase
+    public abstract class BaseController : ControllerBase
     {
         protected const string AuthenticationType = "Token";
 

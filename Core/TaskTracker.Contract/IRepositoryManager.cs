@@ -6,7 +6,7 @@
 
         IProjectRepository ProjectRepository { get; }
 
-        ICodeAttemptRepository CodeAttemptRepository { get; }
+        IUserRepository UserRepository { get; }
 
         Task SaveAsync();
     }

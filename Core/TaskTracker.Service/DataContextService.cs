@@ -19,7 +19,7 @@ namespace TaskTracker.Service
         public async Task<Project?> GetProjectAsync(Guid projectId) =>
             await _manager.ProjectRepository.GetProjectAsync(projectId, false);
 
-        public async Task<CodeAttempt?> GetCodeAttemptAsync(string phoneNumber, string code) =>
-            await _manager.CodeAttemptRepository.GetCodeAttemptAsync(phoneNumber, code, false);
+        public async Task<User?> GetUserAsync(Guid id) =>
+            await _manager.UserRepository.GetUserAsync(id, false);
     }
 }

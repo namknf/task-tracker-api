@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -35,24 +34,6 @@ namespace TaskTracker.Service
             var claims = GetClaims();
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-        }
-
-        public async Task<bool> IsValidNumber(string? number)
-        {
-            var user = await _userManager.Users.FirstOrDefaultAsync(u => string.Compare(u.PhoneNumber, number) == 0);
-            return user != null;
-        }
-
-        public async System.Threading.Tasks.Task SendMessageByBot(string? phoneNumber)
-        {
-            var code = FormRandomCode();
-        }
-
-        private static string FormRandomCode()
-        {
-            var random = new Random();
-            var result = random.Next(100000, 999999);
-            return result.ToString();
         }
 
         private SigningCredentials GetSigningCredentials()

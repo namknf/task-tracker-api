@@ -19,7 +19,7 @@ namespace TaskTracker.Api.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly TaskTracker.Contract.IAuthenticationService _authService;
+        private readonly Contract.IAuthenticationService _authService;
         private readonly IDataContextService _dataContextService;
 
         public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, TaskTracker.Contract.IAuthenticationService authService, SignInManager<User> signInManager, IDataContextService dataContextService)
@@ -73,45 +73,6 @@ namespace TaskTracker.Api.Controllers
             }
             return Ok(new { Token = _authService.CreateToken() });
         }
-
-        /// <summary>
-        /// Send message with code on Telegram
-        /// </summary>
-        /// <param name="phoneNumber">User's phone number</param>
-        /// <returns>Dispatch result message</returns>
-        [HttpPost("login/sendMessage")]
-        public async Task<IActionResult> SendTelegramCode([FromBody] string phoneNumber)
-        {
-            if (!await _authService.IsValidNumber(phoneNumber))
-            {
-                _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong number.");
-                return BadRequest();
-            }
-            await _authService.SendMessageByBot(phoneNumber);
-            return Ok("Message sent");
-        }
-
-        /// <summary>
-        /// Log in by code from Telegram bot
-        /// </summary>
-        /// <param name="attempt">Info about entering attempt</param>
-        /// <returns>Token</returns>
-        [HttpPost("login/phone")]
-        public async Task<IActionResult> LogInByCode([FromBody] CodeAttemptDto attempt)
-        {
-            if (attempt == null)
-            {
-                _logger.LogError("CodeAttemptDto object sent from client is null.");
-                return BadRequest("CodeAttemptDto object is null");
-            }
-            var code = await _dataContextService.GetCodeAttemptAsync(attempt.PhoneNumber, attempt.Code);
-            if (code == null)
-            {
-                _logger.LogWarning($"{nameof(LogInByCode)}: Login code failed. Wrong code.");
-                return Unauthorized();
-            }
-            return Ok(new { Token = _authService.CreateToken() });
-        }
         #endregion
 
         /// <summary>
@@ -127,11 +88,17 @@ namespace TaskTracker.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("info")]
-        [Authorize]
+        [HttpGet("info"), Authorize]
         public async Task<ActionResult<UserDto>> GetUserInfo()
         {
-            return Ok();
+            var userFromDb = await _dataContextService.GetUserAsync(UserId);
+            if (userFromDb == null)
+            {
+                _logger.LogError("User not found");
+                return BadRequest("User not found");
+            }
+            var userDto = _mapper.Map<UserDto>(userFromDb);
+            return Ok(userDto);
         }
     }
 }

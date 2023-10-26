@@ -8,7 +8,7 @@ namespace TaskTracker.Repository
         private DataContext _dataContext;
         private ITaskRepository _taskRepository;
         private IProjectRepository _projectRepository;
-        private ICodeAttemptRepository _codeAttemptRepository;
+        private IUserRepository _userRepository;
 
         public RepositoryManager(DataContext dataContext)
         {
@@ -33,12 +33,12 @@ namespace TaskTracker.Repository
             }
         }
 
-        public ICodeAttemptRepository CodeAttemptRepository
+        public IUserRepository UserRepository
         {
             get
             {
-                _codeAttemptRepository ??= new CodeAttemptRepository(_dataContext);
-                return _codeAttemptRepository;
+                _userRepository ??= new UserRepository(_dataContext);
+                return _userRepository;
             }
         }
 

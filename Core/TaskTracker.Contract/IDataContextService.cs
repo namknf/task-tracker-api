@@ -9,6 +9,6 @@ namespace TaskTracker.Contract
 
         Task<Project?> GetProjectAsync(Guid projectId);
 
-        Task<CodeAttempt?> GetCodeAttemptAsync(string phoneNumber, string code);
+        Task<User?> GetUserAsync(Guid id);
     }
 }
