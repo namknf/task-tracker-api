@@ -26,6 +26,8 @@ namespace TaskTracker.Api
             CreateMap<Project, ProjectForCreationDto>();
 
             CreateMap<ProjectForCreationDto, Project>();
+
+            CreateMap<TaskForCreationDto, Entities.Models.Task>();
         }
     }
 }
