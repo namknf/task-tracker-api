@@ -1,4 +1,5 @@
-﻿using TaskTracker.Entities.Models;
+﻿using TaskTracker.Entities.DataTransferObjects;
+using TaskTracker.Entities.Models;
 
 namespace TaskTracker.Contract
 {
@@ -8,8 +9,12 @@ namespace TaskTracker.Contract
 
         Task<Project?> GetProjectAsync(Guid projectId);
 
-        Task<List<Project>> GetProjectsAsync();
+        Task<List<Project>> GetProjectsAsync(string userId);
 
         System.Threading.Tasks.Task SaveChangesAsync();
+
+        System.Threading.Tasks.Task CreateProjectAsync(Project project, List<ParticipantDto> participants);
+
+        Task<User?> GetUserInformationAsync(string userId);
     }
 }

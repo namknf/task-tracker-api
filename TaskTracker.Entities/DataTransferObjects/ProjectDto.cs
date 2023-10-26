@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
 
-        public string Name { get; set; }
+        public string ProjectName { get; set; }
 
         public DateTime Deadline { get; set; }
 

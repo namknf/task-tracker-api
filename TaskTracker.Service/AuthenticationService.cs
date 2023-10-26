@@ -48,7 +48,7 @@ namespace TaskTracker.Service
         {
             return new List<Claim>
             {
-                new Claim(ClaimTypes.Name, _user.Id)
+                new Claim(ClaimTypes.Name, _user.Id.ToString())
             };
         }
 

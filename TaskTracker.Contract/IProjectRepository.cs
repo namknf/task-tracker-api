@@ -8,6 +8,6 @@ namespace TaskTracker.Contract
 
         void CreateProject(Project project);
 
-        Task<List<Project>?> GetProjectsAsync(bool trackChanges);
+        Task<List<Project>?> GetProjectsAsync(string userId, bool trackChanges);
     }
 }

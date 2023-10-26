@@ -89,10 +89,14 @@ namespace TaskTracker.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Getting user information
+        /// </summary>
+        /// <returns>User information</returns>
         [HttpGet("info"), Authorize]
         public async Task<ActionResult<UserDto>> GetUserInfo()
         {
-            var userFromDb = await _userManager.Users.FirstOrDefaultAsync(u => u.Id.Equals(UserId));
+            var userFromDb = await _dataContextService.GetUserInformationAsync(UserId);
             if (userFromDb == null)
             {
                 _logger.LogError("User not found");

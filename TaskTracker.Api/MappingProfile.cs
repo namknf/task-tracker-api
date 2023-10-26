@@ -20,6 +20,12 @@ namespace TaskTracker.Api
             CreateMap<User, UserDto>();
 
             CreateMap<User, ParticipantDto>();
+
+            CreateMap<ParticipantDto, User>();
+
+            CreateMap<Project, ProjectForCreationDto>();
+
+            CreateMap<ProjectForCreationDto, Project>();
         }
     }
 }
