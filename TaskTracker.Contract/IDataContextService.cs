@@ -7,7 +7,7 @@ namespace TaskTracker.Contract
     {
         Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId);
 
-        Task<Project?> GetProjectAsync(Guid projectId);
+        Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges);
 
         Task<List<Project>> GetProjectsAsync(string userId);
 
@@ -16,5 +16,7 @@ namespace TaskTracker.Contract
         System.Threading.Tasks.Task CreateProjectAsync(Project project, List<ParticipantDto> participants);
 
         Task<User?> GetUserInformationAsync(string userId);
+
+        void DeleteProject(Project project);
     }
 }

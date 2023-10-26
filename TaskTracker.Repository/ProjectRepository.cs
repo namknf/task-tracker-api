@@ -11,6 +11,8 @@ namespace TaskTracker.Repository
 
         public void CreateProject(Project project) => Create(project);
 
+        public void DeleteProject(Project project) => Delete(project);
+
         public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(projectId), trackChanges).SingleOrDefaultAsync();
 

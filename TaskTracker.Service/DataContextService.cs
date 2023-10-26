@@ -20,8 +20,8 @@ namespace TaskTracker.Service
         public async Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId) =>
             await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false);
 
-        public async Task<Project?> GetProjectAsync(Guid projectId) =>
-            await _manager.ProjectRepository.GetProjectAsync(projectId, false);
+        public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
+            await _manager.ProjectRepository.GetProjectAsync(projectId, trackChanges);
 
         public async System.Threading.Tasks.Task SaveChangesAsync() =>
             await _manager.SaveAsync();
@@ -49,5 +49,8 @@ namespace TaskTracker.Service
                 .Include(u => u.Tasks)
                 .FirstOrDefaultAsync(u => u.Id.Equals(userId));
         }
+
+        public void DeleteProject(Project project) =>
+            _manager.ProjectRepository.DeleteProject(project);
     }
 }

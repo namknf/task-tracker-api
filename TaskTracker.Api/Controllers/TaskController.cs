@@ -25,7 +25,7 @@ namespace TaskTracker.Api.Controllers
         [HttpGet("tasks"), Authorize]  
         public async Task<ActionResult<List<TaskDto>>> GetAllTasksForProject(Guid projectId, [FromQuery] TaskParameters parms)
         {
-            var project = await _dataContextService.GetProjectAsync(projectId);
+            var project = await _dataContextService.GetProjectAsync(projectId, false);
             if (project == null)
             {
                 _logger.LogInformation("Project with id: {projectId} doesn't exist in the database.", projectId);

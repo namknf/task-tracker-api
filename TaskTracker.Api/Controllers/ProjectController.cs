@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
+using TaskTracker.Api.ActionFilters;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -16,14 +17,12 @@ namespace TaskTracker.Api.Controllers
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IDataContextService _dataContextService;
-        private readonly UserManager<User> _userManager;
 
-        public ProjectController(ILogger<ProjectController> logger, IMapper mapper, IDataContextService dataContextService, UserManager<User> manager)
+        public ProjectController(ILogger<ProjectController> logger, IMapper mapper, IDataContextService dataContextService)
         {
             _logger = logger;
             _mapper = mapper;
             _dataContextService = dataContextService;
-            _userManager = manager;
         }
 
         /// <summary>
@@ -43,7 +42,7 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="projectDto">Project model with parameters</param>
         /// <returns>Created project</returns>
-        [HttpPost("project"), Authorize]
+        [HttpPost(Name = "ProjectById"), Authorize]
         public async Task<IActionResult> CreateProject([FromBody] ProjectForCreationDto projectDto)
         {
             if (projectDto == null)
@@ -57,6 +56,16 @@ namespace TaskTracker.Api.Controllers
             await _dataContextService.SaveChangesAsync();
             var projectToReturn = _mapper.Map<ProjectDto>(projectEntity);
             return CreatedAtRoute("ProjectById", new { id = projectToReturn.Id }, projectToReturn);
+        }
+
+        [HttpDelete("project/{id}"), Authorize]
+        [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
+        public async Task<IActionResult> DeleteProject(Guid id)
+        {
+            var project = HttpContext.Items["project"] as Project;
+            _dataContextService.DeleteProject(project);
+            await _dataContextService.SaveChangesAsync();
+            return NoContent();
         }
     }
 }

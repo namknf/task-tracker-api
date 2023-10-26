@@ -6,6 +6,7 @@ namespace TaskTracker.Api.ActionFilters
     public class ValidationFilterAttribute : IActionFilter
     {
         private readonly ILogger _logger;
+
         public ValidationFilterAttribute(ILogger<ValidationFilterAttribute> logger)
         {
             _logger = logger;
@@ -34,6 +35,5 @@ namespace TaskTracker.Api.ActionFilters
         public void OnActionExecuted(ActionExecutedContext context)
         {
         }
-
     }
 }
