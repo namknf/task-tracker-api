@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
+using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
 {
     [Route("api/projects/{projectId}/tasks/")]
+    [Produces("application/json")]
     [ApiController]
     public class TaskController : ControllerBase
     {
@@ -76,6 +78,23 @@ namespace TaskTracker.Api.Controllers
         {
             var task = HttpContext.Items["task"] as Entities.Models.Task;
             _dataContextService.DeleteTask(task);
+            await _dataContextService.SaveChangesAsync();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Update task information
+        /// </summary>
+        /// <param name="projectId">Project id</param>
+        /// <param name="taskId">Task id</param>
+        /// <param name="taskDto">Updated task model</param>
+        /// <returns>Updated task model</returns>
+        [HttpPut("{taskId}"), Authorize]
+        [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
+        public async Task<IActionResult> UpdateTask(Guid projectId, Guid taskId, [FromBody] TaskForUpdateDto taskDto)
+        {
+            var taskEntity = HttpContext.Items["task"] as System.Threading.Tasks.Task;
+            await _mapper.Map(taskDto, taskEntity);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
         }

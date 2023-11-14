@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
 using TaskTracker.Contract;
 using TaskTracker.Entities.Data;
 using Task = TaskTracker.Entities.Models.Task;
@@ -20,6 +19,10 @@ namespace TaskTracker.Repository
         }
 
         public async Task<Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges) =>
-            await FindByCondition(e => e.ProjectId.Equals(projectId) && e.Id.Equals(taskId), trackChanges).SingleOrDefaultAsync();
+            await FindByCondition(e => e.ProjectId.Equals(projectId) && e.Id.Equals(taskId), trackChanges)
+            .Include(t => t.Priority)
+            .Include(t => t.Status)
+            .Include(t => t.Participants)
+            .SingleOrDefaultAsync();
     }
 }
