@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +18,7 @@ namespace TaskTracker.Api.Controllers
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly Contract.IAuthenticationService _authService;
+        private readonly IAuthenticationService _authService;
         private readonly IDataContextService _dataContextService;
 
         public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, TaskTracker.Contract.IAuthenticationService authService, SignInManager<User> signInManager, IDataContextService dataContextService)
@@ -74,19 +73,6 @@ namespace TaskTracker.Api.Controllers
             return Ok(new { Token = _authService.CreateToken() });
         }
         #endregion
-
-        /// <summary>
-        /// Log out
-        /// </summary>
-        /// <returns>NoContent</returns>
-        [HttpPost("logout")]
-        [Authorize]
-        public async Task<IActionResult> LogOut()
-        {
-            await _signInManager.Context.SignOutAsync("Cookie");
-            _logger.LogInformation("User signed out successfully");
-            return NoContent();
-        }
 
         /// <summary>
         /// Getting user information
