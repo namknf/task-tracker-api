@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
 
-        public List<ParticipantDto> Participants { get; set; }
+        public List<ParticipantForGetDto> Participants { get; set; }
 
         public DateTime CreationDate { get; set; }
 

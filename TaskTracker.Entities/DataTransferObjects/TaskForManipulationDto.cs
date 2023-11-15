@@ -11,5 +11,9 @@
         public string Description { get; set; }
 
         public List<ParticipantDto> Participants { get; set; }
+
+        public virtual Guid TaskStatusId { get; set; }
+
+        public Guid TaskPriorityId { get; set; }
     }
 }

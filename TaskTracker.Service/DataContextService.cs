@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
-using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Service
 {
@@ -54,7 +53,7 @@ namespace TaskTracker.Service
         public void DeleteProject(Project project) =>
             _manager.ProjectRepository.DeleteProject(project);
 
-        public async System.Threading.Tasks.Task CreateTaskAsync(Entities.Models.Task taskEntity, List<ParticipantDto> participants, Guid projectId, TaskCreationParameters parms)
+        public async System.Threading.Tasks.Task CreateTaskAsync(Entities.Models.Task taskEntity, List<ParticipantDto> participants, Guid projectId)
         {
             var users = new List<User>();
             foreach (var part in participants)
@@ -65,8 +64,6 @@ namespace TaskTracker.Service
             }
             taskEntity.Participants = users;
             taskEntity.ProjectId = projectId;
-            taskEntity.TaskStatusId = parms.StatusId;
-            taskEntity.TaskPriorityId = parms.PriorityId;
             _manager.TaskRepository.CreateTask(taskEntity);
         }
 

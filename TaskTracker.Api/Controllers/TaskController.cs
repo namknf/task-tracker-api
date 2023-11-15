@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
-using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -46,7 +45,7 @@ namespace TaskTracker.Api.Controllers
         /// <returns>Created task</returns>
         [HttpPost(Name = "CreateTaskForProject")]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
-        public async Task<IActionResult> CreateTaskForProject(Guid projectId, [FromBody] TaskForCreationDto taskDto, [FromQuery] TaskCreationParameters parms)
+        public async Task<IActionResult> CreateTaskForProject(Guid projectId, [FromBody] TaskForCreationDto taskDto)
         {
             if (taskDto == null)
             {
@@ -54,14 +53,8 @@ namespace TaskTracker.Api.Controllers
                 return BadRequest("TaskForCreationDto is null");
             }
 
-            if (parms == null)
-            {
-                _logger.LogError("TaskCreationParameters is null");
-                return BadRequest("TaskCreationParameters is null");
-            }
-
             var taskEntity = _mapper.Map<Entities.Models.Task>(taskDto);
-            await _dataContextService.CreateTaskAsync(taskEntity, taskDto.Participants, projectId, parms);
+            await _dataContextService.CreateTaskAsync(taskEntity, taskDto.Participants, projectId);
             await _dataContextService.SaveChangesAsync();
             var taskToReturn = _mapper.Map<TaskDto>(taskEntity);
             return CreatedAtRoute("CreateTaskForProject", new { id = taskToReturn.Id }, taskToReturn);
