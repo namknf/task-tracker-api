@@ -9,6 +9,7 @@ namespace TaskTracker.Repository
         private DataContext _dataContext;
         private ITaskRepository _taskRepository;
         private IProjectRepository _projectRepository;
+        private IStatusRepository _statusRepository;
 
         public RepositoryManager(DataContext dataContext)
         {
@@ -30,6 +31,15 @@ namespace TaskTracker.Repository
             {
                 _projectRepository ??= new ProjectRepository(_dataContext);
                 return _projectRepository;
+            }
+        }
+
+        public IStatusRepository StatusRepository
+        {
+            get
+            {
+                _statusRepository ??= new StatusRepository(_dataContext);
+                return _statusRepository;
             }
         }
 

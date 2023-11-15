@@ -36,6 +36,8 @@ namespace TaskTracker.Api
             CreateMap<TaskForUpdateDto, Entities.Models.Task>();
 
             CreateMap<TaskForCreationDto, Entities.Models.Task>();
+
+            CreateMap<Status, StatusDto>();
         }
     }
 }

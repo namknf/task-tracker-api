@@ -78,5 +78,8 @@ namespace TaskTracker.Service
 
         public void UpdateTask(Entities.Models.Task task) =>
             _manager.TaskRepository.UpdateTask(task);
+
+        public async Task<List<Status>> GetAllStatuses() =>
+            await _manager.StatusRepository.GetAllStatusesAsync(false);
     }
 }

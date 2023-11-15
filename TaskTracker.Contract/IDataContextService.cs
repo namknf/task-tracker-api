@@ -28,5 +28,7 @@ namespace TaskTracker.Contract
         void UpdateProject(Project project);
 
         void UpdateTask(Entities.Models.Task task);
+
+        Task<List<Status>> GetAllStatuses();
     }
 }

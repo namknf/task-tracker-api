@@ -6,6 +6,8 @@
 
         IProjectRepository ProjectRepository { get; }
 
+        IStatusRepository StatusRepository { get; }
+
         Task SaveAsync();
 
         void DetachAllEntities();
