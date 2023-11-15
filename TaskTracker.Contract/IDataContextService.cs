@@ -24,5 +24,7 @@ namespace TaskTracker.Contract
         void DeleteTask(Entities.Models.Task task);
 
         Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges);
+
+        void UpdateProject(Project project);
     }
 }

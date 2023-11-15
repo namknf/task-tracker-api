@@ -83,7 +83,8 @@ namespace TaskTracker.Api.Controllers
         public async Task<IActionResult> UpdateProject(Guid projectId, [FromBody] ProjectForUpdateDto projectDto)
         {
             var projectEntity = HttpContext.Items["project"] as Project;
-            _mapper.Map(projectDto, projectEntity);
+            var updatedProject = _mapper.Map(projectDto, projectEntity);
+            _dataContextService.UpdateProject(updatedProject);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
         }

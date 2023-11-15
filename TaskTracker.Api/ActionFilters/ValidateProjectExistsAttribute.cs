@@ -17,9 +17,8 @@ namespace TaskTracker.Api.ActionFilters
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var trackChanges = context.HttpContext.Request.Method.Equals("PUT");
             var id = (Guid)context.ActionArguments["projectId"];
-            var project = await _dataService.GetProjectAsync(id, trackChanges);
+            var project = await _dataService.GetProjectAsync(id, false);
             if (project == null)
             {
                 _logger.LogInformation($"Project with id: {id} doesn't exist in the database.");

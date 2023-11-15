@@ -20,11 +20,11 @@ namespace TaskTracker.Service
         public async Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId) =>
             await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false);
 
-        public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges)
-        {
-            _manager.DetachAllEntities();
-            return await _manager.ProjectRepository.GetProjectAsync(projectId, trackChanges);
-        }
+        public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
+            await _manager.ProjectRepository.GetProjectAsync(projectId, trackChanges);
+
+        public void UpdateProject(Project project) =>
+            _manager.ProjectRepository.UpdateProject(project);
             
 
         public async System.Threading.Tasks.Task SaveChangesAsync() =>
@@ -73,10 +73,7 @@ namespace TaskTracker.Service
 
         public void DeleteTask(Entities.Models.Task task) => _manager.TaskRepository.DeleteTask(task);
 
-        public async Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges)
-        {
-            _manager.DetachAllEntities();
-            return await _manager.TaskRepository.GetTaskAsync(projectId, taskId, trackChanges);
-        }
+        public async Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges) =>
+            await _manager.TaskRepository.GetTaskAsync(projectId, taskId, trackChanges);
     }
 }
