@@ -82,11 +82,12 @@ namespace TaskTracker.Api.Controllers
         /// <param name="taskDto">Updated task model</param>
         /// <returns>Updated task model</returns>
         [HttpPut("{taskId}"), Authorize]
-        [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
+        [ServiceFilter(typeof(ValidateTaskExistsAttribute))]
         public async Task<IActionResult> UpdateTask(Guid projectId, Guid taskId, [FromBody] TaskForUpdateDto taskDto)
         {
             var taskEntity = HttpContext.Items["task"] as Entities.Models.Task;
-            _mapper.Map<TaskForUpdateDto, Entities.Models.Task>(taskDto, taskEntity);
+            var updatedTask = _mapper.Map<TaskForUpdateDto, Entities.Models.Task>(taskDto, taskEntity);
+            _dataContextService.UpdateTask(updatedTask);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
         }

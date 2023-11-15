@@ -13,6 +13,8 @@ namespace TaskTracker.Repository
 
         public void DeleteTask(Task task) => Delete(task);
 
+        public void UpdateTask(Task task) => Update(task);
+
         public async Task<List<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges)
         {
             return await FindByCondition(e => e.ProjectId.Equals(projectId), trackChanges)

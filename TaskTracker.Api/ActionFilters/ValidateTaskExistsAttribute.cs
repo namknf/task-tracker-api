@@ -17,8 +17,6 @@ namespace TaskTracker.Api.ActionFilters
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var method = context.HttpContext.Request.Method;
-            var trackChanges = (method.Equals("PUT") || method.Equals("PATCH")) ? true : false;
             var projectId = (Guid)context.ActionArguments["projectId"];
             var project = await _dataService.GetProjectAsync(projectId, false);
             if (project == null)
@@ -28,7 +26,7 @@ namespace TaskTracker.Api.ActionFilters
                 return;
             }
             var id = (Guid)context.ActionArguments["taskId"];
-            var task = await _dataService.GetTaskAsync(projectId, id, trackChanges);
+            var task = await _dataService.GetTaskAsync(projectId, id, false);
 
             if (task == null)
             {

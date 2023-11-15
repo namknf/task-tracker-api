@@ -75,5 +75,8 @@ namespace TaskTracker.Service
 
         public async Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges) =>
             await _manager.TaskRepository.GetTaskAsync(projectId, taskId, trackChanges);
+
+        public void UpdateTask(Entities.Models.Task task) =>
+            _manager.TaskRepository.UpdateTask(task);
     }
 }

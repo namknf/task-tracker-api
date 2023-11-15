@@ -26,5 +26,7 @@ namespace TaskTracker.Contract
         Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges);
 
         void UpdateProject(Project project);
+
+        void UpdateTask(Entities.Models.Task task);
     }
 }
