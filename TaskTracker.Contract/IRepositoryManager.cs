@@ -7,5 +7,7 @@
         IProjectRepository ProjectRepository { get; }
 
         Task SaveAsync();
+
+        void DetachAllEntities();
     }
 }

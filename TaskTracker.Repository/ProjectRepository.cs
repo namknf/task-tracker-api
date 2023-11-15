@@ -14,10 +14,15 @@ namespace TaskTracker.Repository
         public void DeleteProject(Project project) => Delete(project);
 
         public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
-            await FindByCondition(c => c.Id.Equals(projectId), trackChanges).SingleOrDefaultAsync();
+            await FindByCondition(c => c.Id.Equals(projectId), trackChanges)
+            .Include(p => p.Participants)
+            .Include(p => p.Tasks)
+            .SingleOrDefaultAsync();
 
         public async Task<List<Project>?> GetProjectsAsync(string userId, bool trackChanges) =>
             await FindAll(trackChanges).Include(p => p.Participants)
-            .Where(c => c.Participants.Any(p => p.Id.Equals(userId))).ToListAsync();
+            .Include(p => p.Tasks)
+            .Where(c => c.Participants.Any(p => p.Id.Equals(userId)))
+            .ToListAsync();
     }
 }

@@ -2,6 +2,6 @@
 {
     public class ProjectForCreationDto : ProjectForManipulationDto
     {
-        public override DateTime CreationDate { get => DateTime.Now; }
+        public DateTime CreationDate { get => DateTime.Now; }
     }
 }

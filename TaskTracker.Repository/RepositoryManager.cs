@@ -1,4 +1,5 @@
-﻿using TaskTracker.Contract;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskTracker.Contract;
 using TaskTracker.Entities.Data;
 
 namespace TaskTracker.Repository
@@ -30,6 +31,16 @@ namespace TaskTracker.Repository
                 _projectRepository ??= new ProjectRepository(_dataContext);
                 return _projectRepository;
             }
+        }
+
+        public void DetachAllEntities()
+        {
+            var undetachedEntriesCopy = _dataContext.ChangeTracker.Entries()
+                .Where(e => e.State != EntityState.Detached)
+                .ToList();
+
+            foreach (var entry in undetachedEntriesCopy)
+                entry.State = EntityState.Detached;
         }
 
         public async Task SaveAsync() => await _dataContext.SaveChangesAsync();
