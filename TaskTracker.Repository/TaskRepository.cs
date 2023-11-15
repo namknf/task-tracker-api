@@ -15,7 +15,11 @@ namespace TaskTracker.Repository
 
         public async Task<List<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges)
         {
-            return await FindByCondition(e => e.ProjectId.Equals(projectId), trackChanges).ToListAsync();
+            return await FindByCondition(e => e.ProjectId.Equals(projectId), trackChanges)
+                .Include(t => t.Participants)
+                .Include(t => t.Status)
+                .Include(t => t.Priority)
+                .ToListAsync();
         }
 
         public async Task<Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges) =>

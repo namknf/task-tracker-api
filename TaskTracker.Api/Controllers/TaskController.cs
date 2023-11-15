@@ -85,8 +85,8 @@ namespace TaskTracker.Api.Controllers
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         public async Task<IActionResult> UpdateTask(Guid projectId, Guid taskId, [FromBody] TaskForUpdateDto taskDto)
         {
-            var taskEntity = HttpContext.Items["task"] as System.Threading.Tasks.Task;
-            await _mapper.Map(taskDto, taskEntity);
+            var taskEntity = HttpContext.Items["task"] as Entities.Models.Task;
+            _mapper.Map<TaskForUpdateDto, Entities.Models.Task>(taskDto, taskEntity);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
         }

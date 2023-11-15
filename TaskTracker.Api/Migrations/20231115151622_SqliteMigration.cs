@@ -44,7 +44,7 @@ namespace TaskTracker.Api.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     ProjectName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Deadline = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: DateTime.Now),
                     Description = table.Column<string>(type: "TEXT", maxLength: 180, nullable: false)
                 },
                 constraints: table =>
@@ -140,7 +140,7 @@ namespace TaskTracker.Api.Migrations
                     Description = table.Column<string>(type: "TEXT", maxLength: 180, nullable: false),
                     TaskStatusId = table.Column<Guid>(type: "TEXT", nullable: false),
                     TaskPriorityId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValue: DateTime.Now),
                     Deadline = table.Column<DateTime>(type: "TEXT", nullable: false),
                     ProjectId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
