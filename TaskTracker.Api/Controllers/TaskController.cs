@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
-using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
