@@ -30,5 +30,7 @@ namespace TaskTracker.Contract
         void UpdateTask(Entities.Models.Task task);
 
         Task<List<Status>> GetAllStatuses();
+
+        Task<List<TaskPriority>> GetAllPriorities();
     }
 }

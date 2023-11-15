@@ -38,6 +38,8 @@ namespace TaskTracker.Api
             CreateMap<TaskForCreationDto, Entities.Models.Task>();
 
             CreateMap<Status, StatusDto>();
+
+            CreateMap<TaskPriority, PriorityDto>();
         }
     }
 }

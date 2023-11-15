@@ -8,6 +8,8 @@
 
         IStatusRepository StatusRepository { get; }
 
+        IPriorityRepository PriorityRepository { get; }
+
         Task SaveAsync();
 
         void DetachAllEntities();
