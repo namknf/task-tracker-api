@@ -12,8 +12,8 @@ namespace TaskTracker.Api
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
 
             CreateMap<Entities.Models.Task, TaskDto>()
-                .ForMember(t => t.Status, opt => opt.MapFrom(td => td.Status.StatusName))
-                .ForMember(t => t.Priority, opt => opt.MapFrom(td => td.Priority.PriorityName));
+                .ForMember(t => t.StatusName, opt => opt.MapFrom(x => x.Status.StatusName))
+                .ForMember(t => t.PriorityName, opt => opt.MapFrom(x => x.Priority.PriorityName));
 
             CreateMap<Project, ProjectDto>();
 
@@ -27,7 +27,19 @@ namespace TaskTracker.Api
 
             CreateMap<ProjectForCreationDto, Project>();
 
+            CreateMap<ProjectForUpdateDto, Project>();
+
+            CreateMap<ParticipantDto, ParticipantForGetDto>();
+
+            CreateMap<User, ParticipantForGetDto>();
+
+            CreateMap<TaskForUpdateDto, Entities.Models.Task>();
+
             CreateMap<TaskForCreationDto, Entities.Models.Task>();
+
+            CreateMap<Status, StatusDto>();
+
+            CreateMap<TaskPriority, PriorityDto>();
         }
     }
 }

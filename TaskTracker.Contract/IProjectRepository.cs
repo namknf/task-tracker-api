@@ -10,6 +10,8 @@ namespace TaskTracker.Contract
 
         void DeleteProject(Project project);
 
+        void UpdateProject(Project project);
+
         Task<List<Project>?> GetProjectsAsync(string userId, bool trackChanges);
     }
 }

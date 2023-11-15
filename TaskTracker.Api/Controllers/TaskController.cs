@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
-using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
 {
     [Route("api/projects/{projectId}/tasks/")]
+    [Produces("application/json")]
     [ApiController]
     public class TaskController : ControllerBase
     {
@@ -45,7 +45,7 @@ namespace TaskTracker.Api.Controllers
         /// <returns>Created task</returns>
         [HttpPost(Name = "CreateTaskForProject")]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
-        public async Task<IActionResult> CreateTaskForProject(Guid projectId, [FromBody] TaskForCreationDto taskDto, [FromQuery] TaskCreationParameters parms)
+        public async Task<IActionResult> CreateTaskForProject(Guid projectId, [FromBody] TaskForCreationDto taskDto)
         {
             if (taskDto == null)
             {
@@ -53,14 +53,8 @@ namespace TaskTracker.Api.Controllers
                 return BadRequest("TaskForCreationDto is null");
             }
 
-            if (parms == null)
-            {
-                _logger.LogError("TaskCreationParameters is null");
-                return BadRequest("TaskCreationParameters is null");
-            }
-
             var taskEntity = _mapper.Map<Entities.Models.Task>(taskDto);
-            await _dataContextService.CreateTaskAsync(taskEntity, taskDto.Participants, projectId, parms);
+            await _dataContextService.CreateTaskAsync(taskEntity, taskDto.Participants, projectId);
             await _dataContextService.SaveChangesAsync();
             var taskToReturn = _mapper.Map<TaskDto>(taskEntity);
             return CreatedAtRoute("CreateTaskForProject", new { id = taskToReturn.Id }, taskToReturn);
@@ -76,6 +70,24 @@ namespace TaskTracker.Api.Controllers
         {
             var task = HttpContext.Items["task"] as Entities.Models.Task;
             _dataContextService.DeleteTask(task);
+            await _dataContextService.SaveChangesAsync();
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Update task information
+        /// </summary>
+        /// <param name="projectId">Project id</param>
+        /// <param name="taskId">Task id</param>
+        /// <param name="taskDto">Updated task model</param>
+        /// <returns>Updated task model</returns>
+        [HttpPut("{taskId}"), Authorize]
+        [ServiceFilter(typeof(ValidateTaskExistsAttribute))]
+        public async Task<IActionResult> UpdateTask(Guid projectId, Guid taskId, [FromBody] TaskForUpdateDto taskDto)
+        {
+            var taskEntity = HttpContext.Items["task"] as Entities.Models.Task;
+            var updatedTask = _mapper.Map<TaskForUpdateDto, Entities.Models.Task>(taskDto, taskEntity);
+            _dataContextService.UpdateTask(updatedTask);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
         }

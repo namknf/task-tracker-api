@@ -1,6 +1,5 @@
 ﻿using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
-using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Contract
 {
@@ -20,10 +19,18 @@ namespace TaskTracker.Contract
 
         void DeleteProject(Project project);
 
-        System.Threading.Tasks.Task CreateTaskAsync(Entities.Models.Task taskEntity, List<ParticipantDto> participants, Guid projectId, TaskCreationParameters parms);
+        System.Threading.Tasks.Task CreateTaskAsync(Entities.Models.Task taskEntity, List<ParticipantDto> participants, Guid projectId);
 
         void DeleteTask(Entities.Models.Task task);
 
         Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges);
+
+        void UpdateProject(Project project);
+
+        void UpdateTask(Entities.Models.Task task);
+
+        Task<List<Status>> GetAllStatuses();
+
+        Task<List<TaskPriority>> GetAllPriorities();
     }
 }

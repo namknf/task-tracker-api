@@ -7,8 +7,6 @@ namespace TaskTracker.Api.Controllers
     [ApiController]
     public abstract class BaseController : ControllerBase
     {
-        protected const string AuthenticationType = "Token";
-
         protected string UserId
         {
             get

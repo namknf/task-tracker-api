@@ -22,7 +22,11 @@ namespace TaskTracker.Repository
 
         public void Create(T entity) => DataContext.Set<T>().Add(entity);
 
-        public void Update(T entity) => DataContext.Set<T>().Update(entity);
+        public void Update(T entity)
+        {
+            DataContext.Entry(entity).State = EntityState.Modified;
+            DataContext.Set<T>().Update(entity);
+        }
 
         public void Delete(T entity) => DataContext.Set<T>().Remove(entity);
     }

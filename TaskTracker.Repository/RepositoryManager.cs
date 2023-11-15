@@ -1,4 +1,5 @@
-﻿using TaskTracker.Contract;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskTracker.Contract;
 using TaskTracker.Entities.Data;
 
 namespace TaskTracker.Repository
@@ -8,6 +9,8 @@ namespace TaskTracker.Repository
         private DataContext _dataContext;
         private ITaskRepository _taskRepository;
         private IProjectRepository _projectRepository;
+        private IStatusRepository _statusRepository;
+        private IPriorityRepository _priorityRepository;
 
         public RepositoryManager(DataContext dataContext)
         {
@@ -30,6 +33,34 @@ namespace TaskTracker.Repository
                 _projectRepository ??= new ProjectRepository(_dataContext);
                 return _projectRepository;
             }
+        }
+
+        public IStatusRepository StatusRepository
+        {
+            get
+            {
+                _statusRepository ??= new StatusRepository(_dataContext);
+                return _statusRepository;
+            }
+        }
+
+        public IPriorityRepository PriorityRepository
+        {
+            get
+            {
+                _priorityRepository ??= new PriorityRepository(_dataContext);
+                return _priorityRepository;
+            }
+        }
+
+        public void DetachAllEntities()
+        {
+            var undetachedEntriesCopy = _dataContext.ChangeTracker.Entries()
+                .Where(e => e.State != EntityState.Detached)
+                .ToList();
+
+            foreach (var entry in undetachedEntriesCopy)
+                entry.State = EntityState.Detached;
         }
 
         public async Task SaveAsync() => await _dataContext.SaveChangesAsync();
