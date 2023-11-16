@@ -32,6 +32,7 @@ builder.Services.AddMvc(options =>
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
+app.AddAutomaticallyMigration();
 app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI(s =>

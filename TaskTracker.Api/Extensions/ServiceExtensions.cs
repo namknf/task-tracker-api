@@ -80,7 +80,8 @@ namespace TaskTracker.Api.Extensions
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
-            var secretKey = configuration["TokenSecret"];
+            var tokenInfo = configuration.GetSection("TokenInfo");
+            var secretKey = tokenInfo.GetSection("keyString").Value;
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -139,6 +140,15 @@ namespace TaskTracker.Api.Extensions
                     }
                 });
             });
+        }
+
+        public static void AddAutomaticallyMigration(this WebApplication app)
+        {
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+                db.Database.Migrate();
+            }
         }
     }
 }
