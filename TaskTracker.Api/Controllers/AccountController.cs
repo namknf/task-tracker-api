@@ -17,18 +17,15 @@ namespace TaskTracker.Api.Controllers
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
         private readonly IAuthenticationService _authService;
         private readonly IDataContextService _dataContextService;
 
-        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, TaskTracker.Contract.IAuthenticationService authService, SignInManager<User> signInManager, IDataContextService dataContextService)
+        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, TaskTracker.Contract.IAuthenticationService authService, IDataContextService dataContextService)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
             _authService = authService;
-            _signInManager = signInManager;
-            _signInManager.UserManager = _userManager;
             _dataContextService = dataContextService;
         }
 
@@ -70,6 +67,20 @@ namespace TaskTracker.Api.Controllers
                 _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong email or password.");
                 return Unauthorized();
             }
+            return Ok(new { Token = _authService.CreateToken() });
+        }
+
+        /// <summary>
+        /// Send confirmation email
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("sendEmail"), AllowAnonymous]
+        public async Task<IActionResult> SendEmail(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest($"User with email {email} not found");
+
             return Ok(new { Token = _authService.CreateToken() });
         }
         #endregion
