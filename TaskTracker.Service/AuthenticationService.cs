@@ -38,7 +38,8 @@ namespace TaskTracker.Service
 
         private SigningCredentials GetSigningCredentials()
         {
-            var keyStr = _configuration["TokenSecret"];
+            var tokenInfo = _configuration.GetSection("TokenInfo");
+            var keyStr = tokenInfo.GetSection("keyString").Value;
             var key = Encoding.UTF8.GetBytes(keyStr);
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
