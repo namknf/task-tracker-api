@@ -39,7 +39,7 @@ namespace TaskTracker.Service
             foreach (var part in participants)
             {
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id.Equals(part.Id.ToString()));
-                if (user == null) continue;
+                if (user == null) throw new Exception($"User with id {part.Id} does not exist");
                 else users.Add(user);
             }
             project.Participants = users;
@@ -63,7 +63,7 @@ namespace TaskTracker.Service
             foreach (var part in participants)
             {
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Id.Equals(part.Id.ToString()));
-                if (user == null) continue;
+                if (user == null) throw new Exception($"User with id {part.Id} does not exist");
                 else users.Add(user);
             }
             taskEntity.Participants = users;
