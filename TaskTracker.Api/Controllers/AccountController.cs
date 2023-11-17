@@ -90,6 +90,23 @@ namespace TaskTracker.Api.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Authentication by code
+        /// </summary>
+        /// <param name="code">code of enternety</param>
+        /// <param name="email">user email</param>
+        /// <returns>token</returns>
+        [HttpPost("loginCode"), AllowAnonymous]
+        public async Task<IActionResult> AuthorizeByCode(string code, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return BadRequest($"User with email {email} not found");
+            if (user.EmailCode.Equals(code))
+                return Ok(new { Token = _authService.CreateToken(user.Id) });
+            else return BadRequest("Incorrect code");
+        }
         #endregion
 
         /// <summary>
