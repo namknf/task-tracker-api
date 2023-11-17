@@ -5,6 +5,7 @@ using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using TaskTracker.Api.ActionFilters;
+using System.Net;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -27,7 +28,9 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Get all projects of current user
         /// </summary>
+        /// <response code="200">Successfully got</response>
         /// <returns>List of projects</returns>
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpGet, Authorize]
         public async Task<ActionResult<List<ProjectDto>>> GetProjects()
         {
@@ -37,10 +40,32 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
+        /// Get project by id
+        /// </summary>
+        /// <param name="projectId">project id</param>
+        /// <response code="200">Successfully got</response>
+        /// <response code="404">Project not found</response>
+        /// <returns>Project</returns>
+        [HttpGet("{projectId}"), Authorize]
+        [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        public ActionResult<ProjectDto> GetProject(Guid projectId)
+        {
+            var projectEntity = HttpContext.Items["project"] as Project;
+            var projectDto = _mapper.Map<ProjectDto>(projectEntity);
+            return Ok(projectDto);
+        }
+
+        /// <summary>
         /// Create project
         /// </summary>
         /// <param name="projectDto">Project model with parameters</param>
+        /// <response code="400">Project dto is null</response>
+        /// <response code="201">Project was successfully created</response>
         /// <returns>Created project</returns>
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [HttpPost(Name = "ProjectById"), Authorize]
         public async Task<IActionResult> CreateProject([FromBody] ProjectForCreationDto projectDto)
         {
@@ -61,8 +86,12 @@ namespace TaskTracker.Api.Controllers
         /// Delete existing project
         /// </summary>
         /// <param name="projectId">Project id</param>
+        /// <response code="204">Project was successfully deleted</response>
+        /// <response code="404">Project not found</response>
         /// <returns>No content</returns>
-        [HttpDelete("{id}"), Authorize]
+        [HttpDelete("{projectId}"), Authorize]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         public async Task<IActionResult> DeleteProject(Guid projectId)
         {
@@ -77,8 +106,12 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="projectId">Project id</param>
         /// <param name="projectDto">New project information</param>
+        /// <response code="204">Project was successfully updated</response>
+        /// <response code="404">Project not found</response>
         /// <returns>No content</returns>
         [HttpPut("{projectId}"), Authorize]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         public async Task<IActionResult> UpdateProject(Guid projectId, [FromBody] ProjectForUpdateDto projectDto)
         {

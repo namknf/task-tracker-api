@@ -22,7 +22,7 @@ namespace TaskTracker.Entities.Models
 
         public File? Photo { get; set; }
 
-        public string EmailCode { get; set; }
+        public string? EmailCode { get; set; }
 
         public IEnumerable<Task>? Tasks { get; set; }
 

@@ -11,7 +11,7 @@ using TaskTracker.Entities.Data;
 namespace TaskTracker.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231117082345_UserEmailCode")]
+    [Migration("20231117141328_UserEmailCode")]
     partial class UserEmailCode
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,22 +230,22 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7b6b14a7-af20-4c41-a60c-916b98b13a0c"),
+                            Id = new Guid("ebbe0afd-dcac-4a65-a405-a14841412f78"),
                             StatusName = "To do"
                         },
                         new
                         {
-                            Id = new Guid("0ca44e5b-d462-4431-a850-f33ab1160ff7"),
+                            Id = new Guid("f89a40b9-3d02-4a7e-aabe-5fa17b582fd0"),
                             StatusName = "In Progress"
                         },
                         new
                         {
-                            Id = new Guid("e9c1f420-912f-4c0a-9b3a-29cb916f5328"),
+                            Id = new Guid("265148d3-e438-4104-96dc-43c8c6dc0489"),
                             StatusName = "Closed"
                         },
                         new
                         {
-                            Id = new Guid("47b08b02-74b8-4372-aca4-25c4a0a007d4"),
+                            Id = new Guid("d31c4737-c1d3-4a1f-b50e-a1694c1219ef"),
                             StatusName = "Frozen"
                         });
                 });
@@ -375,17 +375,17 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e9f1fbc3-463a-41b8-9681-a46721806925"),
+                            Id = new Guid("3f8eae8e-ec2f-4151-8221-bdade0e16e71"),
                             PriorityName = "Low"
                         },
                         new
                         {
-                            Id = new Guid("30bd1e11-e7c0-4f01-b4bd-fb7d0a6753cf"),
+                            Id = new Guid("725e8393-ee68-45f9-a509-900b3851039e"),
                             PriorityName = "Medium"
                         },
                         new
                         {
-                            Id = new Guid("f7497146-ee82-4792-8615-9199a82cb2be"),
+                            Id = new Guid("4b3ef4a6-aabf-40f0-b3e8-c82936c43777"),
                             PriorityName = "High"
                         });
                 });
@@ -407,7 +407,6 @@ namespace TaskTracker.Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EmailCode")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("EmailConfirmed")

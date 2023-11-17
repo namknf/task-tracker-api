@@ -77,8 +77,9 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost("sendCode"), AllowAnonymous]
-        public async Task<IActionResult> SendCodeEmail(string email)
+        public async Task<IActionResult> SendCodeEmail([FromBody] UserLogInByCodeDto userDto)
         {
+            var email = userDto.Email;
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return BadRequest($"User with email {email} not found");
@@ -98,12 +99,12 @@ namespace TaskTracker.Api.Controllers
         /// <param name="email">user email</param>
         /// <returns>token</returns>
         [HttpPost("loginCode"), AllowAnonymous]
-        public async Task<IActionResult> AuthorizeByCode(string code, string email)
+        public async Task<IActionResult> AuthorizeByCode([FromBody] UserEmailCodeDto userDto)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(userDto.Email);
             if (user == null)
-                return BadRequest($"User with email {email} not found");
-            if (user.EmailCode.Equals(code))
+                return BadRequest($"User with email {userDto.Email} not found");
+            if (user.EmailCode.Equals(userDto.Code))
                 return Ok(new { Token = _authService.CreateToken(user.Id) });
             else return BadRequest("Incorrect code");
         }
