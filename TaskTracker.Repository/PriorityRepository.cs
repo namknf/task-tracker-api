@@ -11,5 +11,8 @@ namespace TaskTracker.Repository
 
         public async Task<List<TaskPriority>> GetAllPrioritiesAsync(bool trackChanges) =>
             await FindAll(trackChanges).ToListAsync();
+
+        public async Task<TaskPriority?> GetPriorityAsync(Guid priorityId, bool trackChanges) =>
+            await FindByCondition(c => c.Id.Equals(priorityId), trackChanges).SingleOrDefaultAsync();
     }
 }

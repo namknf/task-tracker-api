@@ -6,6 +6,8 @@ namespace TaskTracker.Contract
     {
         Task<bool> IsValidUser(UserForAuthorizeDto userForAuth);
 
+        string CreateToken(string userId);
+
         string CreateToken();
     }
 }

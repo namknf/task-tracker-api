@@ -19,14 +19,16 @@ namespace TaskTracker.Api.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IAuthenticationService _authService;
         private readonly IDataContextService _dataContextService;
+        private readonly IEmailService _emailService;
 
-        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, TaskTracker.Contract.IAuthenticationService authService, IDataContextService dataContextService)
+        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, IDataContextService dataContextService, IEmailService emailService)
         {
             _logger = logger;
             _mapper = mapper;
             _userManager = userManager;
             _authService = authService;
             _dataContextService = dataContextService;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -74,14 +76,37 @@ namespace TaskTracker.Api.Controllers
         /// Send confirmation email
         /// </summary>
         /// <returns></returns>
-        [HttpPost("sendEmail"), AllowAnonymous]
-        public async Task<IActionResult> SendEmail(string email)
+        [HttpPost("sendCode"), AllowAnonymous]
+        public async Task<IActionResult> SendCodeEmail([FromBody] UserLogInByCodeDto userDto)
         {
+            var email = userDto.Email;
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
                 return BadRequest($"User with email {email} not found");
 
-            return Ok(new { Token = _authService.CreateToken() });
+            var code = _emailService.GenerateCode();
+            await _emailService.SendEmailAsync(user.Email, "Verification code to log in Task Tracker", $"Enter this code to confirm log in: {code}");
+            user.EmailCode = code;
+            await _userManager.UpdateAsync(user);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Authentication by code
+        /// </summary>
+        /// <param name="code">code of enternety</param>
+        /// <param name="email">user email</param>
+        /// <returns>token</returns>
+        [HttpPost("loginCode"), AllowAnonymous]
+        public async Task<IActionResult> AuthorizeByCode([FromBody] UserEmailCodeDto userDto)
+        {
+            var user = await _userManager.FindByEmailAsync(userDto.Email);
+            if (user == null)
+                return BadRequest($"User with email {userDto.Email} not found");
+            if (user.EmailCode.Equals(userDto.Code))
+                return Ok(new { Token = _authService.CreateToken(user.Id) });
+            else return BadRequest("Incorrect code");
         }
         #endregion
 
