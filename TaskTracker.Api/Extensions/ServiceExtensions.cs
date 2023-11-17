@@ -43,6 +43,7 @@ namespace TaskTracker.Api.Extensions
             services.AddScoped<ValidateTaskExistsAttribute>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IDataContextService, DataContextService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         public static void ConfigureRepositoryManager(this IServiceCollection services) =>
