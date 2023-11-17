@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
@@ -28,7 +29,11 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="projectId">Project id</param>
         /// <returns>List of tasks</returns>
+        /// <response code="200">Successfully get all tasks</response>
+        /// <response code="404">Project not found</response>
         [HttpGet, Authorize]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         public async Task<ActionResult<List<TaskDto>>> GetAllTasksForProject(Guid projectId)
         {
@@ -38,12 +43,37 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
+        /// Get task from project by id
+        /// </summary>
+        /// <param name="projectId">project id</param>
+        /// <param name="taskId">task id</param>
+        /// <response code="404">Project or task not found</response>
+        /// <response code="200">Task was successfully got</response>
+        /// <returns>Task</returns>
+        [HttpGet("{taskId}"), Authorize]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ServiceFilter(typeof(ValidateTaskExistsAttribute))]
+        public ActionResult<TaskDto> GetTask(Guid projectId, Guid taskId)
+        {
+            var task = HttpContext.Items["task"] as Entities.Models.Task;
+            var taskDto =_mapper.Map<TaskDto>(task);
+            return Ok(taskDto);
+        }
+
+        /// <summary>
         /// Create new task
         /// </summary>
         /// <param name="projectId">Project id</param>
         /// <param name="taskDto">new task model</param>
+        /// <response code="404">Project not found</response>
+        /// <response code="400">Invalid Task dto</response>
+        /// <response code="201">Task was successfully created</response>
         /// <returns>Created task</returns>
         [HttpPost(Name = "CreateTaskForProject")]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         public async Task<IActionResult> CreateTaskForProject(Guid projectId, [FromBody] TaskForCreationDto taskDto)
         {
@@ -63,8 +93,12 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Delete existing task
         /// </summary>
+        /// <response code="404">Project or task not found</response>
+        /// <response code="204">Task was successfully deleted</response>
         /// <returns>No Content</returns>
         [HttpDelete("{taskId}")]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ServiceFilter(typeof(ValidateTaskExistsAttribute))]
         public async Task<IActionResult> DeleteTask(Guid projectId, Guid taskId)
         {
@@ -80,8 +114,12 @@ namespace TaskTracker.Api.Controllers
         /// <param name="projectId">Project id</param>
         /// <param name="taskId">Task id</param>
         /// <param name="taskDto">Updated task model</param>
+        /// <response code="404">Project or task not found</response>
+        /// <response code="204">Task was successfully updated</response>
         /// <returns>Updated task model</returns>
         [HttpPut("{taskId}"), Authorize]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ServiceFilter(typeof(ValidateTaskExistsAttribute))]
         public async Task<IActionResult> UpdateTask(Guid projectId, Guid taskId, [FromBody] TaskForUpdateDto taskDto)
         {

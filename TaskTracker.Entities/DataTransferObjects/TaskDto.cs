@@ -8,10 +8,10 @@
 
         public DateTime CreationDate { get; set; }
 
-        public string PriorityName { get; set; }
+        public PriorityDto Priority { get; set; }
 
         public string TaskName { get; set; }
 
-        public string StatusName { get; set; }
+        public StatusDto Status { get; set; }
     }
 }

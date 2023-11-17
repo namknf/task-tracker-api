@@ -84,5 +84,11 @@ namespace TaskTracker.Service
 
         public async Task<List<TaskPriority>> GetAllPriorities() =>
             await _manager.PriorityRepository.GetAllPrioritiesAsync(false);
+
+        public async Task<TaskPriority?> GetPriorityAsync(Guid priorityId, bool trackChanges) =>
+            await _manager.PriorityRepository.GetPriorityAsync(priorityId, trackChanges);
+
+        public async Task<Status?> GetStatusAsync(Guid statusId, bool trackChanges) =>
+            await _manager.StatusRepository.GetStatusAsync(statusId, trackChanges);
     }
 }

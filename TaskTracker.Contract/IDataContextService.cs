@@ -32,5 +32,9 @@ namespace TaskTracker.Contract
         Task<List<Status>> GetAllStatuses();
 
         Task<List<TaskPriority>> GetAllPriorities();
+
+        Task<Status?> GetStatusAsync(Guid statusId, bool trackChanges);
+
+        Task<TaskPriority?> GetPriorityAsync(Guid priorityId, bool trackChanges);
     }
 }
