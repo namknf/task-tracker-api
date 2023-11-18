@@ -88,6 +88,8 @@ namespace TaskTracker.Api.Controllers
             await _dataContextService.CreateTaskAsync(taskEntity, taskDto.Participants, projectId);
             await _dataContextService.SaveChangesAsync();
             var taskToReturn = _mapper.Map<TaskDto>(taskEntity);
+            taskToReturn.Status = _mapper.Map<StatusDto>(await _dataContextService.GetStatusAsync(taskEntity.TaskStatusId, false));
+            taskToReturn.Priority = _mapper.Map<PriorityDto>(await _dataContextService.GetPriorityAsync(taskEntity.TaskPriorityId, false));
             return CreatedAtRoute("CreateTaskForProject", new { id = taskToReturn.Id }, taskToReturn);
         }
 
