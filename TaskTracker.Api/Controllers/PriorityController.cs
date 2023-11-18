@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
 
 namespace TaskTracker.Api.Controllers
@@ -9,6 +9,7 @@ namespace TaskTracker.Api.Controllers
     [Route("api/priorities")]
     [ApiController]
     [Produces("application/json")]
+    [Authorize]
     public class PriorityController : BaseController
     {
         private readonly IMapper _mapper;
@@ -24,7 +25,7 @@ namespace TaskTracker.Api.Controllers
         /// Get all tasks priorities
         /// </summary>
         /// <returns>priorities</returns>
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<ActionResult<List<PriorityDto>>> GetPriorities()
         {
             var prioritiesFromDb = await _dataContextService.GetAllPriorities();

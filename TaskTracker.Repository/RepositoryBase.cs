@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Repository;
 using TaskTracker.Entities.Data;
 
 namespace TaskTracker.Repository

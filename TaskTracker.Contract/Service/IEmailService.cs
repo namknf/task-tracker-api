@@ -1,4 +1,4 @@
-﻿namespace TaskTracker.Contract
+﻿namespace TaskTracker.Contract.Service
 {
     public interface IEmailService
     {

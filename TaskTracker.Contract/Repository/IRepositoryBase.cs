@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace TaskTracker.Contract
+namespace TaskTracker.Contract.Repository
 {
     public interface IRepositoryBase<T>
     {

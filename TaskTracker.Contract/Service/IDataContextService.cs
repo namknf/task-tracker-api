@@ -1,7 +1,7 @@
 ﻿using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 
-namespace TaskTracker.Contract
+namespace TaskTracker.Contract.Service
 {
     public interface IDataContextService
     {
