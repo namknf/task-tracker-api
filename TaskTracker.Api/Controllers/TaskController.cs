@@ -11,6 +11,7 @@ namespace TaskTracker.Api.Controllers
     [Route("api/projects/{projectId}/tasks/")]
     [Produces("application/json")]
     [ApiController]
+    [Authorize]
     public class TaskController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -31,7 +32,7 @@ namespace TaskTracker.Api.Controllers
         /// <returns>List of tasks</returns>
         /// <response code="200">Successfully get all tasks</response>
         /// <response code="404">Project not found</response>
-        [HttpGet, Authorize]
+        [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
@@ -50,7 +51,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="404">Project or task not found</response>
         /// <response code="200">Task was successfully got</response>
         /// <returns>Task</returns>
-        [HttpGet("{taskId}"), Authorize]
+        [HttpGet("{taskId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ServiceFilter(typeof(ValidateTaskExistsAttribute))]
@@ -117,7 +118,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="404">Project or task not found</response>
         /// <response code="204">Task was successfully updated</response>
         /// <returns>Updated task model</returns>
-        [HttpPut("{taskId}"), Authorize]
+        [HttpPut("{taskId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ServiceFilter(typeof(ValidateTaskExistsAttribute))]

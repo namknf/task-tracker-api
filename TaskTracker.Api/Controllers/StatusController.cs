@@ -9,6 +9,7 @@ namespace TaskTracker.Api.Controllers
     [Route("api/statuses")]
     [ApiController]
     [Produces("application/json")]
+    [Authorize]
     public class StatusController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -24,7 +25,7 @@ namespace TaskTracker.Api.Controllers
         /// Get all tasks statuses
         /// </summary>
         /// <returns>statuses</returns>
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<ActionResult<List<StatusDto>>> GetStatuses()
         {
             var statusesFromDb = await _dataContextService.GetAllStatuses();
