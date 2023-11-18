@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using TaskTracker.Api.ActionFilters;
 using System.Net;
+using TaskTracker.Contract.Service;
 
 namespace TaskTracker.Api.Controllers
 {

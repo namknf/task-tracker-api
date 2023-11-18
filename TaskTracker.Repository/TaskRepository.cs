@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Repository;
 using TaskTracker.Entities.Data;
 using Task = TaskTracker.Entities.Models.Task;
 

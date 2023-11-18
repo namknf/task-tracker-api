@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using TaskTracker.Api.ActionFilters;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
 
 namespace TaskTracker.Api.Controllers

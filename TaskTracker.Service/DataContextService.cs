@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Repository;
+using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 

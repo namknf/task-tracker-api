@@ -1,7 +1,7 @@
 ﻿using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Service;
 
 namespace TaskTracker.Service
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Service;
 
 namespace TaskTracker.Api.ActionFilters
 {
