@@ -3,7 +3,7 @@ using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;
 using TaskTracker.Entities.RequestFeatures.Entities;
 
-namespace TaskTracker.Contract
+namespace TaskTracker.Contract.Service
 {
     public interface IDataContextService
     {

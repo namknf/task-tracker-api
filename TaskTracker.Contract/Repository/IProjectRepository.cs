@@ -2,7 +2,7 @@
 using TaskTracker.Entities.RequestFeatures;
 using TaskTracker.Entities.RequestFeatures.Entities;
 
-namespace TaskTracker.Contract
+namespace TaskTracker.Contract.Repository
 {
     public interface IProjectRepository
     {

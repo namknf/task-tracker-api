@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
 using System.Threading.Tasks;
 using TaskTracker.Contract;
+=======
+using TaskTracker.Contract.Repository;
+>>>>>>> main
 using TaskTracker.Entities.Data;
 using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;

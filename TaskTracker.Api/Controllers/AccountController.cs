@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 
@@ -103,9 +103,12 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Authentication by code
         /// </summary>
+<<<<<<< HEAD
         /// <param name="userDto">user model</param>
         /// <response code="200">Successfully authorized by code</response>
         /// <response code="400">Account was not found or code is incorrect</response>
+=======
+>>>>>>> main
         /// <returns>token</returns>
         [HttpPost("loginCode"), AllowAnonymous]
         public async Task<IActionResult> AuthorizeByCode([FromBody] UserEmailCodeDto userDto)

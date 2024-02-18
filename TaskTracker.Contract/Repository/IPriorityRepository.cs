@@ -1,6 +1,6 @@
 ﻿using TaskTracker.Entities.Models;
 
-namespace TaskTracker.Contract
+namespace TaskTracker.Contract.Repository
 {
     public interface IPriorityRepository
     {

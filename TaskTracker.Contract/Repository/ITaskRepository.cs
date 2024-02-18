@@ -2,7 +2,7 @@
 using TaskTracker.Entities.RequestFeatures.Entities;
 using Task = TaskTracker.Entities.Models.Task;
 
-namespace TaskTracker.Contract
+namespace TaskTracker.Contract.Repository
 {
     public interface ITaskRepository
     {

@@ -1,6 +1,6 @@
 ﻿using TaskTracker.Entities.DataTransferObjects;
 
-namespace TaskTracker.Contract
+namespace TaskTracker.Contract.Service
 {
     public interface IAuthenticationService
     {

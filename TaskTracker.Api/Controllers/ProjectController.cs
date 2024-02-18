@@ -1,19 +1,23 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using TaskTracker.Api.ActionFilters;
 using System.Net;
+<<<<<<< HEAD
 using TaskTracker.Entities.RequestFeatures;
 using Newtonsoft.Json;
+=======
+using TaskTracker.Contract.Service;
+>>>>>>> main
 
 namespace TaskTracker.Api.Controllers
 {
     [Route("api/projects/")]
     [ApiController]
     [Produces("application/json")]
+    [Authorize]
     public class ProjectController : BaseController
     {
         private readonly ILogger _logger;
@@ -33,8 +37,13 @@ namespace TaskTracker.Api.Controllers
         /// <response code="200">Successfully got</response>
         /// <returns>List of projects</returns>
         [ProducesResponseType((int)HttpStatusCode.OK)]
+<<<<<<< HEAD
         [HttpGet, Authorize]
         public async Task<ActionResult<List<ProjectDto>>> GetProjects([FromQuery] ProjectParameters parms)
+=======
+        [HttpGet]
+        public async Task<ActionResult<List<ProjectDto>>> GetProjects()
+>>>>>>> main
         {
             var projectsFromDb = await _dataContextService.GetProjectsAsync(UserId, parms);
             var projects = _mapper.Map<List<ProjectDto>>(projectsFromDb);
@@ -49,7 +58,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="200">Successfully got</response>
         /// <response code="404">Project not found</response>
         /// <returns>Project</returns>
-        [HttpGet("{projectId}"), Authorize]
+        [HttpGet("{projectId}")]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -69,7 +78,7 @@ namespace TaskTracker.Api.Controllers
         /// <returns>Created project</returns>
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
-        [HttpPost(Name = "ProjectById"), Authorize]
+        [HttpPost(Name = "ProjectById")]
         public async Task<IActionResult> CreateProject([FromBody] ProjectForCreationDto projectDto)
         {
             if (projectDto == null)
@@ -92,7 +101,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="204">Project was successfully deleted</response>
         /// <response code="404">Project not found</response>
         /// <returns>No content</returns>
-        [HttpDelete("{projectId}"), Authorize]
+        [HttpDelete("{projectId}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
@@ -112,7 +121,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="204">Project was successfully updated</response>
         /// <response code="404">Project not found</response>
         /// <returns>No content</returns>
-        [HttpPut("{projectId}"), Authorize]
+        [HttpPut("{projectId}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
