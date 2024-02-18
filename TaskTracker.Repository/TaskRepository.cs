@@ -17,7 +17,7 @@ namespace TaskTracker.Repository
 
         public void UpdateTask(Task task) => Update(task);
 
-        public async Task<List<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges, TaskParameters parms)
+        public async Task<PagedList<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges, TaskParameters parms)
         {
             var tasks = await FindByCondition(e => e.ProjectId.Equals(projectId), trackChanges)
                 .Include(t => t.Participants)

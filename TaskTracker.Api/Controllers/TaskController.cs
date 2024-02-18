@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
@@ -40,6 +41,7 @@ namespace TaskTracker.Api.Controllers
         public async Task<ActionResult<List<TaskDto>>> GetAllTasksForProject(Guid projectId, [FromQuery] TaskParameters parms)
         {
             var tasksFromDb = await _dataContextService.GetProjectTasksAsync(projectId, parms);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(tasksFromDb.MetaData));
             var tasksDto = _mapper.Map<IEnumerable<TaskDto>>(tasksFromDb);
             return Ok(tasksDto);
         }

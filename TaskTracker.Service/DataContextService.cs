@@ -4,6 +4,7 @@ using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;
+using TaskTracker.Entities.RequestFeatures.Entities;
 
 namespace TaskTracker.Service
 {
@@ -18,7 +19,7 @@ namespace TaskTracker.Service
             _userManager = userManager;
         }
 
-        public async Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms) =>
+        public async Task<PagedList<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms) =>
             await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false, parms);
 
         public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
