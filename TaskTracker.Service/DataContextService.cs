@@ -53,6 +53,7 @@ namespace TaskTracker.Service
             return await _userManager.Users
                 .Include(u => u.Projects)
                 .Include(u => u.Tasks)
+                .Include(u => u.Photo)
                 .FirstOrDefaultAsync(u => u.Id.Equals(userId));
         }
 
