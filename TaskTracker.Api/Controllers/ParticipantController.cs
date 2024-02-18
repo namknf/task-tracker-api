@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using TaskTracker.Contract;
+using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.RequestFeatures;
 
