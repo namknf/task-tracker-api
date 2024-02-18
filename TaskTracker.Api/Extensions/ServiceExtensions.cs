@@ -73,6 +73,9 @@ namespace TaskTracker.Api.Extensions
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 10;
                 o.User.RequireUniqueEmail = true;
+                o.Lockout.AllowedForNewUsers = true;
+                o.Lockout.MaxFailedAccessAttempts = 5;
+                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             });
             builder = new IdentityBuilder(builder.UserType, builder.Services);
             builder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders().AddSignInManager<SignInManager<User>>();
