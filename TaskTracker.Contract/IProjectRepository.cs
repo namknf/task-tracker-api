@@ -1,4 +1,6 @@
 ﻿using TaskTracker.Entities.Models;
+using TaskTracker.Entities.RequestFeatures;
+using TaskTracker.Entities.RequestFeatures.Entities;
 
 namespace TaskTracker.Contract
 {
@@ -12,6 +14,6 @@ namespace TaskTracker.Contract
 
         void UpdateProject(Project project);
 
-        Task<List<Project>?> GetProjectsAsync(string userId, bool trackChanges);
+        Task<PagedList<Project>?> GetProjectsAsync(string userId, bool trackChanges, ProjectParameters parms);
     }
 }

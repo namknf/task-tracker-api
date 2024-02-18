@@ -6,6 +6,8 @@ using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using TaskTracker.Api.ActionFilters;
 using System.Net;
+using TaskTracker.Entities.RequestFeatures;
+using Newtonsoft.Json;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -32,10 +34,11 @@ namespace TaskTracker.Api.Controllers
         /// <returns>List of projects</returns>
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpGet, Authorize]
-        public async Task<ActionResult<List<ProjectDto>>> GetProjects()
+        public async Task<ActionResult<List<ProjectDto>>> GetProjects([FromQuery] ProjectParameters parms)
         {
-            var projectsFromDb = await _dataContextService.GetProjectsAsync(UserId);
+            var projectsFromDb = await _dataContextService.GetProjectsAsync(UserId, parms);
             var projects = _mapper.Map<List<ProjectDto>>(projectsFromDb);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(projectsFromDb.MetaData));
             return Ok(projects);
         }
 

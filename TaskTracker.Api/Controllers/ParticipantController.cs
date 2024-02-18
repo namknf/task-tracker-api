@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
-using TaskTracker.Entities.Models;
+using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -13,22 +14,24 @@ namespace TaskTracker.Api.Controllers
     public class ParticipantController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private readonly UserManager<User> _userManager;
+        private readonly IDataContextService _dataService;
 
-        public ParticipantController(IMapper mapper, UserManager<User> userManager)
+        public ParticipantController(IMapper mapper, IDataContextService dataService)
         {
             _mapper = mapper;
-            _userManager = userManager;
+            _dataService = dataService;
         }
 
         /// <summary>
         /// Get participants to create project or task
         /// </summary>
+        /// <response code="200">Successfully got</response>
         /// <returns></returns>
         [HttpGet, Authorize]
-        public ActionResult<List<ParticipantForGetDto>> GetParticipants()
+        public async Task<ActionResult<List<ParticipantForGetDto>>> GetParticipants([FromQuery] ParticipantParameters parms)
         {
-            var participantsFromDb = _userManager.Users;
+            var participantsFromDb = await _dataService.GetParticipantsAsync(parms);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(participantsFromDb.MetaData));
             var participants = _mapper.Map<List<ParticipantForGetDto>>(participantsFromDb);
             return Ok(participants);
         }

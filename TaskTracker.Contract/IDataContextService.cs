@@ -9,9 +9,11 @@ namespace TaskTracker.Contract
     {
         Task<PagedList<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms);
 
+        Task<PagedList<User>> GetParticipantsAsync(ParticipantParameters parms);
+
         Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges);
 
-        Task<List<Project>> GetProjectsAsync(string userId);
+        Task<PagedList<Project>> GetProjectsAsync(string userId, ProjectParameters parms);
 
         System.Threading.Tasks.Task SaveChangesAsync();
 

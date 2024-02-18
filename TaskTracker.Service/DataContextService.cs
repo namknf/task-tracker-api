@@ -32,8 +32,8 @@ namespace TaskTracker.Service
         public async System.Threading.Tasks.Task SaveChangesAsync() =>
             await _manager.SaveAsync();
 
-        public async Task<List<Project>> GetProjectsAsync(string userId) =>
-            await _manager.ProjectRepository.GetProjectsAsync(userId, false) ?? new List<Project>();
+        public async Task<PagedList<Project>> GetProjectsAsync(string userId, ProjectParameters parms) =>
+            await _manager.ProjectRepository.GetProjectsAsync(userId, false, parms);
 
         public async System.Threading.Tasks.Task CreateProjectAsync(Project project, List<ParticipantDto> participants)
         {
@@ -92,5 +92,11 @@ namespace TaskTracker.Service
 
         public async Task<Status?> GetStatusAsync(Guid statusId, bool trackChanges) =>
             await _manager.StatusRepository.GetStatusAsync(statusId, trackChanges);
+
+        public async Task<PagedList<User>> GetParticipantsAsync(ParticipantParameters parms)
+        {
+            var users = await _userManager.Users.AsNoTracking().ToListAsync();
+            return PagedList<User>.ToPagedList(users, parms.PageNumber, parms.PageSize);
+        }
     }
 }
