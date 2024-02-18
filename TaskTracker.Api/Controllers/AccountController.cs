@@ -154,5 +154,11 @@ namespace TaskTracker.Api.Controllers
                 return NoContent();
             }
         }
+
+        [HttpPost("upload_photo"), Authorize]
+        public async Task<IActionResult> UploadPhoto()
+        {
+            return Ok();
+        }
     }
 }

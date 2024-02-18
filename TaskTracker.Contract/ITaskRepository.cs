@@ -1,10 +1,11 @@
-﻿using Task = TaskTracker.Entities.Models.Task;
+﻿using TaskTracker.Entities.RequestFeatures;
+using Task = TaskTracker.Entities.Models.Task;
 
 namespace TaskTracker.Contract
 {
     public interface ITaskRepository
     {
-        Task<List<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges);
+        Task<List<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges, TaskParameters parms);
 
         void CreateTask(Task task);
 

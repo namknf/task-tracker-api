@@ -1,11 +1,12 @@
 ﻿using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
+using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Contract
 {
     public interface IDataContextService
     {
-        Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId);
+        Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms);
 
         Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges);
 

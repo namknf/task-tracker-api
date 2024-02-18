@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
+using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Service
 {
@@ -17,8 +18,8 @@ namespace TaskTracker.Service
             _userManager = userManager;
         }
 
-        public async Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId) =>
-            await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false);
+        public async Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms) =>
+            await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false, parms);
 
         public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
             await _manager.ProjectRepository.GetProjectAsync(projectId, trackChanges);

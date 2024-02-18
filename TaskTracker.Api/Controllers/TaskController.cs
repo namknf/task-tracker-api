@@ -5,6 +5,7 @@ using System.Net;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract;
 using TaskTracker.Entities.DataTransferObjects;
+using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -28,6 +29,7 @@ namespace TaskTracker.Api.Controllers
         /// Get all tasks from project
         /// </summary>
         /// <param name="projectId">Project id</param>
+        /// <param name="parms">Paging parameters</param>
         /// <returns>List of tasks</returns>
         /// <response code="200">Successfully get all tasks</response>
         /// <response code="404">Project not found</response>
@@ -35,9 +37,9 @@ namespace TaskTracker.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
-        public async Task<ActionResult<List<TaskDto>>> GetAllTasksForProject(Guid projectId)
+        public async Task<ActionResult<List<TaskDto>>> GetAllTasksForProject(Guid projectId, [FromQuery] TaskParameters parms)
         {
-            var tasksFromDb = await _dataContextService.GetProjectTasksAsync(projectId);
+            var tasksFromDb = await _dataContextService.GetProjectTasksAsync(projectId, parms);
             var tasksDto = _mapper.Map<IEnumerable<TaskDto>>(tasksFromDb);
             return Ok(tasksDto);
         }
