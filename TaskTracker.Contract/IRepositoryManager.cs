@@ -10,6 +10,8 @@
 
         IPriorityRepository PriorityRepository { get; }
 
+        IFileRepository FileRepository { get; }
+
         Task SaveAsync();
 
         void DetachAllEntities();

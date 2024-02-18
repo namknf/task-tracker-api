@@ -20,8 +20,9 @@ namespace TaskTracker.Api.Controllers
         private readonly IAuthenticationService _authService;
         private readonly IDataContextService _dataContextService;
         private readonly IEmailService _emailService;
+        private readonly IFileService _fileService;
 
-        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, IDataContextService dataContextService, IEmailService emailService)
+        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, IDataContextService dataContextService, IEmailService emailService, IFileService fileService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -29,6 +30,7 @@ namespace TaskTracker.Api.Controllers
             _authService = authService;
             _dataContextService = dataContextService;
             _emailService = emailService;
+            _fileService = fileService;
         }
 
         /// <summary>
@@ -155,9 +157,21 @@ namespace TaskTracker.Api.Controllers
             }
         }
 
-        [HttpPost("upload_photo"), Authorize]
-        public async Task<IActionResult> UploadPhoto()
+        /// <summary>
+        /// Set profile photo
+        /// </summary>
+        /// <param name="photo">photo file</param>
+        /// <returns></returns>
+        [HttpPost("account/set_photo"), Authorize]
+        public async Task<IActionResult> SetPhoto(IFormFile photo)
         {
+            var fileExt = ("." + photo.FileName.Split('.')[^1]).ToLower();
+            if (!fileExt.Equals(".png") && !fileExt.Equals(".jpeg") && !fileExt.Equals(".jpg"))
+                return BadRequest($"{fileExt} is incorrect file format");
+
+            var user = await _userManager.FindByIdAsync(UserId);
+            _fileService.UploadPhoto(photo, user);
+            await _dataContextService.SaveChangesAsync();
             return Ok();
         }
     }

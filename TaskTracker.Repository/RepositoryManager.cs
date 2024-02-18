@@ -11,6 +11,7 @@ namespace TaskTracker.Repository
         private IProjectRepository _projectRepository;
         private IStatusRepository _statusRepository;
         private IPriorityRepository _priorityRepository;
+        private IFileRepository _fileRepository;
 
         public RepositoryManager(DataContext dataContext)
         {
@@ -50,6 +51,15 @@ namespace TaskTracker.Repository
             {
                 _priorityRepository ??= new PriorityRepository(_dataContext);
                 return _priorityRepository;
+            }
+        }
+
+        public IFileRepository FileRepository
+        {
+            get
+            {
+                _fileRepository ??= new FileRepository(_dataContext);
+                return _fileRepository;
             }
         }
 
