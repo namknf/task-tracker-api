@@ -44,6 +44,7 @@ namespace TaskTracker.Api.Extensions
             services.AddScoped<ValidateTaskExistsAttribute>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IDataContextService, DataContextService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<IEmailService, EmailService>();
         }
 
@@ -74,6 +75,9 @@ namespace TaskTracker.Api.Extensions
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 10;
                 o.User.RequireUniqueEmail = true;
+                o.Lockout.AllowedForNewUsers = true;
+                o.Lockout.MaxFailedAccessAttempts = 5;
+                o.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             });
             builder = new IdentityBuilder(builder.UserType, builder.Services);
             builder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders().AddSignInManager<SignInManager<User>>();

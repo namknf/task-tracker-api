@@ -38,6 +38,8 @@ namespace TaskTracker.Api
             CreateMap<Status, StatusDto>();
 
             CreateMap<TaskPriority, PriorityDto>();
+
+            CreateMap<Entities.Models.File, ImageDto>();
         }
     }
 }

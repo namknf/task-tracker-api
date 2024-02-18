@@ -4,6 +4,8 @@ using TaskTracker.Contract.Repository;
 using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
+using TaskTracker.Entities.RequestFeatures;
+using TaskTracker.Entities.RequestFeatures.Entities;
 
 namespace TaskTracker.Service
 {
@@ -18,8 +20,8 @@ namespace TaskTracker.Service
             _userManager = userManager;
         }
 
-        public async Task<List<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId) =>
-            await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false);
+        public async Task<PagedList<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms) =>
+            await _manager.TaskRepository.GetAllTasksForProjectAsync(projectId, false, parms);
 
         public async Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges) =>
             await _manager.ProjectRepository.GetProjectAsync(projectId, trackChanges);
@@ -31,8 +33,8 @@ namespace TaskTracker.Service
         public async System.Threading.Tasks.Task SaveChangesAsync() =>
             await _manager.SaveAsync();
 
-        public async Task<List<Project>> GetProjectsAsync(string userId) =>
-            await _manager.ProjectRepository.GetProjectsAsync(userId, false) ?? new List<Project>();
+        public async Task<PagedList<Project>> GetProjectsAsync(string userId, ProjectParameters parms) =>
+            await _manager.ProjectRepository.GetProjectsAsync(userId, false, parms);
 
         public async System.Threading.Tasks.Task CreateProjectAsync(Project project, List<ParticipantDto> participants)
         {
@@ -52,6 +54,7 @@ namespace TaskTracker.Service
             return await _userManager.Users
                 .Include(u => u.Projects)
                 .Include(u => u.Tasks)
+                .Include(u => u.Photo)
                 .FirstOrDefaultAsync(u => u.Id.Equals(userId));
         }
 
@@ -91,5 +94,11 @@ namespace TaskTracker.Service
 
         public async Task<Status?> GetStatusAsync(Guid statusId, bool trackChanges) =>
             await _manager.StatusRepository.GetStatusAsync(statusId, trackChanges);
+
+        public async Task<PagedList<User>> GetParticipantsAsync(ParticipantParameters parms)
+        {
+            var users = await _userManager.Users.AsNoTracking().ToListAsync();
+            return PagedList<User>.ToPagedList(users, parms.PageNumber, parms.PageSize);
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskTracker.Contract.Repository;
 using TaskTracker.Entities.Data;
+using TaskTracker.Entities.RequestFeatures;
+using TaskTracker.Entities.RequestFeatures.Entities;
 using Task = TaskTracker.Entities.Models.Task;
 
 namespace TaskTracker.Repository
@@ -15,13 +17,14 @@ namespace TaskTracker.Repository
 
         public void UpdateTask(Task task) => Update(task);
 
-        public async Task<List<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges)
+        public async Task<PagedList<Task>> GetAllTasksForProjectAsync(Guid projectId, bool trackChanges, TaskParameters parms)
         {
-            return await FindByCondition(e => e.ProjectId.Equals(projectId), trackChanges)
+            var tasks = await FindByCondition(e => e.ProjectId.Equals(projectId), trackChanges)
                 .Include(t => t.Participants)
                 .Include(t => t.Status)
                 .Include(t => t.Priority)
                 .ToListAsync();
+            return PagedList<Task>.ToPagedList(tasks, parms.PageNumber, parms.PageSize);
         }
 
         public async Task<Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges) =>

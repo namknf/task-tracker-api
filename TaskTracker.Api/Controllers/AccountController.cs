@@ -20,8 +20,9 @@ namespace TaskTracker.Api.Controllers
         private readonly IAuthenticationService _authService;
         private readonly IDataContextService _dataContextService;
         private readonly IEmailService _emailService;
+        private readonly IFileService _fileService;
 
-        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, IDataContextService dataContextService, IEmailService emailService)
+        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, IDataContextService dataContextService, IEmailService emailService, IFileService fileService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -29,12 +30,15 @@ namespace TaskTracker.Api.Controllers
             _authService = authService;
             _dataContextService = dataContextService;
             _emailService = emailService;
+            _fileService = fileService;
         }
 
         /// <summary>
         /// New user registration
         /// </summary>
         /// <param name="userForRegistration">User model for registration</param>
+        /// <response code="201">New user was registered</response>
+        /// <response code="400">Incorrect registration parameters</response>
         /// <returns>Registered user</returns>
         [HttpPost("register")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -59,6 +63,8 @@ namespace TaskTracker.Api.Controllers
         /// Log in by email and password
         /// </summary>
         /// <param name="user">Authorized user</param>
+        /// <response code="200">Authorization token</response>
+        /// <response code="401">Wrong login parameters</response>
         /// <returns>Token</returns>
         [HttpPost("login")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
@@ -75,6 +81,8 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Send confirmation email
         /// </summary>
+        /// <response code="204">Code was sent on email</response>
+        /// <response code="400">Account was not found</response>
         /// <returns></returns>
         [HttpPost("sendCode"), AllowAnonymous]
         public async Task<IActionResult> SendCodeEmail([FromBody] UserLogInByCodeDto userDto)
@@ -95,6 +103,12 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Authentication by code
         /// </summary>
+<<<<<<< HEAD
+        /// <param name="userDto">user model</param>
+        /// <response code="200">Successfully authorized by code</response>
+        /// <response code="400">Account was not found or code is incorrect</response>
+=======
+>>>>>>> main
         /// <returns>token</returns>
         [HttpPost("loginCode"), AllowAnonymous]
         public async Task<IActionResult> AuthorizeByCode([FromBody] UserEmailCodeDto userDto)
@@ -102,7 +116,7 @@ namespace TaskTracker.Api.Controllers
             var user = await _userManager.FindByEmailAsync(userDto.Email);
             if (user == null)
                 return BadRequest($"User with email {userDto.Email} not found");
-            if (user.EmailCode.Equals(userDto.Code))
+            if (!string.IsNullOrEmpty(user.EmailCode) && user.EmailCode.Equals(userDto.Code))
                 return Ok(new { Token = _authService.CreateToken(user.Id) });
             else return BadRequest("Incorrect code");
         }
@@ -111,6 +125,8 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Getting user information
         /// </summary>
+        /// <response code="200">Account info</response>
+        /// <response code="400">User was not found</response>
         /// <returns>User information</returns>
         [HttpGet("info"), Authorize]
         public async Task<ActionResult<UserDto>> GetUserInfo()
@@ -123,6 +139,43 @@ namespace TaskTracker.Api.Controllers
             }
             var userDto = _mapper.Map<UserDto>(userFromDb);
             return Ok(userDto);
+        }
+
+        /// <summary>
+        /// Delete account
+        /// </summary>
+        /// <response code="204">Account was successfully deleted</response>
+        /// <response code="404">Account was not found</response>
+        /// <returns></returns>
+        [HttpDelete("delete"), Authorize]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.FindByIdAsync(UserId);
+            if (user == null)
+                return NotFound("User not found");
+            else
+            {
+                await _userManager.DeleteAsync(user);
+                return NoContent();
+            }
+        }
+
+        /// <summary>
+        /// Set profile photo
+        /// </summary>
+        /// <param name="photo">photo file</param>
+        /// <returns></returns>
+        [HttpPost("account/set_photo"), Authorize]
+        public async Task<IActionResult> SetPhoto(IFormFile photo)
+        {
+            var fileExt = ("." + photo.FileName.Split('.')[^1]).ToLower();
+            if (!fileExt.Equals(".png") && !fileExt.Equals(".jpeg") && !fileExt.Equals(".jpg"))
+                return BadRequest($"{fileExt} is incorrect file format");
+
+            var user = await _userManager.FindByIdAsync(UserId);
+            _fileService.UploadPhoto(photo, user);
+            await _dataContextService.SaveChangesAsync();
+            return Ok();
         }
     }
 }

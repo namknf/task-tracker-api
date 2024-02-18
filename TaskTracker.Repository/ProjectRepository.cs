@@ -1,7 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
+<<<<<<< HEAD
+using System.Threading.Tasks;
+using TaskTracker.Contract;
+=======
 using TaskTracker.Contract.Repository;
+>>>>>>> main
 using TaskTracker.Entities.Data;
 using TaskTracker.Entities.Models;
+using TaskTracker.Entities.RequestFeatures;
+using TaskTracker.Entities.RequestFeatures.Entities;
 
 namespace TaskTracker.Repository
 {
@@ -21,10 +28,13 @@ namespace TaskTracker.Repository
             .Include(p => p.Tasks)
             .SingleOrDefaultAsync();
 
-        public async Task<List<Project>?> GetProjectsAsync(string userId, bool trackChanges) =>
-            await FindAll(trackChanges).Include(p => p.Participants)
-            .Include(p => p.Tasks)
-            .Where(c => c.Participants.Any(p => p.Id.Equals(userId)))
-            .ToListAsync();
+        public async Task<PagedList<Project>?> GetProjectsAsync(string userId, bool trackChanges, ProjectParameters parms)
+        {
+            var projects = await FindAll(trackChanges).Include(p => p.Participants)
+                .Include(p => p.Tasks)
+                .Where(c => c.Participants.Any(p => p.Id.Equals(userId)))
+                .ToListAsync();
+            return PagedList<Project>.ToPagedList(projects, parms.PageNumber, parms.PageSize);
+        }
     }
 }

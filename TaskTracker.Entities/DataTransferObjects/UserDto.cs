@@ -13,5 +13,7 @@
         public List<TaskDto>? Tasks { get; set; }
 
         public List<ProjectDto>? Projects { get; set; }
+        
+        public ImageDto? Photo { get; set; }
     }
 }
