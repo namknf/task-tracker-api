@@ -2,6 +2,7 @@
 using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;
 using TaskTracker.Entities.RequestFeatures.Entities;
+using File = TaskTracker.Entities.Models.File;
 
 namespace TaskTracker.Contract.Service
 {
@@ -40,5 +41,7 @@ namespace TaskTracker.Contract.Service
         Task<Status?> GetStatusAsync(Guid statusId, bool trackChanges);
 
         Task<TaskPriority?> GetPriorityAsync(Guid priorityId, bool trackChanges);
+
+        Task<File?> GetFileAsync(Guid fileId, bool trackChanges);
     }
 }

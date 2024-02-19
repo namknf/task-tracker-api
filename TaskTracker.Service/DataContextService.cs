@@ -54,7 +54,6 @@ namespace TaskTracker.Service
             return await _userManager.Users
                 .Include(u => u.Projects)
                 .Include(u => u.Tasks)
-                .Include(u => u.Photo)
                 .FirstOrDefaultAsync(u => u.Id.Equals(userId));
         }
 
@@ -100,5 +99,8 @@ namespace TaskTracker.Service
             var users = await _userManager.Users.AsNoTracking().ToListAsync();
             return PagedList<User>.ToPagedList(users, parms.PageNumber, parms.PageSize);
         }
+
+        public async Task<Entities.Models.File?> GetFileAsync(Guid fileId, bool trackChanges) =>
+            await _manager.FileRepository.GetFileAsync(fileId, trackChanges);
     }
 }

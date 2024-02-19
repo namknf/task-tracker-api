@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.Entities.DataTransferObjects
 {
-    public class ImageDto
+    public class FileDto
     {
         public byte[] Data { get; set; }
     }

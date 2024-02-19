@@ -162,7 +162,7 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="photo">photo file</param>
         /// <returns></returns>
-        [HttpPost("account/set_photo"), Authorize]
+        [HttpPost("set_photo"), Authorize]
         public async Task<IActionResult> SetPhoto(IFormFile photo)
         {
             var fileExt = ("." + photo.FileName.Split('.')[^1]).ToLower();
