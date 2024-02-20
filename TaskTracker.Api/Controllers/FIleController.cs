@@ -10,13 +10,6 @@ namespace TaskTracker.Api.Controllers
     [ApiController]
     public class FileController : ControllerBase
     {
-        private readonly IMapper _mapper;
-
-        public FileController(IMapper mapper)
-        {
-            _mapper = mapper;
-        }
-
         /// <summary>
         /// Get file by Id
         /// </summary>
@@ -27,8 +20,7 @@ namespace TaskTracker.Api.Controllers
         public ActionResult GetFile(Guid fileId)
         {
             var file = HttpContext.Items["file"] as Entities.Models.File;
-            var fileDto = _mapper.Map<FileDto>(file);
-            return Ok(fileDto);
+            return File(file.Data, "application/octet-stream", file.FileName);
         }
     }
 }
