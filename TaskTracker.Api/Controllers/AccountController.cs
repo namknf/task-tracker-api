@@ -55,7 +55,11 @@ namespace TaskTracker.Api.Controllers
 
                 return BadRequest(ModelState);
             }
-            return Ok(new { Token = _authService.CreateToken() });
+
+            var userForAuth = _mapper.Map<UserForAuthorizeDto>(userForRegistration);
+            if(await _authService.IsValidUser(userForAuth))
+                return Ok(new { Token = _authService.CreateToken() });
+            return BadRequest(ModelState);
         }
 
         #region LogInLogic
