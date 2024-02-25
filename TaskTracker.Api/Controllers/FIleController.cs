@@ -1,7 +1,6 @@
-﻿using AutoMapper;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
-using TaskTracker.Entities.DataTransferObjects;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -15,7 +14,7 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="fileId">file id</param>
         /// <returns></returns>
-        [HttpGet("fileId")]
+        [HttpGet("fileId"), Authorize]
         [ServiceFilter(typeof(ValidateFileExistsAttribute))]
         public ActionResult GetFile(Guid fileId)
         {
