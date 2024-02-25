@@ -8,12 +8,13 @@ namespace TaskTracker.Api.Controllers
     [Route("api/email")]
     [Produces("application/json")]
     [ApiController]
+    [AllowAnonymous]
     public class EmailController : ControllerBase
     {
         private readonly ILogger _logger;
         private readonly IEmailService _emailService;
 
-        public EmailController(ILogger<AccountController> logger, IEmailService emailService)
+        public EmailController(ILogger<EmailController> logger, IEmailService emailService)
         {
             _logger = logger;
             _emailService = emailService;
@@ -24,7 +25,7 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="questionDto">Email and question text</param>
         /// <returns></returns>
-        [HttpPost("ask"), AllowAnonymous]
+        [HttpPost("ask")]
         public IActionResult AskQuestion([FromBody] QuestionDto questionDto)
         {
             if (questionDto == null)
@@ -41,7 +42,7 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="senderDto">Email to send</param>
         /// <returns></returns>
-        [HttpPost("answer"), AllowAnonymous]
+        [HttpPost("answer")]
         public async Task<IActionResult> SendAnswerAsync([FromBody] SenderDto senderDto)
         {
             if (senderDto == null)
