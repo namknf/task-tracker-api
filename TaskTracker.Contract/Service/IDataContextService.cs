@@ -43,5 +43,15 @@ namespace TaskTracker.Contract.Service
         Task<TaskPriority?> GetPriorityAsync(Guid priorityId, bool trackChanges);
 
         Task<File?> GetFileAsync(Guid fileId, bool trackChanges);
+
+        Task<PagedList<TaskComment>> GetTaskCommentsAsync(Guid taskId, CommentParameters parms);
+
+        System.Threading.Tasks.Task CreateCommentAsync(TaskComment commentEntity, string userId, Guid taskId);
+
+        Task<TaskComment> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges);
+
+        void DeleteComment(TaskComment comment);
+
+        void UpdateComment(TaskComment comment);
     }
 }

@@ -102,5 +102,30 @@ namespace TaskTracker.Service
 
         public async Task<Entities.Models.File?> GetFileAsync(Guid fileId, bool trackChanges) =>
             await _manager.FileRepository.GetFileAsync(fileId, trackChanges);
+
+        public Task<PagedList<TaskComment>> GetTaskCommentsAsync(Guid taskId, CommentParameters parms)
+        {
+            throw new NotImplementedException();
+        }
+
+        public System.Threading.Tasks.Task CreateCommentAsync(TaskComment commentEntity, string userId, Guid taskId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TaskComment> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteComment(TaskComment comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateComment(TaskComment comment)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
