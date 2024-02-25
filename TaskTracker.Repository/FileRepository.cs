@@ -1,4 +1,5 @@
-﻿using TaskTracker.Contract;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskTracker.Contract.Repository;
 using TaskTracker.Entities.Data;
 
 namespace TaskTracker.Repository
@@ -11,5 +12,8 @@ namespace TaskTracker.Repository
         {
             Create(file);
         }
+
+        public async Task<Entities.Models.File?> GetFileAsync(Guid fileId, bool trackChanges) =>
+            await FindByCondition(c => c.Id.Equals(fileId), trackChanges).SingleOrDefaultAsync();
     }
 }

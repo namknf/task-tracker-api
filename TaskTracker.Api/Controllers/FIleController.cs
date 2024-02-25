@@ -1,18 +1,25 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TaskTracker.Api.ActionFilters;
 
 namespace TaskTracker.Api.Controllers
 {
     [Route("api/files")]
-    [ApiController]
     [Produces("application/json")]
-    [Authorize]
-    public class FIleController : ControllerBase
+    [ApiController]
+    public class FileController : ControllerBase
     {
-        [HttpPost("profilePhoto")]
-        public IActionResult UploadProfilePhoto()
+        /// <summary>
+        /// Get file by Id
+        /// </summary>
+        /// <param name="fileId">file id</param>
+        /// <returns></returns>
+        [HttpGet("fileId"), Authorize]
+        [ServiceFilter(typeof(ValidateFileExistsAttribute))]
+        public ActionResult GetFile(Guid fileId)
         {
-            return Ok();
+            var file = HttpContext.Items["file"] as Entities.Models.File;
+            return File(file.Data, "application/octet-stream", file.FileName);
         }
     }
 }

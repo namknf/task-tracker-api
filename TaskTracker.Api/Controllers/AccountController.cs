@@ -55,7 +55,11 @@ namespace TaskTracker.Api.Controllers
 
                 return BadRequest(ModelState);
             }
-            return StatusCode(201);
+
+            var userForAuth = _mapper.Map<UserForAuthorizeDto>(userForRegistration);
+            if(await _authService.IsValidUser(userForAuth))
+                return Ok(new { Token = _authService.CreateToken() });
+            return BadRequest(ModelState);
         }
 
         #region LogInLogic
@@ -162,7 +166,7 @@ namespace TaskTracker.Api.Controllers
         /// </summary>
         /// <param name="photo">photo file</param>
         /// <returns></returns>
-        [HttpPost("account/set_photo"), Authorize]
+        [HttpPost("set_photo"), Authorize]
         public async Task<IActionResult> SetPhoto(IFormFile photo)
         {
             var fileExt = ("." + photo.FileName.Split('.')[^1]).ToLower();

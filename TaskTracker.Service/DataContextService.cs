@@ -54,7 +54,6 @@ namespace TaskTracker.Service
             return await _userManager.Users
                 .Include(u => u.Projects)
                 .Include(u => u.Tasks)
-                .Include(u => u.Photo)
                 .FirstOrDefaultAsync(u => u.Id.Equals(userId));
         }
 
@@ -100,5 +99,27 @@ namespace TaskTracker.Service
             var users = await _userManager.Users.AsNoTracking().ToListAsync();
             return PagedList<User>.ToPagedList(users, parms.PageNumber, parms.PageSize);
         }
+
+        public async Task<Entities.Models.File?> GetFileAsync(Guid fileId, bool trackChanges) =>
+            await _manager.FileRepository.GetFileAsync(fileId, trackChanges);
+
+        public async Task<PagedList<TaskComment>> GetTaskCommentsAsync(Guid taskId, CommentParameters parms) =>
+            await _manager.CommentRepository.GetAllCommentsForTaskAsync(taskId, false, parms);
+
+        public void CreateComment(TaskComment commentEntity, string userId, Guid taskId)
+        {
+            commentEntity.UserId = userId;
+            commentEntity.TaskId = taskId;
+            _manager.CommentRepository.CreateComment(commentEntity);
+        }
+
+        public async Task<TaskComment?> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges) =>
+            await _manager.CommentRepository.GetCommentAsync(taskId, commentId, trackChanges);
+
+        public void DeleteComment(TaskComment comment) =>
+            _manager.CommentRepository.DeleteComment(comment);
+
+        public void UpdateComment(TaskComment comment) =>
+            _manager.CommentRepository.UpdateComment(comment);
     }
 }

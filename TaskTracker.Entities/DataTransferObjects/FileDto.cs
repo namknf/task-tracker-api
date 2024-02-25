@@ -1,6 +1,7 @@
 ﻿namespace TaskTracker.Entities.DataTransferObjects
 {
-    public class UserLogInByCodeDto : EmailDto
+    public class FileDto
     {
+        public byte[] Data { get; set; }
     }
 }

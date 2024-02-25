@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TaskTracker.Contract;
 using TaskTracker.Contract.Repository;
 using TaskTracker.Entities.Data;
 
@@ -13,6 +12,7 @@ namespace TaskTracker.Repository
         private IStatusRepository _statusRepository;
         private IPriorityRepository _priorityRepository;
         private IFileRepository _fileRepository;
+        private ICommentRepository _commentRepository;
 
         public RepositoryManager(DataContext dataContext)
         {
@@ -61,6 +61,15 @@ namespace TaskTracker.Repository
             {
                 _fileRepository ??= new FileRepository(_dataContext);
                 return _fileRepository;
+            }
+        }
+
+        public ICommentRepository CommentRepository
+        {
+            get
+            {
+                _commentRepository ??= new CommentRepository(_dataContext);
+                return _commentRepository;
             }
         }
 

@@ -42,6 +42,7 @@ namespace TaskTracker.Api.Extensions
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ValidateProjectExistsAttribute>();
             services.AddScoped<ValidateTaskExistsAttribute>();
+            services.AddScoped<ValidateFileExistsAttribute>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IDataContextService, DataContextService>();
             services.AddScoped<IFileService, FileService>();

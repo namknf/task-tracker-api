@@ -34,7 +34,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="200">Successfully got</response>
         /// <returns>List of projects</returns>
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [HttpGet, Authorize]
+        [HttpGet]
         public async Task<ActionResult<List<ProjectDto>>> GetProjects([FromQuery] ProjectParameters parms)
         {
             var projectsFromDb = await _dataContextService.GetProjectsAsync(UserId, parms);

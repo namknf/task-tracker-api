@@ -11,6 +11,8 @@ namespace TaskTracker.Api
             CreateMap<UserForRegistrerDto, User>()
                 .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
 
+            CreateMap<UserForRegistrerDto, UserForAuthorizeDto>();
+
             CreateMap<Entities.Models.Task, TaskDto>();
 
             CreateMap<Project, ProjectDto>();
@@ -39,7 +41,13 @@ namespace TaskTracker.Api
 
             CreateMap<TaskPriority, PriorityDto>();
 
-            CreateMap<Entities.Models.File, ImageDto>();
+            CreateMap<Entities.Models.File, FileDto>();
+
+            CreateMap<CommentForCreationDto, TaskComment>();
+
+            CreateMap<CommentForUpdateDto, TaskComment>();
+
+            CreateMap<TaskComment, CommentDto>();
         }
     }
 }

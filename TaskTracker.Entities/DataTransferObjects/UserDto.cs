@@ -14,6 +14,6 @@
 
         public List<ProjectDto>? Projects { get; set; }
         
-        public ImageDto? Photo { get; set; }
+        public Guid? PhotoId { get; set; }
     }
 }

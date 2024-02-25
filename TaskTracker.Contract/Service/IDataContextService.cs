@@ -2,6 +2,7 @@
 using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;
 using TaskTracker.Entities.RequestFeatures.Entities;
+using File = TaskTracker.Entities.Models.File;
 
 namespace TaskTracker.Contract.Service
 {
@@ -40,5 +41,17 @@ namespace TaskTracker.Contract.Service
         Task<Status?> GetStatusAsync(Guid statusId, bool trackChanges);
 
         Task<TaskPriority?> GetPriorityAsync(Guid priorityId, bool trackChanges);
+
+        Task<File?> GetFileAsync(Guid fileId, bool trackChanges);
+
+        Task<PagedList<TaskComment>> GetTaskCommentsAsync(Guid taskId, CommentParameters parms);
+
+        void CreateComment(TaskComment commentEntity, string userId, Guid taskId);
+
+        Task<TaskComment?> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges);
+
+        void DeleteComment(TaskComment comment);
+
+        void UpdateComment(TaskComment comment);
     }
 }
