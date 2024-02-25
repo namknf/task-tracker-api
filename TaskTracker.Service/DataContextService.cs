@@ -103,29 +103,23 @@ namespace TaskTracker.Service
         public async Task<Entities.Models.File?> GetFileAsync(Guid fileId, bool trackChanges) =>
             await _manager.FileRepository.GetFileAsync(fileId, trackChanges);
 
-        public Task<PagedList<TaskComment>> GetTaskCommentsAsync(Guid taskId, CommentParameters parms)
+        public async Task<PagedList<TaskComment>> GetTaskCommentsAsync(Guid taskId, CommentParameters parms) =>
+            await _manager.CommentRepository.GetAllCommentsForTaskAsync(taskId, false, parms);
+
+        public void CreateComment(TaskComment commentEntity, string userId, Guid taskId)
         {
-            throw new NotImplementedException();
+            commentEntity.UserId = userId;
+            commentEntity.TaskId = taskId;
+            _manager.CommentRepository.CreateComment(commentEntity);
         }
 
-        public System.Threading.Tasks.Task CreateCommentAsync(TaskComment commentEntity, string userId, Guid taskId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<TaskComment?> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges) =>
+            await _manager.CommentRepository.GetCommentAsync(taskId, commentId, trackChanges);
 
-        public Task<TaskComment> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges)
-        {
-            throw new NotImplementedException();
-        }
+        public void DeleteComment(TaskComment comment) =>
+            _manager.CommentRepository.DeleteComment(comment);
 
-        public void DeleteComment(TaskComment comment)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateComment(TaskComment comment)
-        {
-            throw new NotImplementedException();
-        }
+        public void UpdateComment(TaskComment comment) =>
+            _manager.CommentRepository.UpdateComment(comment);
     }
 }

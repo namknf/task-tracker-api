@@ -46,9 +46,9 @@ namespace TaskTracker.Contract.Service
 
         Task<PagedList<TaskComment>> GetTaskCommentsAsync(Guid taskId, CommentParameters parms);
 
-        System.Threading.Tasks.Task CreateCommentAsync(TaskComment commentEntity, string userId, Guid taskId);
+        void CreateComment(TaskComment commentEntity, string userId, Guid taskId);
 
-        Task<TaskComment> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges);
+        Task<TaskComment?> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges);
 
         void DeleteComment(TaskComment comment);
 

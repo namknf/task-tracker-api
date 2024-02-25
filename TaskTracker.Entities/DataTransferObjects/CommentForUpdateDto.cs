@@ -2,5 +2,6 @@
 {
     public class CommentForUpdateDto
     {
+        public string CommentText { get; set; }
     }
 }

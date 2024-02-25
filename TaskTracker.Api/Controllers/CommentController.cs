@@ -87,7 +87,7 @@ namespace TaskTracker.Api.Controllers
             }
 
             var commentEntity = _mapper.Map<TaskComment>(commentDto);
-            await _dataContextService.CreateCommentAsync(commentEntity, UserId, taskId);
+            _dataContextService.CreateComment(commentEntity, UserId, taskId);
             await _dataContextService.SaveChangesAsync();
             var commentToReturn = _mapper.Map<CommentDto>(commentEntity);
             return CreatedAtRoute("CreateCommentForTask", new { id = commentToReturn.Id }, commentToReturn);

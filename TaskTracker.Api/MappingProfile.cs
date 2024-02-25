@@ -42,6 +42,12 @@ namespace TaskTracker.Api
             CreateMap<TaskPriority, PriorityDto>();
 
             CreateMap<Entities.Models.File, FileDto>();
+
+            CreateMap<CommentForCreationDto, TaskComment>();
+
+            CreateMap<CommentForUpdateDto, TaskComment>();
+
+            CreateMap<TaskComment, CommentDto>();
         }
     }
 }

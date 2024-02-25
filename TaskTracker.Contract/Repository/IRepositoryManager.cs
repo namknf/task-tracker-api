@@ -12,6 +12,8 @@
 
         IFileRepository FileRepository { get; }
 
+        ICommentRepository CommentRepository { get; }
+
         Task SaveAsync();
 
         void DetachAllEntities();
