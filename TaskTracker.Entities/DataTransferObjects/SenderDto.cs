@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.Entities.DataTransferObjects
 {
-    public class UserLogInByCodeDto : EmailDto
+    public class SenderDto : EmailDto
     {
     }
 }
