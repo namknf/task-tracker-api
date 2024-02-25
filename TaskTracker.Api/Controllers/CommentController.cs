@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
@@ -117,17 +118,31 @@ namespace TaskTracker.Api.Controllers
         /// <param name="projectId">project id</param>
         /// <param name="taskId">task id</param>
         /// <param name="commentId">comment id</param>
-        /// <param name="commentDto">comment to update dto</param>
         /// <returns></returns>
-        [HttpPut("{commentId}")]
+        [HttpPatch("{commentId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
         [ServiceFilter(typeof(ValidateCommentExistsAttribute))]
-        public async Task<IActionResult> UpdateTask(Guid projectId, Guid taskId, Guid commentId, [FromBody] CommentForUpdateDto commentDto)
+        public async Task<IActionResult> PartiallyUpdateComment(Guid projectId, Guid taskId, Guid commentId, [FromBody] JsonPatchDocument<CommentForUpdateDto> patchDoc)
         {
+            if (patchDoc == null)
+            {
+                _logger.LogError("patchDoc object sent from client is null.");
+                return BadRequest("patchDoc object is null");
+            }
+
             var commentEntity = HttpContext.Items["comment"] as TaskComment;
-            var updatedComment = _mapper.Map<CommentForUpdateDto, TaskComment>(commentDto, commentEntity);
-            _dataContextService.UpdateComment(updatedComment);
+            var commentToPatch = _mapper.Map<CommentForUpdateDto>(commentEntity);
+            patchDoc.ApplyTo(commentToPatch, ModelState);
+            TryValidateModel(commentToPatch);
+
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the patch document");
+                return UnprocessableEntity(ModelState);
+            }
+
+            _mapper.Map(commentToPatch, commentEntity);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
         }
