@@ -6,6 +6,7 @@ using TaskTracker.Entities.DataTransferObjects;
 namespace TaskTracker.Api.Controllers
 {
     [Route("api/email")]
+    [Produces("application/json")]
     [ApiController]
     public class EmailController : ControllerBase
     {
