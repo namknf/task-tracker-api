@@ -121,5 +121,8 @@ namespace TaskTracker.Service
 
         public void UpdateComment(TaskComment comment) =>
             _manager.CommentRepository.UpdateComment(comment);
+
+        public void DeleteFile(Entities.Models.File file) =>
+            _manager.FileRepository.DeleteFile(file);
     }
 }

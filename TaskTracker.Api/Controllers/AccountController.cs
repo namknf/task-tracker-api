@@ -40,7 +40,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="201">New user was registered</response>
         /// <response code="400">Incorrect registration parameters</response>
         /// <returns>Registered user</returns>
-        [HttpPost("register")]
+        [HttpPost("register"), AllowAnonymous]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrerDto userForRegistration)
         {
@@ -70,7 +70,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="200">Authorization token</response>
         /// <response code="401">Wrong login parameters</response>
         /// <returns>Token</returns>
-        [HttpPost("login")]
+        [HttpPost("login"), AllowAnonymous]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthorizeDto user)
         {

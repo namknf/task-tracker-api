@@ -8,12 +8,11 @@ namespace TaskTracker.Repository
     {
         public FileRepository(DataContext dataContext) : base(dataContext) { }
 
-        public void CreateFile(Entities.Models.File file)
-        {
-            Create(file);
-        }
+        public void CreateFile(Entities.Models.File file) => Create(file);
 
         public async Task<Entities.Models.File?> GetFileAsync(Guid fileId, bool trackChanges) =>
             await FindByCondition(c => c.Id.Equals(fileId), trackChanges).SingleOrDefaultAsync();
+
+        public void DeleteFile(Entities.Models.File file) => Delete(file);
     }
 }

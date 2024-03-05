@@ -53,5 +53,7 @@ namespace TaskTracker.Contract.Service
         void DeleteComment(TaskComment comment);
 
         void UpdateComment(TaskComment comment);
+
+        void DeleteFile(File file);
     }
 }
