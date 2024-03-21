@@ -24,6 +24,8 @@ namespace TaskTracker.Entities.Models
 
         public string? EmailCode { get; set; }
 
+        public string? RefreshToken { get; set; }
+
         public IEnumerable<Task>? Tasks { get; set; }
 
         public IEnumerable<Project>? Projects { get; set; }
