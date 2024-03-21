@@ -6,6 +6,7 @@ using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
+using TaskTracker.Entities.RequestFeatures;
 
 namespace TaskTracker.Api.Controllers
 {
@@ -22,7 +23,14 @@ namespace TaskTracker.Api.Controllers
         private readonly IEmailService _emailService;
         private readonly IFileService _fileService;
 
-        public AccountController(ILogger<AccountController> logger, IMapper mapper, UserManager<User> userManager, IAuthenticationService authService, IDataContextService dataContextService, IEmailService emailService, IFileService fileService)
+        public AccountController(
+            ILogger<AccountController> logger, 
+            IMapper mapper, 
+            UserManager<User> userManager, 
+            IAuthenticationService authService, 
+            IDataContextService dataContextService, 
+            IEmailService emailService, 
+            IFileService fileService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -79,7 +87,12 @@ namespace TaskTracker.Api.Controllers
                 _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong email or password.");
                 return Unauthorized();
             }
-            return Ok(new { Token = _authService.CreateToken() });
+
+            var userFromDb = await _userManager.FindByEmailAsync(user.Email);
+            var refresh = await _authService.GenerateRefreshToken();
+            userFromDb.RefreshToken = refresh;
+            await _userManager.UpdateAsync(userFromDb);
+            return Ok(new { Token = _authService.CreateToken(), RefreshToken = refresh });
         }
 
         /// <summary>
@@ -118,8 +131,46 @@ namespace TaskTracker.Api.Controllers
             if (user == null)
                 return BadRequest($"User with email {userDto.Email} not found");
             if (!string.IsNullOrEmpty(user.EmailCode) && user.EmailCode.Equals(userDto.Code))
-                return Ok(new { Token = _authService.CreateToken(user.Id) });
+            {
+                var refresh = await _authService.GenerateRefreshToken();
+                user.RefreshToken = refresh;
+                await _userManager.UpdateAsync(user);
+                return Ok(new { Token = _authService.CreateToken(user.Id, 5) });
+            }
             else return BadRequest("Incorrect code");
+        }
+
+        /// <summary>
+        /// Refresh access token.
+        /// </summary>
+        /// <param name="refreshTokenParams">Life time (default 5 min) and refresh token</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("login/refresh")]
+        public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenParams refreshTokenParams)
+        {
+            if (refreshTokenParams.RefreshToken.Length == 0)
+                return BadRequest("Invalid refresh token");
+
+            var user = _userManager.Users.FirstOrDefault(p => p.RefreshToken.Contains(refreshTokenParams.RefreshToken));
+
+            if (user == null || user.RefreshTokenExpiryTime <= DateTime.Now)
+                return BadRequest("Invalid access token or refresh token");
+
+            var newAccessToken = _authService.CreateToken(user.Id, refreshTokenParams.LifeTime);
+            var newRefreshToken = await _authService.GenerateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            await _userManager.UpdateAsync(user);
+
+            return Ok(new
+            {
+                Session = new
+                {
+                    AccessToken = newAccessToken,
+                    RefreshToken = newRefreshToken,
+                }
+            });
         }
         #endregion
 

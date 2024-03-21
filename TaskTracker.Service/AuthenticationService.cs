@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using TaskTracker.Contract.Service;
 using TaskTracker.Entities.DataTransferObjects;
@@ -28,11 +29,11 @@ namespace TaskTracker.Service
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
         }
 
-        public string CreateToken(string userId)
+        public string CreateToken(string userId, uint lifetime)
         {
             var signingCredentials = GetSigningCredentials();
             var claims = GetClaims(userId);
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+            var tokenOptions = GenerateTokenOptions(signingCredentials, claims, lifetime);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
@@ -40,7 +41,7 @@ namespace TaskTracker.Service
         {
             var signingCredentials = GetSigningCredentials();
             var claims = GetClaims(_user.Id);
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
+            var tokenOptions = GenerateTokenOptions(signingCredentials, claims, 5);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
@@ -61,7 +62,7 @@ namespace TaskTracker.Service
             };
         }
 
-        private SecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)
+        private SecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims, uint lifetime)
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var issuer = jwtSettings.GetSection("validIssuer").Value;
@@ -69,7 +70,7 @@ namespace TaskTracker.Service
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Expires = DateTime.Now.AddDays(Convert.ToDouble(jwtSettings.GetSection("expires").Value)),
+                Expires = DateTime.Now.Add(TimeSpan.FromMinutes(lifetime)),
                 Issuer = issuer,
                 Audience = audiense,
                 SigningCredentials = signingCredentials,
@@ -79,6 +80,14 @@ namespace TaskTracker.Service
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return token;
+        }
+
+        public Task<string> GenerateRefreshToken()
+        {
+            var randomNumber = new byte[64];
+            using var rng = RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return System.Threading.Tasks.Task.FromResult(Convert.ToBase64String(randomNumber));
         }
     }
 }
