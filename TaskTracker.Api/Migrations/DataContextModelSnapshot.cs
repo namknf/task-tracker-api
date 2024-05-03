@@ -15,7 +15,7 @@ namespace TaskTracker.Api.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "8.0.3");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -228,22 +228,22 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7c044558-cce7-40f7-9214-baa2acecb2ca"),
+                            Id = new Guid("26153ca4-13a3-4058-aafa-08ea8993912b"),
                             StatusName = "To do"
                         },
                         new
                         {
-                            Id = new Guid("a8ad7521-8ca7-4fb2-8bfa-7562d25120aa"),
+                            Id = new Guid("b112add8-7a61-4fe3-9f22-b31b18562b96"),
                             StatusName = "In Progress"
                         },
                         new
                         {
-                            Id = new Guid("767f5b82-4a10-4f16-b937-392acbba7c92"),
+                            Id = new Guid("81f6b1c1-7ce2-4377-98c3-924c8c7caae2"),
                             StatusName = "Closed"
                         },
                         new
                         {
-                            Id = new Guid("99a97551-9983-4d69-8cf9-d5a15e0a4d92"),
+                            Id = new Guid("9c2626b0-0241-4a65-b237-b151adcadf60"),
                             StatusName = "Frozen"
                         });
                 });
@@ -373,17 +373,17 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("aa625601-74a8-4bdd-81ec-3dba7011de8c"),
+                            Id = new Guid("6315d9d0-b54d-4811-9965-3eab2b3ccf92"),
                             PriorityName = "Low"
                         },
                         new
                         {
-                            Id = new Guid("b2e66f78-afe2-4a20-8c0a-4cea167aef5a"),
+                            Id = new Guid("13f78a9a-4647-43a7-8884-5375f6f482ae"),
                             PriorityName = "Medium"
                         },
                         new
                         {
-                            Id = new Guid("d89b6183-4180-45e1-8b80-dd7e2f1f7cbf"),
+                            Id = new Guid("163316c2-3a1d-4fcd-9d2a-f98c3dd0ea11"),
                             PriorityName = "High"
                         });
                 });
@@ -452,9 +452,6 @@ namespace TaskTracker.Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SecurityStamp")

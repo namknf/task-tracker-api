@@ -7,9 +7,6 @@ namespace TaskTracker.Api.Controllers
     [ApiController]
     public abstract class BaseController : ControllerBase
     {
-        protected const string OtpHeader = "X-OTP";
-        protected const string DeviceIdHeader = "X-Device-Id";
-
         protected string UserId
         {
             get
