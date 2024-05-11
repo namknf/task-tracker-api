@@ -41,7 +41,7 @@ namespace TaskTracker.Service
         {
             var signingCredentials = GetSigningCredentials();
             var claims = GetClaims(_user.Id);
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims, 5);
+            var tokenOptions = GenerateTokenOptions(signingCredentials, claims, 20);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 

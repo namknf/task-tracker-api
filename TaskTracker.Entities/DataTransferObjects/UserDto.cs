@@ -15,5 +15,11 @@
         public List<ProjectDto>? Projects { get; set; }
         
         public Guid? PhotoId { get; set; }
+
+        public int InProgressTasks { get; set; }
+
+        public int ClosedTasks { get; set; }
+
+        public int FrozenTasks { get; set; }
     }
 }

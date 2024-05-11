@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskTracker.Contract.Repository;
 using TaskTracker.Contract.Service;
+using TaskTracker.Entities.Data;
 using TaskTracker.Entities.DataTransferObjects;
 using TaskTracker.Entities.Models;
 using TaskTracker.Entities.RequestFeatures;
@@ -13,11 +14,13 @@ namespace TaskTracker.Service
     {
         private readonly IRepositoryManager _manager;
         private readonly UserManager<User> _userManager;
+        private readonly DataContext _context;
 
-        public DataContextService(IRepositoryManager manager, UserManager<User> userManager)
+        public DataContextService(IRepositoryManager manager, UserManager<User> userManager, DataContext context)
         {
             _manager = manager;
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<PagedList<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms) =>
@@ -124,5 +127,11 @@ namespace TaskTracker.Service
 
         public void DeleteFile(Entities.Models.File file) =>
             _manager.FileRepository.DeleteFile(file);
+
+        public async Task<List<Entities.Models.Task>> GetUserTasksAsync(string userId)
+        {
+            var tasks = _context.Tasks.Where(t => t.Participants.Select(p => p.Id).Contains(userId));
+            return await tasks.ToListAsync();
+        }
     }
 }
