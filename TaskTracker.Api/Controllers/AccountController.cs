@@ -190,6 +190,10 @@ namespace TaskTracker.Api.Controllers
                 return BadRequest("User not found");
             }
             var userDto = _mapper.Map<UserDto>(userFromDb);
+            var userTasks = await _dataContextService.GetUserTasksAsync(userFromDb.Id);
+            userDto.InProgressTasks = userTasks.Where(t => t.Status.StatusName == "InProgress").ToList().Count;
+            userDto.FrozenTasks = userTasks.Where(t => t.Status.StatusName == "Frozen").ToList().Count;
+            userDto.ClosedTasks = userTasks.Where(t => t.Status.StatusName == "Closed").ToList().Count;
             return Ok(userDto);
         }
 
