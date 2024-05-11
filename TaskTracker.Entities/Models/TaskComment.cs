@@ -7,18 +7,18 @@ namespace TaskTracker.Entities.Models
     {
         [Required(ErrorMessage = "CommentText is a required field.")]
         [MaxLength(180, ErrorMessage = "Maximum length for the comment text is 180 characters.")]
-        public string CommentText { get; set; }
+        public virtual string CommentText { get; set; }
 
         [ForeignKey(nameof(User))]
-        public string UserId { get; set; }
+        public virtual string UserId { get; set; }
 
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
-        public Task Task { get; set; }
+        public virtual Task Task { get; set; }
 
         [ForeignKey(nameof(Task))]
-        public Guid TaskId { get; set; }
+        public virtual Guid TaskId { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public virtual DateTime CreationDate { get; set; }
     }
 }

@@ -5,6 +5,6 @@ namespace TaskTracker.Entities.Models
     public abstract class BaseModel
     {
         [Key]
-        public Guid Id { get; set; }
+        public virtual Guid Id { get; set; }
     }
 }

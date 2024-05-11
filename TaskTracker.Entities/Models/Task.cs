@@ -7,35 +7,35 @@ namespace TaskTracker.Entities.Models
     {
         [Required(ErrorMessage = "TaskName is a required field.")]
         [MaxLength(50, ErrorMessage = "Maximum length for the description is 50 characters.")]
-        public string TaskName { get; set; }
+        public virtual string TaskName { get; set; }
 
         [Required(ErrorMessage = "Description is a required field.")]
         [MaxLength(180, ErrorMessage = "Maximum length for the description is 180 characters.")]
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
         [ForeignKey(nameof(Status))]
-        public Guid TaskStatusId { get; set; }
+        public virtual Guid TaskStatusId { get; set; }
 
-        public Status Status { get; set; }
+        public virtual Status Status { get; set; }
 
         [ForeignKey(nameof(Priority))]
-        public Guid TaskPriorityId { get; set; }
+        public virtual Guid TaskPriorityId { get; set; }
 
-        public TaskPriority Priority { get; set; }
+        public virtual TaskPriority Priority { get; set; }
 
-        public DateTime CreationDate { get; set; }
+        public virtual DateTime CreationDate { get; set; }
 
-        public DateTime Deadline { get; set; }
+        public virtual DateTime Deadline { get; set; }
 
-        public IEnumerable<User> Participants { get; set; }
+        public virtual List<User> Participants { get; set; }
 
-        public Project Project { get; set; }
+        public virtual Project Project { get; set; }
 
         [ForeignKey(nameof(Project))]
-        public Guid ProjectId { get; set; }
+        public virtual Guid ProjectId { get; set; }
 
-        public IEnumerable<TaskAction>? Actions { get; set; }
+        public virtual List<TaskAction>? Actions { get; set; }
 
-        public IEnumerable<TaskComment>? Comments { get; set; }
+        public virtual List<TaskComment>? Comments { get; set; }
     }
 }

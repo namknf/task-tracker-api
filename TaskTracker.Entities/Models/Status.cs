@@ -6,6 +6,6 @@ namespace TaskTracker.Entities.Models
     {
         [Required(ErrorMessage = "StatusName is a required field.")]
         [MaxLength(15, ErrorMessage = "Maximum length for the status name is 15 characters.")]
-        public string StatusName { get; set; }
+        public virtual string StatusName { get; set; }
     }
 }

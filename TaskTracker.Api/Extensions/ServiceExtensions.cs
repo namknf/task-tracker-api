@@ -18,7 +18,7 @@ namespace TaskTracker.Api.Extensions
     public static class ServiceExtensions
     {
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration) =>
-            services.AddDbContext<DataContext>(opts => opts.UseSqlite(configuration.GetConnectionString("sqlConnection"),
+            services.AddDbContext<DataContext>(opts => opts.UseLazyLoadingProxies().UseSqlite(configuration.GetConnectionString("sqlConnection"),
             ma => ma.MigrationsAssembly("TaskTracker.Api")));
 
         public static void ConfigureLogging(this IServiceCollection services) =>
