@@ -14,6 +14,8 @@ namespace TaskTracker.Contract.Repository
 
         void UpdateTask(Task task);
 
-        Task<Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges);
+        Task<Task?> GetTaskByProjectAsync(Guid projectId, Guid taskId, bool trackChanges);
+
+        Task<Task?> GetTaskAsync(Guid taskId, bool trackChanges);
     }
 }

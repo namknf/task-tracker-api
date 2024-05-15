@@ -79,8 +79,11 @@ namespace TaskTracker.Service
 
         public void DeleteTask(Entities.Models.Task task) => _manager.TaskRepository.DeleteTask(task);
 
-        public async Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges) =>
-            await _manager.TaskRepository.GetTaskAsync(projectId, taskId, trackChanges);
+        public async Task<Entities.Models.Task?> GetTaskByProjectAsync(Guid projectId, Guid taskId, bool trackChanges) =>
+            await _manager.TaskRepository.GetTaskByProjectAsync(projectId, taskId, trackChanges);
+
+        public async Task<Entities.Models.Task?> GetTaskAsync(Guid taskId, bool trackChanges) =>
+            await _manager.TaskRepository.GetTaskAsync(taskId, trackChanges);
 
         public void UpdateTask(Entities.Models.Task task) =>
             _manager.TaskRepository.UpdateTask(task);
