@@ -4,7 +4,7 @@ using TaskTracker.Contract.Service;
 
 namespace TaskTracker.Api.ActionFilters
 {
-    public class ValidateCommentExistsAttribute
+    public class ValidateCommentExistsAttribute : IAsyncActionFilter
     {
         private readonly IDataContextService _dataService;
         private readonly ILogger _logger;
@@ -27,7 +27,7 @@ namespace TaskTracker.Api.ActionFilters
             }
 
             var taskId = (Guid)context.ActionArguments["taskId"];
-            var task = await _dataService.GetTaskAsync(projectId, taskId, false);
+            var task = await _dataService.GetTaskByProjectAsync(projectId, taskId, false);
             if (task == null)
             {
                 _logger.LogInformation($"Task with id: {taskId} doesn't exist in the database.");
