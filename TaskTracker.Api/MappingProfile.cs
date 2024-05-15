@@ -48,6 +48,8 @@ namespace TaskTracker.Api
             CreateMap<CommentForUpdateDto, TaskComment>();
 
             CreateMap<TaskComment, CommentDto>();
+
+            CreateMap<User, UserInfoForCommentDto>();
         }
     }
 }
