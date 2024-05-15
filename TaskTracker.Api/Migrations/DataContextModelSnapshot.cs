@@ -228,22 +228,22 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d9b238c1-0343-460a-a5b5-fe6273149c46"),
+                            Id = new Guid("aafa041b-cad5-4edd-8c28-0051939b0a8d"),
                             StatusName = "To do"
                         },
                         new
                         {
-                            Id = new Guid("0a6d7e77-6f5d-4fcd-9e68-6322f9f3840e"),
+                            Id = new Guid("70fe366c-31f3-41ca-a5d7-99f8ad3c94d3"),
                             StatusName = "In Progress"
                         },
                         new
                         {
-                            Id = new Guid("3f9d4965-ab03-487a-aab4-ab1364b86fa2"),
+                            Id = new Guid("01025f35-af59-4d52-bd1f-46874d30f360"),
                             StatusName = "Closed"
                         },
                         new
                         {
-                            Id = new Guid("a12d6432-ebc4-4c99-8241-8ef2d26c5153"),
+                            Id = new Guid("4aa3c65d-5ff7-4cd3-9581-6f14ad4e9b2c"),
                             StatusName = "Frozen"
                         });
                 });
@@ -373,17 +373,17 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("08358bc9-2223-4187-ac98-862137a48a84"),
+                            Id = new Guid("24bdd8f4-6b8a-45cb-bbf8-93029d3ee946"),
                             PriorityName = "Low"
                         },
                         new
                         {
-                            Id = new Guid("f99edabe-99f1-48dc-a5dd-61988d0fa3a4"),
+                            Id = new Guid("38567fba-b98e-403b-856b-d513116a2f26"),
                             PriorityName = "Medium"
                         },
                         new
                         {
-                            Id = new Guid("a76d06fe-131f-494f-9824-7fb1886942e6"),
+                            Id = new Guid("336ec1dd-fb31-477c-861b-7462214bfbd3"),
                             PriorityName = "High"
                         });
                 });
@@ -483,54 +483,39 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "73e58b1b-6bc7-4484-9c12-807d120cae36",
+                            Id = "d76ed0bf-9da3-4803-b79a-a17a4b367aca",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f3cf4dd5-ff6b-4b7d-80c1-5dd449a6a4d0",
+                            ConcurrencyStamp = "90c623e0-0d88-4ab4-8296-92718432e2f1",
                             Email = "life_paradishe@mail.ru",
                             EmailConfirmed = false,
                             FirstName = "Ruslan",
                             LastName = "Palytin",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAECdLLLF5OblHM/TVOv+Tnu2VFd3uwjHoJ4hHeCj8IjN1vyhK55Zo84hjIlPt5AyObA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDDvQyMbHmJrJT3Z9g4hoHByF5blh2/PzVc7m2e7SfiI5YK7vmgrtA5bhUwEHPGtOA==",
                             PhoneNumberConfirmed = false,
                             Position = "IOS Developer",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "5c12ef75-bff3-4939-9366-c0e2e088e8b0",
-                            TwoFactorEnabled = false
+                            SecurityStamp = "1cf6f16d-0560-4e0b-92e3-fad4a7698ed1",
+                            TwoFactorEnabled = false,
+                            UserName = "tatarin"
                         },
                         new
                         {
-                            Id = "603dadb8-e3c0-4328-b362-6348be30f147",
+                            Id = "291c305b-fbb5-454a-876e-0d5a0696c063",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5d3d70eb-2320-497f-b1df-796277e5e9ce",
-                            Email = "anya.makeeva.2004@mail.ru",
-                            EmailConfirmed = false,
-                            FirstName = "Ann",
-                            LastName = "Makeeva",
-                            LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEIs6p1wbul6Fh90ZwkfH1EkZTgd3os6veZKM7qTkZOR7rL23c074hkmJiVKQfWCprQ==",
-                            PhoneNumberConfirmed = false,
-                            Position = "Frontend Developer",
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "30cac050-b31f-4df0-bc73-df9356bf4949",
-                            TwoFactorEnabled = false
-                        },
-                        new
-                        {
-                            Id = "91e81946-7879-4790-9e28-f2eb0e6d796c",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "e72a917c-0974-4cff-aad8-b33a040f78ea",
+                            ConcurrencyStamp = "985d7270-06d1-4db0-9d2d-c6dd4a603447",
                             Email = "9093264418es@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Anastasia",
                             LastName = "Malkina",
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEOxw9x+zJWfgbv1Sg0msY9JRoJZ6850nYI2nk1HjOYKxr0Ph+3eSGnXmW4bVBUwe1A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN9yFGJGSpAXvtNQKY4Y4BaIqSLBKc8IzUJJrh8u2+2TrPR2rgWEmWRTZbyb89wUpQ==",
                             PhoneNumberConfirmed = false,
                             Position = "Backend Developer",
                             RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "052ba646-69d2-42b2-ad6b-e60d6a382a5e",
-                            TwoFactorEnabled = false
+                            SecurityStamp = "ef6097d7-6577-47cc-bf69-7d64bb6b4bd5",
+                            TwoFactorEnabled = false,
+                            UserName = "nastik"
                         });
                 });
 

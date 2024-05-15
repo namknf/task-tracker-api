@@ -23,27 +23,19 @@ namespace TaskTracker.Entities.Configuration
                 FirstName = "Ruslan",
                 LastName = "Palytin",
                 Position = "IOS Developer",
+                UserName = "tatarin"
             };
-            user.PasswordHash = _passwordHasher.HashPassword(user, "123456789");
+            user.PasswordHash = _passwordHasher.HashPassword(user, "12345qwertY");
             builder.HasData(user);
 
-            user = new User
-            {
-                Id = Guid.NewGuid().ToString(),
-                Email = "anya.makeeva.2004@mail.ru",
-                FirstName = "Ann",
-                LastName = "Makeeva",
-                Position = "Frontend Developer"
-            };
-            user.PasswordHash = _passwordHasher.HashPassword(user, "qwerty123");
-            builder.HasData(user);
             user = new User
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = "9093264418es@gmail.com",
                 FirstName = "Anastasia",
                 LastName = "Malkina",
-                Position = "Backend Developer"
+                Position = "Backend Developer",
+                UserName = "nastik"
             };
             user.PasswordHash = _passwordHasher.HashPassword(user, "nastik");
             builder.HasData(user);
