@@ -15,5 +15,7 @@ namespace TaskTracker.Entities.DataTransferObjects
 
         [Required(ErrorMessage = "Никнем обязателен для заполнения")]
         public string UserName { get; set; }
+
+        public string? Email { get; set; }
     }
 }

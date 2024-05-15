@@ -10,7 +10,12 @@ namespace TaskTracker.Api
         {
             CreateMap<UserForRegistrerDto, User>();
 
-            CreateMap<UserForRegistrerDto, UserForAuthorizeDto>();
+            CreateMap<UserForRegistrerDto, UserForAuthorizeDto>()
+                .ForMember(u => u.EmailOrUserName, opt => opt.MapFrom(x => x.Email));
+
+            CreateMap<UserForAuthorizeDto, UserForRegistrerDto>()
+                .ForMember(u => u.Email, opt => opt.MapFrom(x => x.EmailOrUserName))
+                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.EmailOrUserName));
 
             CreateMap<Entities.Models.Task, TaskDto>();
 
