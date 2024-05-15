@@ -4,13 +4,16 @@ namespace TaskTracker.Entities.DataTransferObjects
 {
     public class UserForRegistrerDto : UserForManipulationDto
     {
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = "Имя обязательно для заполнения")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Last name is required")]
+        [Required(ErrorMessage = "Фамилия обязательна для заполнения")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Position is required")]
+        [Required(ErrorMessage = "Должность обязательна для заполнения")]
         public string Position { get; set; }
+
+        [Required(ErrorMessage = "Никнем обязателен для заполнения")]
+        public string UserName { get; set; }
     }
 }

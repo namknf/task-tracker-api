@@ -66,7 +66,20 @@ namespace TaskTracker.Api.Controllers
 
             var userForAuth = _mapper.Map<UserForAuthorizeDto>(userForRegistration);
             if (await _authService.IsValidUser(userForAuth))
-                return Ok(new { Token = _authService.CreateToken() });
+            {
+                var refresh = await _authService.GenerateRefreshToken();
+                user.RefreshToken = refresh;
+                await _userManager.UpdateAsync(user);
+                return Ok(new
+                {
+                    Session = new
+                    {
+                        AccessToken = _authService.CreateToken(user.Id, 20),
+                        RefreshToken = refresh,
+                    }
+                });
+            } 
+
             return BadRequest(ModelState);
         }
 
@@ -88,11 +101,20 @@ namespace TaskTracker.Api.Controllers
                 return Unauthorized();
             }
 
-            var userFromDb = await _userManager.FindByEmailAsync(user.Email);
+            var userFromDb = await _userManager.FindByEmailAsync(user.EmailOrUserName);
+            userFromDb ??= await _userManager.FindByNameAsync(user.EmailOrUserName);
             var refresh = await _authService.GenerateRefreshToken();
             userFromDb.RefreshToken = refresh;
             await _userManager.UpdateAsync(userFromDb);
-            return Ok(new { Token = _authService.CreateToken(), RefreshToken = refresh });
+
+            return Ok(new
+            {
+                Session = new
+                {
+                    AccessToken = _authService.CreateToken(userFromDb.Id, 20),
+                    RefreshToken = refresh,
+                }
+            });
         }
 
         /// <summary>
@@ -129,33 +151,42 @@ namespace TaskTracker.Api.Controllers
         {
             var user = await _userManager.FindByEmailAsync(userDto.Email);
             if (user == null)
-                return BadRequest($"User with email {userDto.Email} not found");
+                return BadRequest($"Пользователь с электронно почтой {userDto.Email} не найден");
+
             if (!string.IsNullOrEmpty(user.EmailCode) && user.EmailCode.Equals(userDto.Code))
             {
                 var refresh = await _authService.GenerateRefreshToken();
                 user.RefreshToken = refresh;
                 await _userManager.UpdateAsync(user);
-                return Ok(new { Token = _authService.CreateToken(user.Id, 5) });
+
+                return Ok(new
+                {
+                    Session = new
+                    {
+                        AccessToken = _authService.CreateToken(user.Id, 20),
+                        RefreshToken = refresh,
+                    }
+                });
             }
-            else return BadRequest("Incorrect code");
+            else return BadRequest("Некорректны код");
         }
 
         /// <summary>
-        /// Refresh access token.
+        /// Обновление токена доступа. Если не отправлять свойство LifeTime, то время жизни токена 5 минут.
         /// </summary>
-        /// <param name="refreshTokenParams">Life time (default 5 min) and refresh token</param>
+        /// <param name="refreshTokenParams">Параметры для обновления</param>
         /// <returns></returns>
         [HttpPost]
         [Route("login/refresh")]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenParams refreshTokenParams)
         {
             if (refreshTokenParams.RefreshToken.Length == 0)
-                return BadRequest("Invalid refresh token");
+                return BadRequest("Некорректный токен обновления");
 
             var user = _userManager.Users.FirstOrDefault(p => p.RefreshToken.Contains(refreshTokenParams.RefreshToken));
 
             if (user == null || user.RefreshTokenExpiryTime <= DateTime.Now)
-                return BadRequest("Invalid access token or refresh token");
+                return BadRequest("Некорректный токен доступа или токен обновления");
 
             var newAccessToken = _authService.CreateToken(user.Id, refreshTokenParams.LifeTime);
             var newRefreshToken = await _authService.GenerateRefreshToken();
@@ -190,10 +221,7 @@ namespace TaskTracker.Api.Controllers
                 return BadRequest("User not found");
             }
             var userDto = _mapper.Map<UserDto>(userFromDb);
-            var userTasks = await _dataContextService.GetUserTasksAsync(userFromDb.Id);
-            userDto.InProgressTasks = userTasks.Where(t => t.Status.StatusName == "InProgress").ToList().Count;
-            userDto.FrozenTasks = userTasks.Where(t => t.Status.StatusName == "Frozen").ToList().Count;
-            userDto.ClosedTasks = userTasks.Where(t => t.Status.StatusName == "Closed").ToList().Count;
+            await CountTasksAsync(userDto, userFromDb.Id);
             return Ok(userDto);
         }
 
@@ -232,6 +260,16 @@ namespace TaskTracker.Api.Controllers
             _fileService.UploadPhoto(photo, user);
             await _dataContextService.SaveChangesAsync();
             return Ok();
+        }
+
+        [NonAction]
+        private async Task<UserDto> CountTasksAsync(UserDto userDto, string userId)
+        {
+            var userTasks = await _dataContextService.GetUserTasksAsync(userId);
+            userDto.InProgressTasks = userTasks.Where(t => t.Status.StatusName == "InProgress").ToList().Count;
+            userDto.FrozenTasks = userTasks.Where(t => t.Status.StatusName == "Frozen").ToList().Count;
+            userDto.ClosedTasks = userTasks.Where(t => t.Status.StatusName == "Closed").ToList().Count;
+            return userDto;
         }
     }
 }

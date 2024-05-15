@@ -25,7 +25,8 @@ namespace TaskTracker.Service
 
         public async Task<bool> IsValidUser(UserForAuthorizeDto userForAuth)
         {
-            _user = await _userManager.FindByEmailAsync(userForAuth.Email);
+            _user = await _userManager.FindByEmailAsync(userForAuth.EmailOrUserName);
+            _user ??= await _userManager.FindByNameAsync(userForAuth.EmailOrUserName);
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
         }
 
