@@ -7,7 +7,5 @@
         public DateTime Deadline { get; set; }
 
         public string Description { get; set; }
-
-        public List<ParticipantDto> Participants { get; set; }
     }
 }
