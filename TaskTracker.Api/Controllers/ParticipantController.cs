@@ -23,9 +23,10 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get participants to create project or task
+        /// Получение списка пользователей для добавления участников проекта или задачи
         /// </summary>
-        /// <response code="200">Successfully got</response>
+        /// <response code="200">Пользователи успешно загружены из БД</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpGet, Authorize]
         public async Task<ActionResult<List<ParticipantForGetDto>>> GetParticipants([FromQuery] ParticipantParameters parms)

@@ -22,10 +22,12 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get all tasks priorities
+        /// Получение списка всех приоритетов задач
         /// </summary>
+        /// <response code="401">Пользователь не авторизован</response>
+        /// <response code="200">Список приоритетов успешно загружен из БД</response>
         /// <returns>priorities</returns>
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<ActionResult<List<PriorityDto>>> GetPriorities()
         {
             var prioritiesFromDb = await _dataContextService.GetAllPriorities();

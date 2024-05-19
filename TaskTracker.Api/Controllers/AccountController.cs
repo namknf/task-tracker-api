@@ -42,12 +42,12 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// New user registration
+        /// Регистрация нового пользователя
         /// </summary>
-        /// <param name="userForRegistration">User model for registration</param>
-        /// <response code="201">New user was registered</response>
-        /// <response code="400">Incorrect registration parameters</response>
-        /// <returns>Registered user</returns>
+        /// <param name="userForRegistration">Модель пользователя для регистрации</param>
+        /// <response code="200">Регистрация прошла успешно</response>
+        /// <response code="400">Некорректные параметры для регистрации</response>
+        /// <returns>Зарегистрированный пользователь</returns>
         [HttpPost("register"), AllowAnonymous]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrerDto userForRegistration)
@@ -86,19 +86,19 @@ namespace TaskTracker.Api.Controllers
 
         #region LogInLogic
         /// <summary>
-        /// Log in by email and password
+        /// Авторизация "логин (почта/имя пользователя) + пароль"
         /// </summary>
-        /// <param name="user">Authorized user</param>
-        /// <response code="200">Authorization token</response>
-        /// <response code="401">Wrong login parameters</response>
-        /// <returns>Token</returns>
+        /// <param name="user">Параметры для авторизации</param>
+        /// <response code="200">Авторизация прошла успешно</response>
+        /// <response code="401">Некорректные параметры для авторизации</response>
+        /// <returns>Токен доступа</returns>
         [HttpPost("login"), AllowAnonymous]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Authenticate([FromBody] UserForAuthorizeDto user)
         {
             if (!await _authService.IsValidUser(user))
             {
-                _logger.LogWarning($"{nameof(Authenticate)}: Authentication failed. Wrong email or password.");
+                _logger.LogWarning($"{nameof(Authenticate)}: Авторизация прошла неуспешно. Неверный логин или пароль");
                 return Unauthorized();
             }
 
@@ -120,10 +120,10 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Send confirmation email
+        /// Отправка письма на почту для входа по коду
         /// </summary>
-        /// <response code="204">Code was sent on email</response>
-        /// <response code="400">Account was not found</response>
+        /// <response code="200">Код был успешно отправлен</response>
+        /// <response code="400">Пользователь не был найден</response>
         /// <returns></returns>
         [HttpPost("send_login_code"), AllowAnonymous]
         public async Task<IActionResult> SendCodeEmail([FromBody] UserLogInByCodeDto userDto)
@@ -131,7 +131,7 @@ namespace TaskTracker.Api.Controllers
             var email = userDto.Email;
             var user = await _userManager.FindByEmailAsync(email);
             if (user == null)
-                return BadRequest($"User with email {email} not found");
+                return BadRequest($"Пользователь с электронной почтой {email} не найден");
 
             var code = _emailService.GenerateCode();
             await _emailService.SendEmailAsync(user.Email, "Код подтверждения для входа в приложение", $"Введите следующий код, чтобы войти: {code}");
@@ -142,11 +142,11 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Authentication by code
+        /// Авторизация по коду, отправленному на почту
         /// </summary>
-        /// <param name="userDto">user model</param>
-        /// <response code="200">Successfully authorized by code</response>
-        /// <response code="400">Account was not found or code is incorrect</response>
+        /// <param name="userDto">Параметры для авторизации: почта + отправленны код</param>
+        /// <response code="200">Авторизация прошла успешно</response>
+        /// <response code="400">Были введены некорретные параметры</response>
         /// <returns>token</returns>
         [HttpPost("loginCode"), AllowAnonymous]
         public async Task<IActionResult> AuthorizeByCode([FromBody] UserEmailCodeDto userDto)
@@ -178,6 +178,8 @@ namespace TaskTracker.Api.Controllers
         /// Обновление токена доступа. Если не отправлять свойство LifeTime, то время жизни токена 5 минут.
         /// </summary>
         /// <param name="refreshTokenParams">Параметры для обновления</param>
+        /// <response code="200">Обновление сессии прошло успешно</response>
+        /// <response code="400">Некорректные параметры для обновления токена</response>
         /// <returns></returns>
         [HttpPost]
         [Route("login/refresh")]
@@ -210,19 +212,20 @@ namespace TaskTracker.Api.Controllers
         #endregion
 
         /// <summary>
-        /// Getting user information
+        /// Получение информации о пользователе
         /// </summary>
-        /// <response code="200">Account info</response>
-        /// <response code="400">User was not found</response>
-        /// <returns>User information</returns>
+        /// <response code="200">Информация была успешно получена из БД</response>
+        /// <response code="400">Пользователь не был найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
+        /// <returns>Информация о пользователе</returns>
         [HttpGet("info"), Authorize]
         public async Task<ActionResult<UserDto>> GetUserInfo()
         {
             var userFromDb = await _dataContextService.GetUserInformationAsync(UserId);
             if (userFromDb == null)
             {
-                _logger.LogError("User not found");
-                return BadRequest("User not found");
+                _logger.LogError("Пользователь не найден");
+                return BadRequest("Пользователь не найден");
             }
             var userDto = _mapper.Map<UserDto>(userFromDb);
             await CountTasksAsync(userDto, userFromDb.Id);
@@ -230,17 +233,19 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Delete account
+        /// Удаление аккаунта
         /// </summary>
-        /// <response code="204">Account was successfully deleted</response>
-        /// <response code="404">Account was not found</response>
+        /// <response code="204">Аккаунт был успешно удален</response>
+        /// <response code="200">Аккаунт был успешно удален</response>
+        /// <response code="404">Аккаунт не найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpDelete("delete"), Authorize]
         public async Task<IActionResult> DeleteAccount()
         {
             var user = await _userManager.FindByIdAsync(UserId);
             if (user == null)
-                return NotFound("User not found");
+                return NotFound("Пользователь не найден");
             else
             {
                 await _userManager.DeleteAsync(user);
@@ -249,16 +254,19 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Set profile photo
+        /// Добавить фото профиля
         /// </summary>
-        /// <param name="photo">photo file</param>
+        /// <param name="photo">Файл фотографии</param>
+        /// <response code="200">Регистрация прошла успешно</response>
+        /// <response code="400">Некорректный формат файла</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpPost("set_photo"), Authorize]
         public async Task<IActionResult> SetPhoto(IFormFile photo)
         {
             var fileExt = ("." + photo.FileName.Split('.')[^1]).ToLower();
             if (!fileExt.Equals(".png") && !fileExt.Equals(".jpeg") && !fileExt.Equals(".jpg"))
-                return BadRequest($"{fileExt} is incorrect file format");
+                return BadRequest($"{fileExt} является некорретным форматом для фотографии");
 
             var user = await _userManager.FindByIdAsync(UserId);
             _fileService.UploadPhoto(photo, user);
@@ -269,6 +277,9 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Обновление пароля
         /// </summary>
+        /// <response code="204">Пароль успешно обновлен</response>
+        /// <response code="400">Отсутствет пароль для изменения или не найден код для подтверждения сброса</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpPatch("update_password"), Authorize]
         public async Task<IActionResult> UpdatePassword([FromBody] UserForPasswordUpdateDto passwordForUpdateDto)
@@ -306,6 +317,9 @@ namespace TaskTracker.Api.Controllers
         /// <summary>
         /// Обновление информации о пользователе
         /// </summary>
+        /// <response code="200">Информация обновлена успешно</response>
+        /// <response code="400">Отсутствет информация для обновления данных</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpPut("update_user_info"), Authorize]
         public async Task<IActionResult> UpdateUserInfo([FromBody] UserForUpdateDto userForUpdateDto)
@@ -319,12 +333,15 @@ namespace TaskTracker.Api.Controllers
             var user = await _userManager.FindByEmailAsync(Email);
             var updatedUser = _mapper.Map(userForUpdateDto, user);
             await _userManager.UpdateAsync(updatedUser);
-            return NoContent();
+            return Ok();
         }
 
         /// <summary>
         /// Подтверждение сброса пароля
         /// </summary>
+        /// <response code="200">Письмо с кодом для подтверждения отправлено</response>
+        /// <response code="400">Пользователь не был найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpPost("confirm_password_reset"), Authorize]
         public async Task<IActionResult> ConfirmPasswordReset()

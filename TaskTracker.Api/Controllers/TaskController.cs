@@ -28,13 +28,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get all tasks from project
+        /// Получение списка всех задач проекта
         /// </summary>
-        /// <param name="projectId">Project id</param>
-        /// <param name="parms">Paging parameters</param>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="parms">Параметры для пагинации</param>
         /// <returns>List of tasks</returns>
-        /// <response code="200">Successfully get all tasks</response>
-        /// <response code="404">Project not found</response>
+        /// <response code="200">Список задач успешно загружен из БД</response>
+        /// <response code="404">Проект не найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -48,12 +49,13 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get task from project by id
+        /// Получение задачи
         /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <param name="taskId">task id</param>
-        /// <response code="404">Project or task not found</response>
-        /// <response code="200">Task was successfully got</response>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskId">Идентификатор задачи</param>
+        /// <response code="404">Проект или задача не найдена</response>
+        /// <response code="200">Информация о задаче успешно загружена из БД</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>Task</returns>
         [HttpGet("{taskId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -67,13 +69,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Create new task
+        /// Создание новой задачи
         /// </summary>
-        /// <param name="projectId">Project id</param>
-        /// <param name="taskDto">new task model</param>
-        /// <response code="404">Project not found</response>
-        /// <response code="400">Invalid Task dto</response>
-        /// <response code="201">Task was successfully created</response>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskDto">Параметры для создания</param>
+        /// <response code="404">Проект не был найден</response>
+        /// <response code="400">Некорректные параметры для создания задачи</response>
+        /// <response code="201">Задача успешно создана</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>Created task</returns>
         [HttpPost(Name = "CreateTaskForProject")]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -98,10 +101,11 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Delete existing task
+        /// Удаление существующей задачи
         /// </summary>
-        /// <response code="404">Project or task not found</response>
-        /// <response code="204">Task was successfully deleted</response>
+        /// <response code="404">Проект или задача не найдены</response>
+        /// <response code="204">Задача успешно удалена</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>No Content</returns>
         [HttpDelete("{taskId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -116,13 +120,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Update task information
+        /// Обновление информации о задаче
         /// </summary>
-        /// <param name="projectId">Project id</param>
-        /// <param name="taskId">Task id</param>
-        /// <param name="taskDto">Updated task model</param>
-        /// <response code="404">Project or task not found</response>
-        /// <response code="204">Task was successfully updated</response>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskId">Идентификатор задачи</param>
+        /// <param name="taskDto">Параметры для редактирования</param>
+        /// <response code="404">Проект или задача не найдены</response>
+        /// <response code="204">Информация о задаче успешно обновлена</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>Updated task model</returns>
         [HttpPut("{taskId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]

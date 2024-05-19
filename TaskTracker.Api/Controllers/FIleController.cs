@@ -18,9 +18,12 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get file by Id
+        /// Получение файла по идентификатору
         /// </summary>
-        /// <param name="fileId">file id</param>
+        /// <param name="fileId">Идентификатор файла</param>
+        /// <response code="206">Файл успешно получен из БД</response>
+        /// <response code="200">Файл успешно получен из БД</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpGet("fileId"), Authorize]
         [ServiceFilter(typeof(ValidateFileExistsAttribute))]
@@ -31,9 +34,13 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Delete existing file
+        /// Удаление существующего файла
         /// </summary>
-        /// <param name="fileId">file id</param>
+        /// <param name="fileId">Идентификатор файла</param>
+        /// <response code="204">Файл успешно удален</response>
+        /// <response code="200">Файл успешно удален</response>
+        /// <response code="404">Файл не был найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpDelete("fileId"), Authorize]
         [ServiceFilter(typeof(ValidateFileExistsAttribute))]

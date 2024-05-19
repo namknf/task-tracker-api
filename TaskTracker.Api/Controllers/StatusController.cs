@@ -22,8 +22,10 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get all tasks statuses
+        /// Получение списка всех статусов задач
         /// </summary>
+        /// <response code="401">Пользователь не авторизован</response>
+        /// <response code="200">Список статусов успешно загружен из БД</response>
         /// <returns>statuses</returns>
         [HttpGet]
         public async Task<ActionResult<List<StatusDto>>> GetStatuses()
