@@ -69,6 +69,7 @@ namespace TaskTracker.Api.Controllers
             {
                 var refresh = await _authService.GenerateRefreshToken();
                 user.RefreshToken = refresh;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(10);
                 await _userManager.UpdateAsync(user);
                 return Ok(new
                 {
@@ -105,6 +106,7 @@ namespace TaskTracker.Api.Controllers
             userFromDb ??= await _userManager.FindByNameAsync(user.EmailOrUserName);
             var refresh = await _authService.GenerateRefreshToken();
             userFromDb.RefreshToken = refresh;
+            userFromDb.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(10);
             await _userManager.UpdateAsync(userFromDb);
 
             return Ok(new
@@ -157,6 +159,7 @@ namespace TaskTracker.Api.Controllers
             {
                 var refresh = await _authService.GenerateRefreshToken();
                 user.RefreshToken = refresh;
+                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(10);
                 await _userManager.UpdateAsync(user);
 
                 return Ok(new
@@ -192,6 +195,7 @@ namespace TaskTracker.Api.Controllers
             var newRefreshToken = await _authService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(refreshTokenParams.LifeTime);
             await _userManager.UpdateAsync(user);
 
             return Ok(new
