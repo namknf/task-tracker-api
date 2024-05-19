@@ -270,7 +270,7 @@ namespace TaskTracker.Api.Controllers
         /// Обновление пароля
         /// </summary>
         /// <returns></returns>
-        [HttpPatch("update_password/{code}"), Authorize]
+        [HttpPatch("update_password"), Authorize]
         public async Task<IActionResult> UpdatePassword([FromBody] UserForPasswordUpdateDto passwordForUpdateDto)
         {
             if (passwordForUpdateDto == null)

@@ -24,7 +24,7 @@ namespace TaskTracker.Api.Controllers
         {
             get
             {
-                var value = User.Claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultNameClaimType)?.Value;
+                var value = User.Claims.FirstOrDefault(x => x.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
                 if (value is not null) return value;
                 throw new Exception("Авторизованный пользователь не найден");
             }
