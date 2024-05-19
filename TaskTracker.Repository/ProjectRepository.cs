@@ -25,7 +25,8 @@ namespace TaskTracker.Repository
 
         public async Task<PagedList<Project>?> GetProjectsAsync(string userId, bool trackChanges, ProjectParameters parms)
         {
-            var projects = await FindAll(trackChanges).Include(p => p.Participants)
+            var projects = await FindAll(trackChanges)
+                .Include(p => p.Participants)
                 .Include(p => p.Tasks)
                 .Where(c => c.Participants.Any(p => p.Id.Equals(userId)))
                 .ToListAsync();

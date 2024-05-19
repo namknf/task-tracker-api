@@ -30,11 +30,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get all comments from task
+        /// Получение всех комментариев задачи
         /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <param name="taskId"> task id</param>
-        /// <param name="parms">pagination params</param>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskId">Идентификатор задачи</param>
+        /// <param name="parms">Параметры для загрузки данных</param>
+        /// <response code="200">Комментарии успешно загружены из БД</response>
+        /// <response code="404">Не найден проект или задача</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -49,11 +52,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get comment
+        /// Получение комментария
         /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <param name="taskId">task id</param>
-        /// <param name="commentId">comment id</param>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskId">Идентификатор задачи</param>
+        /// <param name="commentId">Идентификатор комментария</param>
+        /// <response code="200">Комментарий успешно загружен из БД</response>
+        /// <response code="404">Не найден проект или задача</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpGet("{commentId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -67,11 +73,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Create new comment
+        /// Создание нового комментария
         /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <param name="taskId">task id</param>
-        /// <param name="commentDto">comment for creation dto</param>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskId">Идентификатор задачи</param>
+        /// <param name="commentDto">Модель комментария для создания нового</param>
+        /// <response code="201">Комментарий успешно создан</response>
+        /// <response code="404">Не найден проект или задача</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpPost(Name = "CreateCommentForTask")]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -82,8 +91,8 @@ namespace TaskTracker.Api.Controllers
         {
             if (commentDto == null)
             {
-                _logger.LogError("CommentForCreationDto is null");
-                return BadRequest("CommentForCreationDto is null");
+                _logger.LogError("Отсутствует информация для создания комментария");
+                return BadRequest("Отсутствует информация для создания комментария");
             }
 
             var commentEntity = _mapper.Map<TaskComment>(commentDto);
@@ -94,11 +103,14 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Delete comment
+        /// Удаление комментария
         /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <param name="taskId">task id</param>
-        /// <param name="commentId">comment id</param>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskId">Идентификатор задачи</param>
+        /// <param name="commentId">Идентификатор комментария</param>
+        /// <response code="204">Комментарий успешно удален</response>
+        /// <response code="404">Не найден проект или задача</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
         [HttpDelete("{commentId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -113,11 +125,15 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Update comment information
+        /// Редактирование комментария
         /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <param name="taskId">task id</param>
-        /// <param name="commentId">comment id</param>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <param name="taskId">Идентификатор задачи</param>
+        /// <param name="commentId">Идентификатор комментария</param>
+        /// <response code="204">Комментарий успешно обновлен</response>
+        /// <response code="404">Не найден проект или задача; отсутствует модель для обновления информации</response>
+        /// <response code="401">Пользователь не авторизован</response>
+        /// <response code="422">Обновить данные о комментарии не получилось, так как данные были неккорректны</response>
         /// <returns></returns>
         [HttpPatch("{commentId}")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
@@ -127,8 +143,8 @@ namespace TaskTracker.Api.Controllers
         {
             if (patchDoc == null)
             {
-                _logger.LogError("patchDoc object sent from client is null.");
-                return BadRequest("patchDoc object is null");
+                _logger.LogError("Отсутствует модель для обновления информации комментария");
+                return BadRequest("Отсутствует модель для обновления информации комментария");
             }
 
             var commentEntity = HttpContext.Items["comment"] as TaskComment;
@@ -138,7 +154,7 @@ namespace TaskTracker.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for the patch document");
+                _logger.LogError("Некорректное состояние модели для обновления");
                 return UnprocessableEntity(ModelState);
             }
 

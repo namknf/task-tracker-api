@@ -4,8 +4,8 @@ namespace TaskTracker.Entities.Models
 {
     public class TaskPriority : BaseModel
     {
-        [Required(ErrorMessage = "PriorityName is a required field.")]
-        [MaxLength(15, ErrorMessage = "Maximum length for the task priority is 15 characters.")]
-        public string PriorityName { get; set; }
+        [Required(ErrorMessage = "Название приоритета задачи обязательно для заполнения.")]
+        [MaxLength(15, ErrorMessage = "MМаксимальная длина названия приоритета задачи 15 символов.")]
+        public virtual string PriorityName { get; set; }
     }
 }

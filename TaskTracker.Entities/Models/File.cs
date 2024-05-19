@@ -2,10 +2,10 @@
 {
     public class File : BaseModel
     {
-        public string FileName { get; set; }
+        public virtual string FileName { get; set; }
 
-        public string Title { get; set; }
+        public virtual string Title { get; set; }
 
-        public byte[] Data { get; set; }
+        public virtual byte[] Data { get; set; }
     }
 }

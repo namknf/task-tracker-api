@@ -8,14 +8,22 @@ namespace TaskTracker.Api
     {
         public MappingProfile()
         {
-            CreateMap<UserForRegistrerDto, User>()
-                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.Email));
+            CreateMap<UserForRegistrerDto, User>();
 
-            CreateMap<UserForRegistrerDto, UserForAuthorizeDto>();
+            CreateMap<UserForRegistrerDto, UserForAuthorizeDto>()
+                .ForMember(u => u.EmailOrUserName, opt => opt.MapFrom(x => x.Email));
+
+            CreateMap<UserForAuthorizeDto, UserForRegistrerDto>()
+                .ForMember(u => u.Email, opt => opt.MapFrom(x => x.EmailOrUserName))
+                .ForMember(u => u.UserName, opt => opt.MapFrom(x => x.EmailOrUserName));
 
             CreateMap<Entities.Models.Task, TaskDto>();
 
             CreateMap<Project, ProjectDto>();
+
+            CreateMap<Project, ProjectForGetDto>();
+
+            CreateMap<ProjectDto, ProjectForGetDto>();
 
             CreateMap<User, UserDto>();
 
@@ -48,6 +56,10 @@ namespace TaskTracker.Api
             CreateMap<CommentForUpdateDto, TaskComment>();
 
             CreateMap<TaskComment, CommentDto>();
+
+            CreateMap<User, UserInfoForCommentDto>();
+
+            CreateMap<UserForUpdateDto, User>();
         }
     }
 }

@@ -10,6 +10,8 @@ namespace TaskTracker.Contract.Service
     {
         Task<PagedList<Entities.Models.Task>> GetProjectTasksAsync(Guid projectId, TaskParameters parms);
 
+        Task<List<Entities.Models.Task>> GetUserTasksAsync(string userId);
+
         Task<PagedList<User>> GetParticipantsAsync(ParticipantParameters parms);
 
         Task<Project?> GetProjectAsync(Guid projectId, bool trackChanges);
@@ -28,7 +30,9 @@ namespace TaskTracker.Contract.Service
 
         void DeleteTask(Entities.Models.Task task);
 
-        Task<Entities.Models.Task?> GetTaskAsync(Guid projectId, Guid taskId, bool trackChanges);
+        Task<Entities.Models.Task?> GetTaskByProjectAsync(Guid projectId, Guid taskId, bool trackChanges);
+
+        Task<Entities.Models.Task?> GetTaskAsync(Guid taskId, bool trackChanges);
 
         void UpdateProject(Project project);
 
@@ -53,5 +57,7 @@ namespace TaskTracker.Contract.Service
         void DeleteComment(TaskComment comment);
 
         void UpdateComment(TaskComment comment);
+
+        void DeleteFile(File file);
     }
 }

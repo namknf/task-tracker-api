@@ -16,20 +16,21 @@ namespace TaskTracker.Entities.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new PriorityConfiguration());
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
 
-        public DbSet<Project> Projects { get; set; }
+        public virtual DbSet<Project> Projects { get; set; }
 
-        public DbSet<Status> Statuses { get; set; }
+        public virtual DbSet<Status> Statuses { get; set; }
 
-        public DbSet<Task> Tasks { get; set; }
+        public virtual DbSet<Task> Tasks { get; set; }
 
-        public DbSet<TaskAction> TaskActions { get; set; }
+        public virtual DbSet<TaskAction> TaskActions { get; set; }
 
-        public DbSet<TaskPriority> TaskPriorities { get; set; }
+        public virtual DbSet<TaskPriority> TaskPriorities { get; set; }
 
-        public DbSet<TaskComment> TaskComments { get; set; }
+        public virtual DbSet<TaskComment> TaskComments { get; set; }
 
-        public DbSet<File> Files { get; set; }
+        public virtual DbSet<File> Files { get; set; }
     }
 }

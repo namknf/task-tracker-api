@@ -29,9 +29,10 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get all projects of current user
+        /// Получение проектов текущего пользователя
         /// </summary>
-        /// <response code="200">Successfully got</response>
+        /// <response code="200">Список проектов успешно загружен из БД</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>List of projects</returns>
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [HttpGet]
@@ -44,29 +45,51 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Get project by id
+        /// Получение проекта
         /// </summary>
-        /// <param name="projectId">project id</param>
-        /// <response code="200">Successfully got</response>
-        /// <response code="404">Project not found</response>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <response code="200">Проект успешно загружен из БД</response>
+        /// <response code="404">Проект не найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>Project</returns>
         [HttpGet("{projectId}")]
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public ActionResult<ProjectDto> GetProject(Guid projectId)
+        public async Task<ActionResult<ProjectForGetDto>> GetProject(Guid projectId)
         {
             var projectEntity = HttpContext.Items["project"] as Project;
-            var projectDto = _mapper.Map<ProjectDto>(projectEntity);
+            var projectDto = _mapper.Map<ProjectForGetDto>(projectEntity);
+            projectDto = await CountTasksAsync(projectDto, projectId);
             return Ok(projectDto);
         }
 
+        [NonAction]
+        private async Task<ProjectForGetDto> CountTasksAsync(ProjectForGetDto projectDto, Guid projectId)
+        {
+            var pageNumber = 1;
+            var userTasks = await _dataContextService.GetProjectTasksAsync(projectId, new TaskParameters { PageNumber = pageNumber, PageSize = 50});
+            projectDto.TasksInfo = new ProjectTasksInfo();
+            while (userTasks.Count != 0)
+            {
+                projectDto.TasksInfo.NewTasks += userTasks.Where(t => t.Status.StatusName == "To do").ToList().Count;
+                projectDto.TasksInfo.AllTasks += userTasks.ToList().Count;
+                projectDto.TasksInfo.FrozenTasks += userTasks.Where(t => t.Status.StatusName == "Frozen").ToList().Count;
+                projectDto.TasksInfo.DoneTasks += userTasks.Where(t => t.Status.StatusName == "Closed").ToList().Count;
+                pageNumber++;
+
+                userTasks = await _dataContextService.GetProjectTasksAsync(projectId, new TaskParameters { PageNumber = pageNumber, PageSize = 50 });
+            }
+            return projectDto;
+        }
+
         /// <summary>
-        /// Create project
+        /// Создание проекта
         /// </summary>
-        /// <param name="projectDto">Project model with parameters</param>
-        /// <response code="400">Project dto is null</response>
-        /// <response code="201">Project was successfully created</response>
+        /// <param name="projectDto">Параметры для создания нового проекта</param>
+        /// <response code="400">Некорректные параметры</response>
+        /// <response code="201">Проект был успешно создан</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>Created project</returns>
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -75,8 +98,8 @@ namespace TaskTracker.Api.Controllers
         {
             if (projectDto == null)
             {
-                _logger.LogError("ProjectForCreationDto is null");
-                return BadRequest("ProjectForCreationDto is null");
+                _logger.LogError("Некорректные параметры для создания нового проекта");
+                return BadRequest("Некорректные параметры для создания нового проекта");
             }
 
             var projectEntity = _mapper.Map<Project>(projectDto);
@@ -87,11 +110,12 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Delete existing project
+        /// Удаление существующего проекта
         /// </summary>
-        /// <param name="projectId">Project id</param>
-        /// <response code="204">Project was successfully deleted</response>
-        /// <response code="404">Project not found</response>
+        /// <param name="projectId">Идентификатор проекта</param>
+        /// <response code="204">Проект был успешно удален</response>
+        /// <response code="404">Проект не был найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>No content</returns>
         [HttpDelete("{projectId}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]
@@ -106,12 +130,13 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Update project information
+        /// Обновление информации о проекте
         /// </summary>
-        /// <param name="projectId">Project id</param>
+        /// <param name="projectId">Идентификатор проекта</param>
         /// <param name="projectDto">New project information</param>
-        /// <response code="204">Project was successfully updated</response>
-        /// <response code="404">Project not found</response>
+        /// <response code="204">Проект был успешно обновлен</response>
+        /// <response code="404">Проект не был найден</response>
+        /// <response code="401">Пользователь не авторизован</response>
         /// <returns>No content</returns>
         [HttpPut("{projectId}")]
         [ProducesResponseType((int)HttpStatusCode.NoContent)]

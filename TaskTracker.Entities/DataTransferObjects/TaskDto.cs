@@ -1,6 +1,6 @@
 ﻿namespace TaskTracker.Entities.DataTransferObjects
 {
-    public class TaskDto
+    public class TaskDto : TaskForManipulationDto
     {
         public Guid Id { get; set; }
 
@@ -9,8 +9,6 @@
         public DateTime CreationDate { get; set; }
 
         public PriorityDto Priority { get; set; }
-
-        public string TaskName { get; set; }
 
         public StatusDto Status { get; set; }
     }

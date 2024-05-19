@@ -26,7 +26,7 @@ namespace TaskTracker.Api.ActionFilters
                 return;
             }
             var id = (Guid)context.ActionArguments["taskId"];
-            var task = await _dataService.GetTaskAsync(projectId, id, false);
+            var task = await _dataService.GetTaskByProjectAsync(projectId, id, false);
 
             if (task == null)
             {

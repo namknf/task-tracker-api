@@ -3,5 +3,7 @@
     public class ProjectForCreationDto : ProjectForManipulationDto
     {
         public DateTime CreationDate { get => DateTime.Now; }
+
+        public List<ParticipantDto> Participants { get; set; }
     }
 }

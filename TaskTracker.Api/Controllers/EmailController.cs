@@ -21,36 +21,40 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
-        /// Send a question on email
+        /// Отправка вопроса на электронную почту
         /// </summary>
-        /// <param name="questionDto">Email and question text</param>
+        /// <param name="questionDto">Почта и текст вопроса</param>
+        /// <response code="404">Некорректные параметры для отправки письма на почту</response>
+        /// <response code="200">Вопрос успешно отправлен</response>
         /// <returns></returns>
         [HttpPost("ask")]
         public IActionResult AskQuestion([FromBody] QuestionDto questionDto)
         {
             if (questionDto == null)
             {
-                _logger.LogError("Invalid parameters to send the e-mail");
-                return BadRequest("Invalid parameters to send the e-mail");
+                _logger.LogError("Некорректные параметры для отправки письма на почту");
+                return BadRequest("Некорректные параметры для отправки письма на почту");
             }
-            _emailService.SendQuestionAsync(questionDto.Email, "Ask question", questionDto.QuestionText);
+            _emailService.SendQuestionAsync(questionDto.Email, "Заданный вопрос", questionDto.QuestionText);
             return Ok();
         }
 
         /// <summary>
-        /// Send an answer
+        /// Отправка ответного сообщения на вопрос
         /// </summary>
-        /// <param name="senderDto">Email to send</param>
+        /// <param name="senderDto">Адрес электронной почты для отправки</param>
+        /// <response code="404">Некорректные параметры для отправки письма на почту</response>
+        /// <response code="200">Ответ успешно отправлен</response>
         /// <returns></returns>
         [HttpPost("answer")]
         public async Task<IActionResult> SendAnswerAsync([FromBody] SenderDto senderDto)
         {
             if (senderDto == null)
             {
-                _logger.LogError("Invalid e-mail");
-                return BadRequest("Invalid e-mail");
+                _logger.LogError("Некорректный адрес почты");
+                return BadRequest("Некорректный адрес почты");
             }
-            await _emailService.SendEmailAsync(senderDto.Email, "Your question", "Hello, we have seen your question and will try to answer it shortly!");
+            await _emailService.SendEmailAsync(senderDto.Email, "Your question", "Добрый день, с вашей стороны был задан вопрос, и в скором времени мы обязательно решим вашу проблему!");
             return Ok();
         }
     }

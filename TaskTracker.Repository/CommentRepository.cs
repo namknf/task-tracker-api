@@ -19,11 +19,11 @@ namespace TaskTracker.Repository
 
         public async Task<PagedList<TaskComment>> GetAllCommentsForTaskAsync(Guid taskId, bool trackChanges, CommentParameters parms)
         {
-            var comments = await FindByCondition(e => e.TaskId.Equals(taskId), trackChanges).ToListAsync();
+            var comments = await FindByCondition(e => e.TaskId.Equals(taskId), trackChanges).Include(c => c.User).ToListAsync();
             return PagedList<TaskComment>.ToPagedList(comments, parms.PageNumber, parms.PageSize);
         }
 
         public async Task<TaskComment?> GetCommentAsync(Guid taskId, Guid commentId, bool trackChanges) =>
-            await FindByCondition(e => e.TaskId.Equals(taskId) && e.Id.Equals(commentId), trackChanges).SingleOrDefaultAsync();
+            await FindByCondition(e => e.TaskId.Equals(taskId) && e.Id.Equals(commentId), trackChanges).Include(c => c.User).SingleOrDefaultAsync();
     }
 }

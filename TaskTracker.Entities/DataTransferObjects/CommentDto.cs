@@ -6,7 +6,7 @@
 
         public string CommentText { get; set; }
 
-        public string UserId { get; set; }
+        public UserInfoForCommentDto User { get; set; }
 
         public DateTime CreationDate { get; set; }
     }

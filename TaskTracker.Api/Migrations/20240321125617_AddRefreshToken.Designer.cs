@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskTracker.Entities.Data;
 
@@ -10,9 +11,10 @@ using TaskTracker.Entities.Data;
 namespace TaskTracker.Api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240321125617_AddRefreshToken")]
+    partial class AddRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -228,22 +230,22 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a7ac5a66-6c2d-4363-a2b8-3c86ede9eeae"),
+                            Id = new Guid("26153ca4-13a3-4058-aafa-08ea8993912b"),
                             StatusName = "To do"
                         },
                         new
                         {
-                            Id = new Guid("c6223bf7-8715-4dfd-a080-41030b5f8e01"),
+                            Id = new Guid("b112add8-7a61-4fe3-9f22-b31b18562b96"),
                             StatusName = "In Progress"
                         },
                         new
                         {
-                            Id = new Guid("85be2a62-cb07-4b25-a722-5e77ce881fac"),
+                            Id = new Guid("81f6b1c1-7ce2-4377-98c3-924c8c7caae2"),
                             StatusName = "Closed"
                         },
                         new
                         {
-                            Id = new Guid("d17fd91b-5a04-41db-9789-413730361250"),
+                            Id = new Guid("9c2626b0-0241-4a65-b237-b151adcadf60"),
                             StatusName = "Frozen"
                         });
                 });
@@ -373,17 +375,17 @@ namespace TaskTracker.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("eaaa797f-7a7c-41c3-a545-0fd934d70644"),
+                            Id = new Guid("6315d9d0-b54d-4811-9965-3eab2b3ccf92"),
                             PriorityName = "Low"
                         },
                         new
                         {
-                            Id = new Guid("10c56daf-30c8-4def-9f4a-36b5b2d7c641"),
+                            Id = new Guid("13f78a9a-4647-43a7-8884-5375f6f482ae"),
                             PriorityName = "Medium"
                         },
                         new
                         {
-                            Id = new Guid("e13bf46e-7ccc-4d5f-8f99-a648b964c684"),
+                            Id = new Guid("163316c2-3a1d-4fcd-9d2a-f98c3dd0ea11"),
                             PriorityName = "High"
                         });
                 });
@@ -434,9 +436,6 @@ namespace TaskTracker.Api.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("PasswordCode")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("PasswordHash")
                         .HasColumnType("TEXT");
 
@@ -455,9 +454,6 @@ namespace TaskTracker.Api.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RefreshToken")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("SecurityStamp")
@@ -482,44 +478,6 @@ namespace TaskTracker.Api.Migrations
                     b.HasIndex("PhotoId");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "4aa87cfa-65e1-4b68-b29d-4aef4daeee03",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "f40ec7eb-3c77-451b-954a-fed4ded7a0aa",
-                            Email = "life_paradishe@mail.ru",
-                            EmailConfirmed = false,
-                            FirstName = "Ruslan",
-                            LastName = "Palytin",
-                            LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEMZ1MmRGyRARt/o0ezHqTBt9ktTCARiKrsBNN9y8cfVduSFjT+nATGRZxK2PhnTzQg==",
-                            PhoneNumberConfirmed = false,
-                            Position = "IOS Developer",
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "c9638a71-fb38-4149-80b8-93b326e3924e",
-                            TwoFactorEnabled = false,
-                            UserName = "tatarin"
-                        },
-                        new
-                        {
-                            Id = "d8e6f819-12db-43b6-8e00-e01f0e2a0ca1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "9afabd55-511c-45e2-b3b4-f4a9d8eb2674",
-                            Email = "9093264418es@gmail.com",
-                            EmailConfirmed = false,
-                            FirstName = "Anastasia",
-                            LastName = "Malkina",
-                            LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEMdOfHJRm0aGUrnGMpRbFe+etfb1vOvIN6SzD9XE59bboYtj3d9+O4RxMI3nhKctJA==",
-                            PhoneNumberConfirmed = false,
-                            Position = "Backend Developer",
-                            RefreshTokenExpiryTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "3b5ab46c-6a55-4e06-804d-4966d4771fbd",
-                            TwoFactorEnabled = false,
-                            UserName = "nastik"
-                        });
                 });
 
             modelBuilder.Entity("TaskUser", b =>
