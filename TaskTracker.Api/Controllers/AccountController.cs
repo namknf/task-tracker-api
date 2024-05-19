@@ -75,7 +75,7 @@ namespace TaskTracker.Api.Controllers
                 {
                     Session = new
                     {
-                        AccessToken = _authService.CreateToken(user.Id, 20),
+                        AccessToken = _authService.CreateToken(user.Id, user.Email, 20),
                         RefreshToken = refresh,
                     }
                 });
@@ -113,7 +113,7 @@ namespace TaskTracker.Api.Controllers
             {
                 Session = new
                 {
-                    AccessToken = _authService.CreateToken(userFromDb.Id, 20),
+                    AccessToken = _authService.CreateToken(userFromDb.Id, userFromDb.Email, 20),
                     RefreshToken = refresh,
                 }
             });
@@ -125,7 +125,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="204">Code was sent on email</response>
         /// <response code="400">Account was not found</response>
         /// <returns></returns>
-        [HttpPost("sendCode"), AllowAnonymous]
+        [HttpPost("send_login_code"), AllowAnonymous]
         public async Task<IActionResult> SendCodeEmail([FromBody] UserLogInByCodeDto userDto)
         {
             var email = userDto.Email;
@@ -134,7 +134,7 @@ namespace TaskTracker.Api.Controllers
                 return BadRequest($"User with email {email} not found");
 
             var code = _emailService.GenerateCode();
-            await _emailService.SendEmailAsync(user.Email, "Verification code to log in Task Tracker", $"Enter this code to confirm log in: {code}");
+            await _emailService.SendEmailAsync(user.Email, "Код подтверждения для входа в приложение", $"Введите следующий код, чтобы войти: {code}");
             user.EmailCode = code;
             await _userManager.UpdateAsync(user);
 
@@ -153,7 +153,7 @@ namespace TaskTracker.Api.Controllers
         {
             var user = await _userManager.FindByEmailAsync(userDto.Email);
             if (user == null)
-                return BadRequest($"Пользователь с электронно почтой {userDto.Email} не найден");
+                return BadRequest($"Пользователь с электронной почтой {userDto.Email} не найден");
 
             if (!string.IsNullOrEmpty(user.EmailCode) && user.EmailCode.Equals(userDto.Code))
             {
@@ -166,12 +166,12 @@ namespace TaskTracker.Api.Controllers
                 {
                     Session = new
                     {
-                        AccessToken = _authService.CreateToken(user.Id, 20),
+                        AccessToken = _authService.CreateToken(user.Id, user.Email, 20),
                         RefreshToken = refresh,
                     }
                 });
             }
-            else return BadRequest("Некорректны код");
+            else return BadRequest("Некорректный код");
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace TaskTracker.Api.Controllers
             if (user == null || user.RefreshTokenExpiryTime <= DateTime.Now)
                 return BadRequest("Некорректный токен доступа или токен обновления");
 
-            var newAccessToken = _authService.CreateToken(user.Id, refreshTokenParams.LifeTime);
+            var newAccessToken = _authService.CreateToken(user.Id, user.Email, refreshTokenParams.LifeTime);
             var newRefreshToken = await _authService.GenerateRefreshToken();
 
             user.RefreshToken = newRefreshToken;
@@ -263,6 +263,62 @@ namespace TaskTracker.Api.Controllers
             var user = await _userManager.FindByIdAsync(UserId);
             _fileService.UploadPhoto(photo, user);
             await _dataContextService.SaveChangesAsync();
+            return Ok();
+        }
+
+        /// <summary>
+        /// Обновление пароля
+        /// </summary>
+        /// <returns></returns>
+        [HttpPatch("update_password/{code}"), Authorize]
+        public async Task<IActionResult> UpdatePassword([FromBody] UserForPasswordUpdateDto passwordForUpdateDto)
+        {
+            if (passwordForUpdateDto == null)
+            {
+                _logger.LogError("Отсутствет пароль для изменения");
+                return BadRequest("Отсутствет пароль для изменения");
+            }
+
+            var user = await _userManager.FindByEmailAsync(Email);
+
+            if (!string.IsNullOrEmpty(user.PasswordCode) && user.PasswordCode.Equals(passwordForUpdateDto.ConfirmationCode))
+            {
+                // Generate the reset token (this would generally be sent out as a query parameter as part of a 'reset' link in an email)
+                string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                // Use the reset token to verify the provenance of the reset request and reset the password.
+                var updateResult = await _userManager.ResetPasswordAsync(user, resetToken, passwordForUpdateDto.NewPassword);
+
+                if (!updateResult.Succeeded)
+                {
+                    foreach (var error in updateResult.Errors)
+                        ModelState.TryAddModelError(error.Code, error.Description);
+
+                    return BadRequest(ModelState);
+                }
+
+                return NoContent();
+            }
+            else
+                return BadRequest("Не найден код для подтверждения сброса");
+        }
+
+        /// <summary>
+        /// Подтверждение сброса пароля
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("confirm_password_reset"), Authorize]
+        public async Task<IActionResult> ConfirmPasswordReset()
+        {
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user == null)
+                return BadRequest($"Пользователь с электронной почтой {Email} не найден");
+
+            var code = _emailService.GenerateCode();
+            await _emailService.SendEmailAsync(user.Email, "Код подтверждения для изменения пароля", $"Введите следующий код, чтобы изменить пароль: {code}");
+            user.PasswordCode = code;
+            await _userManager.UpdateAsync(user);
+
             return Ok();
         }
 

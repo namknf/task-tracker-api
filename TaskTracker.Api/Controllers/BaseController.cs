@@ -16,7 +16,17 @@ namespace TaskTracker.Api.Controllers
             {
                 var value = User.Claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultNameClaimType)?.Value;
                 if (value is not null) return value;
-                throw new Exception("Undefined user");
+                throw new Exception("Авторизованный пользователь не найден");
+            }
+        }
+
+        protected string Email
+        {
+            get
+            {
+                var value = User.Claims.FirstOrDefault(x => x.Type == ClaimsIdentity.DefaultNameClaimType)?.Value;
+                if (value is not null) return value;
+                throw new Exception("Авторизованный пользователь не найден");
             }
         }
     }

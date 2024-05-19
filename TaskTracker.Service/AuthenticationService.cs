@@ -30,19 +30,11 @@ namespace TaskTracker.Service
             return (_user != null && await _userManager.CheckPasswordAsync(_user, userForAuth.Password));
         }
 
-        public string CreateToken(string userId, uint lifetime)
+        public string CreateToken(string userId, string email, uint lifetime)
         {
             var signingCredentials = GetSigningCredentials();
-            var claims = GetClaims(userId);
+            var claims = GetClaims(userId, email);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims, lifetime);
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-        }
-
-        public string CreateToken()
-        {
-            var signingCredentials = GetSigningCredentials();
-            var claims = GetClaims(_user.Id);
-            var tokenOptions = GenerateTokenOptions(signingCredentials, claims, 20);
             return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
         }
 
@@ -55,11 +47,12 @@ namespace TaskTracker.Service
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        private List<Claim> GetClaims(string userId)
+        private List<Claim> GetClaims(string userId, string email)
         {
             return new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userId)
+                new(ClaimTypes.Name, userId),
+                new(ClaimTypes.Email, email)
             };
         }
 

@@ -24,6 +24,8 @@ namespace TaskTracker.Entities.Models
 
         public virtual string? EmailCode { get; set; }
 
+        public virtual string? PasswordCode { get; set; }
+
         public virtual string? RefreshToken { get; set; }
 
         public virtual DateTime RefreshTokenExpiryTime { get; set; }

@@ -6,10 +6,8 @@ namespace TaskTracker.Contract.Service
     {
         Task<bool> IsValidUser(UserForAuthorizeDto userForAuth);
 
-        string CreateToken(string userId, uint lifetime);
+        string CreateToken(string userId, string email, uint lifetime);
 
         Task<string> GenerateRefreshToken();
-
-        string CreateToken();
     }
 }
