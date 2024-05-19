@@ -5,12 +5,12 @@ namespace TaskTracker.Entities.Models
 {
     public class Task : BaseModel
     {
-        [Required(ErrorMessage = "TaskName is a required field.")]
-        [MaxLength(50, ErrorMessage = "Maximum length for the description is 50 characters.")]
+        [Required(ErrorMessage = "Название задачи обязательно для заполнения.")]
+        [MaxLength(50, ErrorMessage = "Максимальная длина название задачи 50 символов.")]
         public virtual string TaskName { get; set; }
 
-        [Required(ErrorMessage = "Description is a required field.")]
-        [MaxLength(180, ErrorMessage = "Maximum length for the description is 180 characters.")]
+        [Required(ErrorMessage = "Описание задачи обязательно для заполнения.")]
+        [MaxLength(180, ErrorMessage = "Максимальная длина для описания 180 символов.")]
         public virtual string Description { get; set; }
 
         [ForeignKey(nameof(Status))]

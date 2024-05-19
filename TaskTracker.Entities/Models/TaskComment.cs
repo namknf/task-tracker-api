@@ -5,8 +5,8 @@ namespace TaskTracker.Entities.Models
 {
     public class TaskComment : BaseModel
     {
-        [Required(ErrorMessage = "CommentText is a required field.")]
-        [MaxLength(180, ErrorMessage = "Maximum length for the comment text is 180 characters.")]
+        [Required(ErrorMessage = "Текст комментария обязателен для заполнения.")]
+        [MaxLength(180, ErrorMessage = "Макисмальная длина текста комментария 180 символов.")]
         public virtual string CommentText { get; set; }
 
         [ForeignKey(nameof(User))]
