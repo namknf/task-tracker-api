@@ -304,6 +304,25 @@ namespace TaskTracker.Api.Controllers
         }
 
         /// <summary>
+        /// Обновление информации о пользователе
+        /// </summary>
+        /// <returns></returns>
+        [HttpPut("update_user_info"), Authorize]
+        public async Task<IActionResult> UpdateUserInfo([FromBody] UserForUpdateDto userForUpdateDto)
+        {
+            if (userForUpdateDto == null)
+            {
+                _logger.LogError("Отсутствет информация для обновления данных");
+                return BadRequest("Отсутствет информация для обновления данных");
+            }
+
+            var user = await _userManager.FindByEmailAsync(Email);
+            var updatedUser = _mapper.Map(userForUpdateDto, user);
+            await _userManager.UpdateAsync(updatedUser);
+            return NoContent();
+        }
+
+        /// <summary>
         /// Подтверждение сброса пароля
         /// </summary>
         /// <returns></returns>
