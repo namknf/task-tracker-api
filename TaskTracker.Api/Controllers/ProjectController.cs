@@ -56,11 +56,31 @@ namespace TaskTracker.Api.Controllers
         [ServiceFilter(typeof(ValidateProjectExistsAttribute))]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public ActionResult<ProjectDto> GetProject(Guid projectId)
+        public async Task<ActionResult<ProjectForGetDto>> GetProject(Guid projectId)
         {
             var projectEntity = HttpContext.Items["project"] as Project;
-            var projectDto = _mapper.Map<ProjectDto>(projectEntity);
+            var projectDto = _mapper.Map<ProjectForGetDto>(projectEntity);
+            projectDto = await CountTasksAsync(projectDto, projectId);
             return Ok(projectDto);
+        }
+
+        [NonAction]
+        private async Task<ProjectForGetDto> CountTasksAsync(ProjectForGetDto projectDto, Guid projectId)
+        {
+            var pageNumber = 1;
+            var userTasks = await _dataContextService.GetProjectTasksAsync(projectId, new TaskParameters { PageNumber = pageNumber, PageSize = 50});
+            projectDto.TasksInfo = new ProjectTasksInfo();
+            while (userTasks.Count != 0)
+            {
+                projectDto.TasksInfo.NewTasks += userTasks.Where(t => t.Status.StatusName == "To do").ToList().Count;
+                projectDto.TasksInfo.AllTasks += userTasks.ToList().Count;
+                projectDto.TasksInfo.FrozenTasks += userTasks.Where(t => t.Status.StatusName == "Frozen").ToList().Count;
+                projectDto.TasksInfo.DoneTasks += userTasks.Where(t => t.Status.StatusName == "Closed").ToList().Count;
+                pageNumber++;
+
+                userTasks = await _dataContextService.GetProjectTasksAsync(projectId, new TaskParameters { PageNumber = pageNumber, PageSize = 50 });
+            }
+            return projectDto;
         }
 
         /// <summary>
