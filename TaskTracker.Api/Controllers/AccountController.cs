@@ -257,19 +257,19 @@ namespace TaskTracker.Api.Controllers
         /// Добавить фото профиля
         /// </summary>
         /// <param name="photo">Файл фотографии</param>
-        /// <response code="200">Регистрация прошла успешно</response>
+        /// <response code="200">Загрузка файла прошла успешно</response>
         /// <response code="400">Некорректный формат файла</response>
         /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
-        [HttpPost("set_photo"), Authorize]
-        public async Task<IActionResult> SetPhoto(IFormFile photo)
+        [HttpPost("set_photo"), DisableRequestSizeLimit, Authorize]
+        public async Task<IActionResult> SetPhoto([FromForm] FileForUploadDto photo)
         {
-            var fileExt = ("." + photo.FileName.Split('.')[^1]).ToLower();
+            var fileExt = ("." + photo.File.FileName.Split('.')[^1]).ToLower();
             if (!fileExt.Equals(".png") && !fileExt.Equals(".jpeg") && !fileExt.Equals(".jpg"))
                 return BadRequest($"{fileExt} является некорретным форматом для фотографии");
 
             var user = await _userManager.FindByIdAsync(UserId);
-            _fileService.UploadPhoto(photo, user);
+            _fileService.UploadPhoto(photo.File, user);
             await _dataContextService.SaveChangesAsync();
             return Ok();
         }
