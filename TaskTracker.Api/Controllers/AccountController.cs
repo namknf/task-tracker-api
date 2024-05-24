@@ -69,7 +69,6 @@ namespace TaskTracker.Api.Controllers
             {
                 var refresh = await _authService.GenerateRefreshToken();
                 user.RefreshToken = refresh;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(10);
                 await _userManager.UpdateAsync(user);
                 return Ok(new
                 {
@@ -106,7 +105,6 @@ namespace TaskTracker.Api.Controllers
             userFromDb ??= await _userManager.FindByNameAsync(user.EmailOrUserName);
             var refresh = await _authService.GenerateRefreshToken();
             userFromDb.RefreshToken = refresh;
-            userFromDb.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(10);
             await _userManager.UpdateAsync(userFromDb);
 
             return Ok(new
@@ -159,7 +157,6 @@ namespace TaskTracker.Api.Controllers
             {
                 var refresh = await _authService.GenerateRefreshToken();
                 user.RefreshToken = refresh;
-                user.RefreshTokenExpiryTime = DateTime.Now.AddMinutes(10);
                 await _userManager.UpdateAsync(user);
 
                 return Ok(new
@@ -190,8 +187,8 @@ namespace TaskTracker.Api.Controllers
 
             var user = _userManager.Users.FirstOrDefault(p => p.RefreshToken.Contains(refreshTokenParams.RefreshToken));
 
-            if (user == null || user.RefreshTokenExpiryTime <= DateTime.Now)
-                return BadRequest("Некорректный токен доступа или токен обновления");
+            if (user == null)
+                return BadRequest("Некорректный токен обновления");
 
             var newAccessToken = _authService.CreateToken(user.Id, user.Email, refreshTokenParams.LifeTime);
             var newRefreshToken = await _authService.GenerateRefreshToken();
@@ -362,9 +359,9 @@ namespace TaskTracker.Api.Controllers
         private async Task<UserDto> CountTasksAsync(UserDto userDto, string userId)
         {
             var userTasks = await _dataContextService.GetUserTasksAsync(userId);
-            userDto.InProgressTasks = userTasks.Where(t => t.Status.StatusName == "InProgress").ToList().Count;
-            userDto.FrozenTasks = userTasks.Where(t => t.Status.StatusName == "Frozen").ToList().Count;
-            userDto.ClosedTasks = userTasks.Where(t => t.Status.StatusName == "Closed").ToList().Count;
+            userDto.InProgressTasks = userTasks.Where(t => t.Status.StatusName == "В процессе выполнения").ToList().Count;
+            userDto.FrozenTasks = userTasks.Where(t => t.Status.StatusName == "Выполнение приостановлено").ToList().Count;
+            userDto.ClosedTasks = userTasks.Where(t => t.Status.StatusName == "Закрыто").ToList().Count;
             return userDto;
         }
     }
