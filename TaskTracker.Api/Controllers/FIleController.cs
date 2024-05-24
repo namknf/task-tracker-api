@@ -1,20 +1,24 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.ActionFilters;
 using TaskTracker.Contract.Service;
+using TaskTracker.Entities.Models;
 
 namespace TaskTracker.Api.Controllers
 {
     [Route("api/files")]
     [Produces("application/json")]
     [ApiController]
-    public class FileController : ControllerBase
+    public class FileController : BaseController
     {
         private readonly IDataContextService _dataContextService;
+        private readonly UserManager<User> _userManager;
 
-        public FileController(IDataContextService dataContextService)
+        public FileController(IDataContextService dataContextService, UserManager<User> userManager)
         {
             _dataContextService = dataContextService;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -47,6 +51,10 @@ namespace TaskTracker.Api.Controllers
         public async Task<ActionResult> DeleteFile(Guid fileId) 
         {
             var file = HttpContext.Items["file"] as Entities.Models.File;
+            var user = await _userManager.FindByIdAsync(UserId);
+            user.Photo = null;
+            user.PhotoId = null;
+            await _userManager.UpdateAsync(user);
             _dataContextService.DeleteFile(file);
             await _dataContextService.SaveChangesAsync();
             return NoContent();
