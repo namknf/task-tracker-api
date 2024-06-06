@@ -16,7 +16,6 @@ namespace TaskTracker.Entities.Data
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new PriorityConfiguration());
             modelBuilder.ApplyConfiguration(new StatusConfiguration());
-            modelBuilder.ApplyConfiguration(new UserConfiguration());
         }
 
         public virtual DbSet<Project> Projects { get; set; }

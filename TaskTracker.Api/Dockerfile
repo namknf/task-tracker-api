@@ -23,4 +23,8 @@ RUN dotnet publish "TaskTracker.Api.csproj" -c Release -o /app/publish /p:UseApp
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN mkdir -p /app/Certs
+COPY TaskTracker.Api/Certs/aspnetapp.pfx /app/Certs
+
 ENTRYPOINT ["dotnet", "TaskTracker.Api.dll"]
