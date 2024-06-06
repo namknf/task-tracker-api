@@ -40,7 +40,6 @@ app.UseSwaggerUI(s =>
 {
     s.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskTracker.Api v1");
 });
-app.UseHttpsRedirection();
 app.ConfigureExceptionHandler();
 app.UseStaticFiles();
 app.UseCorsMiddleware();
