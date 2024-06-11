@@ -358,22 +358,22 @@ namespace TaskTracker.Api.Migrations
             migrationBuilder.InsertData(
                 table: "Statuses",
                 columns: new[] { "Id", "StatusName" },
-                values: new object[] { new Guid("3cc296c3-2cb6-46c2-8546-5ce7b55259b3"), "In Progress" });
+                values: new object[] { new Guid("3cc296c3-2cb6-46c2-8546-5ce7b55259b3"), "В процессе выполнения" });
 
             migrationBuilder.InsertData(
                 table: "Statuses",
                 columns: new[] { "Id", "StatusName" },
-                values: new object[] { new Guid("529b0f8b-5133-4056-bb57-f56b86aebb51"), "Closed" });
+                values: new object[] { new Guid("529b0f8b-5133-4056-bb57-f56b86aebb51"), "Закрыто" });
 
             migrationBuilder.InsertData(
                 table: "Statuses",
                 columns: new[] { "Id", "StatusName" },
-                values: new object[] { new Guid("5ddf44b1-cf32-4114-93d9-be0dc5240ce6"), "Frozen" });
+                values: new object[] { new Guid("5ddf44b1-cf32-4114-93d9-be0dc5240ce6"), "Выполнение приостановлено" });
 
             migrationBuilder.InsertData(
                 table: "Statuses",
                 columns: new[] { "Id", "StatusName" },
-                values: new object[] { new Guid("dd10800a-4924-4eb4-b95b-04f694daf9aa"), "To do" });
+                values: new object[] { new Guid("dd10800a-4924-4eb4-b95b-04f694daf9aa"), "К выполнению" });
 
             migrationBuilder.InsertData(
                 table: "TaskPriorities",

@@ -12,22 +12,22 @@ namespace TaskTracker.Entities.Configuration
                 new Status
                 {
                     Id = Guid.NewGuid(),
-                    StatusName = "To do"
+                    StatusName = "К выполнению"
                 },
                 new Status
                 {
                     Id = Guid.NewGuid(),
-                    StatusName = "In Progress",
+                    StatusName = "В процессе выполнения",
                 },
                 new Status
                 {
                     Id = Guid.NewGuid(),
-                    StatusName = "Closed",
+                    StatusName = "Закрыто",
                 },
                 new Status
                 {
                     Id = Guid.NewGuid(),
-                    StatusName = "Frozen",
+                    StatusName = "Выполнение приостановлено",
                 });
         }
     }

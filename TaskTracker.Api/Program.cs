@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using TaskTracker.Api.Extensions;
+using TaskTracker.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
@@ -11,7 +12,7 @@ builder.Services.AddControllers(conf =>
     conf.RespectBrowserAcceptHeader = true;
     conf.ReturnHttpNotAcceptable = true;
 });
-builder.Services.ConfigureCors();
+//builder.Services.ConfigureCors();
 builder.Services.ConfigureIISIntegration();
 builder.Services.ConfigureJWT(builder.Configuration);
 builder.Services.ConfigureIdentity();
@@ -39,10 +40,9 @@ app.UseSwaggerUI(s =>
 {
     s.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskTracker.Api v1");
 });
-app.UseHttpsRedirection();
 app.ConfigureExceptionHandler();
 app.UseStaticFiles();
-app.UseCors("CorsPolicy");
+app.UseCorsMiddleware();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
