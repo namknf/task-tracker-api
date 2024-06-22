@@ -278,7 +278,7 @@ namespace TaskTracker.Api.Controllers
         /// <response code="400">Отсутствет пароль для изменения или не найден код для подтверждения сброса</response>
         /// <response code="401">Пользователь не авторизован</response>
         /// <returns></returns>
-        [HttpPatch("update_password"), Authorize]
+        [HttpPost("update_password"), Authorize]
         public async Task<IActionResult> UpdatePassword([FromBody] UserForPasswordUpdateDto passwordForUpdateDto)
         {
             if (passwordForUpdateDto == null)

@@ -25,12 +25,26 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policyBuilder =>
+    {
+        policyBuilder
+            .AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddMvc(options =>
 {
     options.SuppressAsyncSuffixInActionNames = false;
 });
 
 var app = builder.Build();
+//app.UseCorsMiddleware();
+app.UseStaticFiles();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.AddAutomaticallyMigration();
@@ -41,8 +55,6 @@ app.UseSwaggerUI(s =>
     s.SwaggerEndpoint("/swagger/v1/swagger.json", "TaskTracker.Api v1");
 });
 app.ConfigureExceptionHandler();
-app.UseStaticFiles();
-app.UseCorsMiddleware();
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.All
